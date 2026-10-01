@@ -11,6 +11,7 @@ dependencies = []
 
 [dependency-groups]
 dev = [
+    "ipykernel>=7.4.0",
     "mypy>=2.3.1",
     "pytest>=9.1.1",
     "ruff>=0.16.9",
@@ -41,6 +42,7 @@ convention = "google"
 
 [tool.ruff.lint.per-file-ignores]
 "*.ipynb" = ["D", "ANN"]  # notebook cells are not modules/functions
+"tests/*" = ["D"]  # test names describe the tests
 
 [tool.mypy]
 strict = true
