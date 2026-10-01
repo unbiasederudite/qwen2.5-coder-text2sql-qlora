@@ -1,0 +1,47 @@
+[project]
+name = "text2sql"
+version = "0.1.0"
+description = "QLoRA fine-tuning of Qwen2.5-Coder-1.5B/3B-Instruct for text-to-SQL"
+readme = "README.md"
+authors = [
+    { name = "Mykhailo Stasiuk", email = "erudite1854@proton.me" }
+]
+requires-python = ">=3.13"
+dependencies = []
+
+[dependency-groups]
+dev = [
+    "mypy>=2.3.1",
+    "pytest>=9.1.1",
+    "ruff>=0.16.9",
+]
+train = [
+    "bitsandbytes>=0.50.2",
+    "peft>=0.21.2",
+    "transformers>=5.18.0",
+    "trl>=1.14.1",
+]
+
+[build-system]
+requires = ["uv_build>=0.12.13,<0.13.0"]
+build-backend = "uv_build"
+
+[tool.ruff]
+line-length = 100
+src = ["src"]
+
+[tool.ruff.lint]
+extend-select = [
+    "D",    # pydocstyle
+    "ANN",  # missing type annotations
+]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.lint.per-file-ignores]
+"*.ipynb" = ["D", "ANN"]  # notebook cells are not modules/functions
+
+[tool.mypy]
+strict = true
+files = ["src"]
