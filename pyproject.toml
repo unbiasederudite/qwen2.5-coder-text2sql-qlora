@@ -47,3 +47,7 @@ convention = "google"
 [tool.mypy]
 strict = true
 files = ["src"]
+
+[[tool.mypy.overrides]]
+module = ["torch.*", "transformers.*"]
+ignore_missing_imports = true  # installed only in the train group

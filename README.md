@@ -1,16 +1,22 @@
 # qwen2.5-coder-text2sql-qlora
 
+## Models
+
+QLoRA with 4-bit models.
+
+| Model | GPU memory (4-bit) |
+| --- | --- |
+| `Qwen/Qwen2.5-Coder-1.5B-Instruct` | 1.2 GB |
+| `Qwen/Qwen2.5-Coder-3B-Instruct` | 2.1 GB |
+
 ## Data
 
 Download the official [Spider](https://yale-lily.github.io/spider) release from the project root:
 
 ```bash
-DRIVE_ID=1403EGqzIDoHMdQF4c9Bkyl7dZLZ5Wt6J
-NAME=spider_data
-uvx gdown "$DRIVE_ID" -O "$NAME.zip" && unzip -qo "$NAME.zip" "$NAME/*" -d data && rm "$NAME.zip"
+source scripts/config.env
+uvx gdown "$SPIDER_DRIVE_ID" -O "$SPIDER_DIR.zip" && unzip -qo "$SPIDER_DIR.zip" "$SPIDER_DIR/*" -d data && rm "$SPIDER_DIR.zip"
 ```
-
-This downloads the dataset to `data/spider_data/`.
 
 ## Training sample
 
@@ -69,4 +75,20 @@ user:
 
 assistant:
     SELECT count(*) FROM singer
+```
+
+## Colab
+
+The GPU work (models, baseline, training) runs on a free Colab T4. Everything else runs locally.
+
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/unbiasederudite/qwen2.5-coder-text2sql-qlora/blob/main/notebooks/colab_model_check.ipynb)
+
+The notebook's first cell sets `REPO` and `REF`. The setup script reads them to clone the repo and download the data.
+
+### VS Code
+
+If VS Code did not recommend the Colab extension, or it is not installed yet:
+
+```bash
+code --install-extension google.colab
 ```
