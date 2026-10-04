@@ -15,6 +15,12 @@ dev = [
     "mypy>=2.3.1",
     "pytest>=9.1.1",
     "ruff>=0.16.9",
+    {include-group = "eval"},
+]
+eval = [
+    "nltk>=3.10.3",
+    "sqlparse>=0.6.0",
+    "tqdm>=4.70.1",
 ]
 train = [
     "bitsandbytes>=0.50.2",
@@ -30,6 +36,7 @@ build-backend = "uv_build"
 [tool.ruff]
 line-length = 100
 src = ["src"]
+extend-exclude = ["src/text2sql/spider_evaluation"]  # vendored, see its README
 
 [tool.ruff.lint]
 extend-select = [
@@ -51,3 +58,7 @@ files = ["src"]
 [[tool.mypy.overrides]]
 module = ["torch.*", "transformers.*"]
 ignore_missing_imports = true  # installed only in the train group
+
+[[tool.mypy.overrides]]
+module = ["text2sql.spider_evaluation.*"]
+ignore_errors = true  # vendored, see its README
