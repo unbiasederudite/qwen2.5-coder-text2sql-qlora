@@ -11,12 +11,14 @@ QLoRA with 4-bit models.
 
 ## Data
 
-Download the official [Spider](https://yale-lily.github.io/spider) release from the project root:
+Download from the project root. At least one target is required:
 
 ```bash
-source scripts/config.env
-uvx gdown "$SPIDER_DRIVE_ID" -O "$SPIDER_DIR.zip" && unzip -qo "$SPIDER_DIR.zip" "$SPIDER_DIR/*" -d data && rm "$SPIDER_DIR.zip"
+bash scripts/download_data.sh spider test-suite
 ```
+
+- `spider`: the official [Spider](https://yale-lily.github.io/spider) release.
+- `test-suite`: extra versions of the dev databases for scoring (1.3 GB download, 4.9 GB on disk).
 
 ## Training sample
 
@@ -83,7 +85,7 @@ The GPU work (models, baseline, training) runs on a free Colab T4. Everything el
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/unbiasederudite/qwen2.5-coder-text2sql-qlora/blob/main/notebooks/colab_model_check.ipynb)
 
-The notebook's first cell sets `REPO` and `REF`. The setup script reads them to clone the repo and download the data.
+The notebook's first cell sets `REPO` and `REF`. The setup script reads them to clone the repo and install it, and the cell then downloads the data.
 
 ### VS Code
 
