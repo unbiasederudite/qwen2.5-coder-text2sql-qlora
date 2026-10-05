@@ -10,7 +10,12 @@ nltk = pytest.importorskip("nltk")
 if not nltk.download("punkt_tab", quiet=True):  # no-op when already downloaded
     pytest.skip("could not download the nltk tokenizer data", allow_module_level=True)
 
-from text2sql.spider_evaluation.evaluation import Evaluator
+from text2sql.spider_evaluation.evaluation import (
+    Evaluator,
+    build_valid_col_units,
+    rebuild_sql_col,
+    rebuild_sql_val,
+)
 from text2sql.spider_evaluation.exec_eval import eval_exec_match, exec_on_db
 from text2sql.spider_evaluation.process_sql import Schema, get_schema, get_sql
 
@@ -97,3 +102,70 @@ def test_a_missing_database_is_not_created(tmp_path: Path) -> None:
 
     assert flag == "exception"
     assert not (tmp_path / "none.sqlite").exists()
+
+
+def exact_match(db: Path, predicted: str, gold: str) -> tuple[bool, dict[str, dict[str, float]]]:
+    """Exact set match and the component scores, prepared as `evaluate` does."""
+    schema = Schema(get_schema(str(db)))
+    evaluator = Evaluator()
+    sqls = []
+    for query in (predicted, gold):
+        sql = rebuild_sql_val(get_sql(schema, query))
+        sqls.append(
+            rebuild_sql_col(build_valid_col_units(sql["from"]["table_units"], schema), sql, {})
+        )
+    return bool(evaluator.eval_exact_match(*sqls)), evaluator.partial_scores
+
+
+GOLD_WHERE = "SELECT name FROM singer WHERE age > 35 AND name = 'Tim'"
+
+
+def test_exact_match_ignores_the_order_of_conditions_and_of_columns(db: Path) -> None:
+    swapped = "SELECT name FROM singer WHERE name = 'Tim' AND age > 35"
+
+    assert exact_match(db, swapped, GOLD_WHERE)[0]
+    assert exact_match(db, "SELECT age, name FROM singer", "SELECT name, age FROM singer")[0]
+
+
+def test_exact_match_ignores_values_and_case(db: Path) -> None:
+    other_value = "SELECT name FROM singer WHERE age > 99 AND name = 'Tim'"
+
+    assert exact_match(db, other_value, GOLD_WHERE)[0]
+    assert exact_match(db, GOLD_WHERE.lower(), GOLD_WHERE)[0]
+
+
+def test_exact_match_rejects_a_different_condition(db: Path) -> None:
+    assert not exact_match(
+        db, "SELECT name FROM singer WHERE age < 35 AND name = 'Tim'", GOLD_WHERE
+    )[0]
+
+
+def test_component_matching_scores_each_clause_separately(db: Path) -> None:
+    other_column = "SELECT age FROM singer WHERE age > 35 AND name = 'Tim'"
+    other_operator = "SELECT name FROM singer WHERE age < 35 AND name = 'Tim'"
+
+    _, wrong_select = exact_match(db, other_column, GOLD_WHERE)
+    _, wrong_operator = exact_match(db, other_operator, GOLD_WHERE)
+
+    assert (wrong_select["select"]["f1"], wrong_select["where"]["f1"]) == (0, 1)
+    assert (wrong_operator["where"]["f1"], wrong_operator["where(no OP)"]["f1"]) == (0, 1)
+
+
+@pytest.mark.parametrize(
+    ("query", "level"),
+    [
+        ("SELECT count(*) FROM singer", "easy"),
+        ("SELECT name FROM singer WHERE age > 35", "easy"),
+        ("SELECT name FROM singer WHERE age > 35 ORDER BY age", "medium"),
+        ("SELECT name FROM singer WHERE age > (SELECT avg(age) FROM singer)", "hard"),
+        (
+            "SELECT name FROM singer WHERE age > 40 UNION SELECT name FROM singer WHERE age < 30",
+            "hard",
+        ),
+        ("SELECT name FROM singer WHERE age > 35 AND name LIKE 'T%' ORDER BY age LIMIT 1", "extra"),
+    ],
+)
+def test_hardness_levels(db: Path, query: str, level: str) -> None:
+    sql = get_sql(Schema(get_schema(str(db))), query)
+
+    assert Evaluator().eval_hardness(sql) == level

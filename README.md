@@ -20,6 +20,23 @@ bash scripts/download_data.sh spider test-suite
 - `spider`: the official [Spider](https://yale-lily.github.io/spider) release.
 - `test-suite`: extra versions of the dev databases for scoring (1.3 GB download, 4.9 GB on disk).
 
+## Scoring
+
+Score a predictions file from the project root:
+
+```bash
+uv run python -m text2sql.score predictions/<name>.jsonl
+```
+
+Scoring is built around the vendored official [test-suite evaluation](https://github.com/taoyds/test-suite-sql-eval), which provides these metrics, each by difficulty (easy, medium, hard, extra) and over all questions:
+
+| Metric | Name | Description |
+| --- | --- | --- |
+| EX | Execution accuracy | The predicted query returns the same rows as the gold query on the original database. |
+| TS | Test-suite accuracy | The same check on every extra version of the database, so a lucky answer fails. Dev only. |
+| EM | Exact set match | The predicted query has the same parts as the gold query, such as select and where. Values are ignored. |
+| CM | Component matching | How well each part of the query matches, scored separately for select, where, order and so on. |
+
 ## Training sample
 
 Each sample is three chat messages:

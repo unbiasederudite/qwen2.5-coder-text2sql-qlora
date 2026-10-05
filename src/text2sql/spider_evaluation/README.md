@@ -22,5 +22,7 @@ Each change is marked `# Modified` in the code:
 - `exec_eval.py`: relative import.
 - `exec_eval.py`: the database is opened read-only, and a missing file is an error instead of a new empty database.
 - `exec_eval.py`: sqlite itself stops the query at the deadline, instead of `asyncio.wait_for`.
+- `evaluation.py`: `evaluate` returns the scores.
+- `evaluation.py`: a prediction containing `value` is no longer rewritten to `1`.
 
 `parse.py`, `process_sql.py` and `LICENSE` are byte-identical to upstream.

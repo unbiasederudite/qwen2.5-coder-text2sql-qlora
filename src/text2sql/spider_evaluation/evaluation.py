@@ -1,5 +1,7 @@
 # Vendored from https://github.com/taoyds/test-suite-sql-eval at e97acc5 (Apache-2.0, see LICENSE).
 # Modified: imports of the sibling modules are package-relative.
+# Modified: evaluate() returns the scores.
+# Modified: predictions are not rewritten, upstream replaced "value" with "1".
 ################################
 # val: number(float)/string(str)/sql(dict)
 # col_unit: (agg_id, col_id, isDistinct(bool))
@@ -568,7 +570,7 @@ def evaluate(gold, predict, db_dir, etype, kmaps, plug_value, keep_distinct, pro
         for idx, pg in enumerate(zip(p, g)):
             p, g = pg
             p_str = p[0]
-            p_str = p_str.replace("value", "1")
+            # Modified: removed p_str.replace("value", "1"), it broke predictions containing "value"
             g_str, db = g
             db_name = db
             db = os.path.join(db_dir, db, db + ".sqlite")
@@ -705,6 +707,7 @@ def evaluate(gold, predict, db_dir, etype, kmaps, plug_value, keep_distinct, pro
                         scores[level]['partial'][type_]['rec'] + scores[level]['partial'][type_]['acc'])
 
     print_scores(scores, etype, include_turn_acc=include_turn_acc)
+    return scores  # Modified: added, so callers can use the scores
 
 
 # Rebuild SQL functions for value evaluation

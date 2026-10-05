@@ -60,5 +60,9 @@ module = ["torch.*", "transformers.*"]
 ignore_missing_imports = true  # installed only in the train group
 
 [[tool.mypy.overrides]]
+module = ["nltk.*"]
+ignore_missing_imports = true  # no type information
+
+[[tool.mypy.overrides]]
 module = ["text2sql.spider_evaluation.*"]
 ignore_errors = true  # vendored, see its README
