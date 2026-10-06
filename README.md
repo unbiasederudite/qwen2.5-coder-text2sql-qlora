@@ -1,5 +1,7 @@
 # qwen2.5-coder-text2sql-qlora
 
+[![CI](https://github.com/unbiasederudite/qwen2.5-coder-text2sql-qlora/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/unbiasederudite/qwen2.5-coder-text2sql-qlora/actions/workflows/ci.yml)
+
 ## Models
 
 QLoRA with 4-bit models.
@@ -20,6 +22,8 @@ bash scripts/download_data.sh spider test-suite
 - `spider`: the official [Spider](https://yale-lily.github.io/spider) release.
 - `test-suite`: extra versions of the dev databases for scoring (1.3 GB download, 4.9 GB on disk).
 
+The data goes to `data/spider_data/` and `data/test_suite_data/`. See [Reproduce the results](#reproduce-the-results) for the full sequence.
+
 ## Scoring
 
 Score a predictions file from the project root:
@@ -27,6 +31,19 @@ Score a predictions file from the project root:
 ```bash
 uv run python -m text2sql.score predictions/<name>.jsonl
 ```
+
+Only the predictions file is required:
+
+| Parameter | Values | Description |
+| --- | --- | --- |
+| `predictions` | path to a `.jsonl` file | Predictions to score. |
+| `--split` | `dev` (default), `test` | Spider split the predictions are for. |
+| `--spider-dir` | folder, default `data/spider_data` | Spider release. |
+| `--test-suite-dir` | folder, default `data/test_suite_data` | Test-suite databases for TS, used for `dev` only. |
+| `--keep-distinct` | flag | Keep `DISTINCT` in EX and TS, the official script strips it. EM and CM always ignore it. |
+| `--raw` | flag | Score the replies as written, without taking the SQL out of code blocks. |
+
+The scorer prints the scores by difficulty and writes `<name>.report.json` and `<name>.report.meta.json` to `scores/`. See [Reproduce the results](#reproduce-the-results) for the full sequence.
 
 Scoring is built around the vendored official [test-suite evaluation](https://github.com/taoyds/test-suite-sql-eval), which provides these metrics, each by difficulty (easy, medium, hard, extra) and over all questions:
 
@@ -36,6 +53,8 @@ Scoring is built around the vendored official [test-suite evaluation](https://gi
 | TS | Test-suite accuracy | The same check on every extra version of the database, so a lucky answer fails. Dev only. |
 | EM | Exact set match | The predicted query has the same parts as the gold query, such as select and where. Values are ignored. |
 | CM | Component matching | How well each part of the query matches, scored separately for select, where, order and so on. |
+
+Only text-to-SQL is evaluated. The fine-tuned models are intended for this task only, and any loss of general capabilities is possible and not measured.
 
 ## Training sample
 
@@ -98,11 +117,33 @@ assistant:
 
 ## Colab
 
-The GPU work (models, baseline, training) runs on a free Colab T4. Everything else runs locally.
+The GPU work (generation, training) runs on a free Colab T4. Everything else runs locally.
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/unbiasederudite/qwen2.5-coder-text2sql-qlora/blob/main/notebooks/colab_model_check.ipynb)
+| Notebook | Description | Open |
+| --- | --- | --- |
+| `colab_generate_predictions.ipynb` | Predictions of one model on one split. | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/unbiasederudite/qwen2.5-coder-text2sql-qlora/blob/main/notebooks/colab_generate_predictions.ipynb) |
 
-The notebook's first cell sets `REPO` and `REF`. The setup script reads them to clone the repo and install it, and the cell then downloads the data.
+### colab_generate_predictions
+
+Parameters, all required:
+
+| Parameter | Values | Description |
+| --- | --- | --- |
+| `MODEL` | `Qwen/Qwen2.5-Coder-1.5B-Instruct`, `Qwen/Qwen2.5-Coder-3B-Instruct` | Model that answers the questions. |
+| `SPLIT` | `dev`, `test` | Spider split to answer. |
+| `RUN` | any name | Name of the run, part of the output file name. |
+| `BATCH_SIZE` | integer, for example `16` | Questions generated at once. |
+
+Pass them with the [Colab CLI](https://github.com/googlecolab/google-colab-cli) as `--env` options:
+
+```bash
+uv run colab exec -s <session> -f notebooks/colab_generate_predictions.ipynb --timeout 3600 \
+  --env MODEL=<model> --env SPLIT=<split> --env RUN=<run> --env BATCH_SIZE=<batch size>
+```
+
+In the browser or VS Code, uncomment the `%env` lines at the top of the notebook's first cell and set the values. Keep them commented when you use the CLI, as they would override its values.
+
+The notebook writes `<model>_<run>_<split>.jsonl` and `<model>_<run>_<split>.meta.json` to `/content/qwen2.5-coder-text2sql-qlora/predictions/` on the session. See [Reproduce the results](#reproduce-the-results) for the full sequence.
 
 ### VS Code
 
@@ -111,3 +152,77 @@ If VS Code did not recommend the Colab extension, or it is not installed yet:
 ```bash
 code --install-extension google.colab
 ```
+
+## Checks
+
+Lint, formatting, types and tests, the same steps CI runs on every push:
+
+```bash
+uv run ruff check . && uv run ruff format --check . && uv run mypy && uv run pytest
+```
+
+## Reproduce the results
+
+Run every command from the project root, in order. All Colab steps use one session, `qlora`.
+
+### 1. Setup
+
+Install the project, and download the data for scoring:
+
+```bash
+uv sync
+bash scripts/download_data.sh spider test-suite
+```
+
+The data is in `data/spider_data/` and `data/test_suite_data/`.
+
+### 2. Start the Colab session
+
+The first call opens a browser to sign in:
+
+```bash
+uv run colab new -s qlora --gpu T4
+```
+
+### 3. Evaluate the baseline models
+
+The same notebook runs for each model:
+
+```bash
+uv run colab exec -s qlora -f notebooks/colab_generate_predictions.ipynb --timeout 3600 \
+  --env MODEL=Qwen/Qwen2.5-Coder-1.5B-Instruct --env SPLIT=dev --env RUN=baseline --env BATCH_SIZE=16
+uv run colab exec -s qlora -f notebooks/colab_generate_predictions.ipynb --timeout 3600 \
+  --env MODEL=Qwen/Qwen2.5-Coder-3B-Instruct --env SPLIT=dev --env RUN=baseline --env BATCH_SIZE=16
+```
+
+The predictions are in `/content/qwen2.5-coder-text2sql-qlora/predictions/` on the session.
+
+### 4. Download the predictions
+
+Each run writes its predictions and their metadata. Files on the session are lost when it stops:
+
+```bash
+mkdir -p predictions
+for name in qwen2.5-coder-1.5b-instruct_baseline_dev qwen2.5-coder-3b-instruct_baseline_dev; do
+  for ext in jsonl meta.json; do
+    uv run colab download -s qlora /content/qwen2.5-coder-text2sql-qlora/predictions/$name.$ext predictions/$name.$ext
+  done
+done
+```
+
+The files are in `predictions/`.
+
+### 5. Close the session
+
+```bash
+uv run colab stop -s qlora
+```
+
+### 6. Score the predictions
+
+```bash
+uv run python -m text2sql.score predictions/qwen2.5-coder-1.5b-instruct_baseline_dev.jsonl
+uv run python -m text2sql.score predictions/qwen2.5-coder-3b-instruct_baseline_dev.jsonl
+```
+
+The scores are in `scores/`.

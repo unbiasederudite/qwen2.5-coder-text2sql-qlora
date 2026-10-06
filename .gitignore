@@ -219,3 +219,6 @@ __marimo__/
 
 # Project data
 data/
+
+# Output notebooks written by `colab exec`
+*_output.ipynb

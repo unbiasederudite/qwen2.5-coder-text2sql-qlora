@@ -1,7 +1,9 @@
+import hashlib
 import json
 import sqlite3
 import sys
 from pathlib import Path
+from typing import Any
 
 import pytest
 
@@ -13,11 +15,13 @@ from text2sql import score as score_module
 from text2sql.score import (
     Prediction,
     align,
+    extract_sql,
     format_report,
     load_predictions,
     main,
     one_line,
     score,
+    write_report,
 )
 from text2sql.spider import Example
 
@@ -55,6 +59,19 @@ QUESTIONS = [
     (ALL_AGE + " AND name LIKE 'T%' ORDER BY age", "", "extra"),
 ]
 LEVELS = ["easy", "medium", "hard", "extra", "all"]
+
+
+@pytest.fixture(autouse=True)
+def in_tmp_path(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """Runs every test in its own folder, where the default `scores/` folder is created."""
+    monkeypatch.chdir(tmp_path)
+
+
+def read_scores(tmp_path: Path, name: str = "run") -> tuple[dict[str, Any], dict[str, Any]]:
+    """Reads the scores and the metadata of a report written to the default folder."""
+    scores = json.loads((tmp_path / "scores" / f"{name}.report.json").read_text())
+    metadata = json.loads((tmp_path / "scores" / f"{name}.report.meta.json").read_text())
+    return scores, metadata
 
 
 def make_database(path: Path, extra_singer: bool) -> None:
@@ -266,9 +283,9 @@ def test_main_prints_the_report_and_writes_it_as_json(
     main()
 
     assert "TS" in capsys.readouterr().out
-    report = json.loads((tmp_path / "run.report.json").read_text())
-    assert report["split"] == "dev"
-    assert report["ts"]["all"] == 2 / 6
+    scores, metadata = read_scores(tmp_path)
+    assert scores["ts"]["all"] == 2 / 6
+    assert metadata["split"] == "dev"
 
 
 def test_main_asks_to_download_a_missing_test_suite(
@@ -348,7 +365,6 @@ def test_score_on_the_test_split_reads_the_test_files_and_has_no_test_suite(tmp_
 
     report = score(predictions, spider, "test")
 
-    assert report["split"] == "test"
     assert report["count"]["all"] == 2
     assert report["ts"] is None
     assert report["ex"]["all"] == 0.5
@@ -366,7 +382,7 @@ def test_score_collapses_whitespace_in_the_gold_and_the_prediction(tmp_path: Pat
     assert report["em"]["all"] == 1.0
 
 
-def test_main_scores_the_test_split_and_writes_the_report_where_asked(
+def test_main_scores_the_test_split_without_a_test_suite(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
 ) -> None:
     spider = make_test_split(tmp_path / "spider", ["SELECT count(*) FROM singer"])
@@ -374,8 +390,6 @@ def test_main_scores_the_test_split_and_writes_the_report_where_asked(
     path.write_text(
         json.dumps({"id": 0, "db_id": "concert", "predicted": "SELECT count(*) FROM singer"}) + "\n"
     )
-    report_path = tmp_path / "out" / "report.json"
-    report_path.parent.mkdir()
     argv = [
         "score",
         str(path),
@@ -383,18 +397,15 @@ def test_main_scores_the_test_split_and_writes_the_report_where_asked(
         "test",
         "--spider-dir",
         str(spider),
-        "--report",
-        str(report_path),
     ]
     monkeypatch.setattr(sys, "argv", argv)
 
     main()  # the test split needs no test suite
 
-    assert str(report_path) in capsys.readouterr().out
-    report = json.loads(report_path.read_text())
-    assert report["split"] == "test"
-    assert report["ts"] is None
-    assert not (tmp_path / "run.report.json").exists()
+    assert "scores/run.report.json" in capsys.readouterr().out
+    scores, metadata = read_scores(tmp_path)
+    assert scores["ts"] is None
+    assert metadata["split"] == "test"
 
 
 def test_distinct_is_stripped_from_execution_unless_kept(tmp_path: Path) -> None:
@@ -408,8 +419,7 @@ def test_distinct_is_stripped_from_execution_unless_kept(tmp_path: Path) -> None
     stripped = score(predictions, spider, "test")
     kept = score(predictions, spider, "test", keep_distinct=True)
 
-    assert (stripped["keep_distinct"], stripped["ex"]["all"]) == (False, 1.0)
-    assert (kept["keep_distinct"], kept["ex"]["all"]) == (True, 0.0)
+    assert (stripped["ex"]["all"], kept["ex"]["all"]) == (1.0, 0.0)
     assert stripped["em"]["all"] == kept["em"]["all"] == 1.0  # EM ignores DISTINCT either way
 
 
@@ -427,7 +437,7 @@ def test_main_passes_keep_distinct_on_and_notes_it(
     main()
 
     assert "DISTINCT kept" in capsys.readouterr().out
-    assert json.loads((tmp_path / "run.report.json").read_text())["keep_distinct"] is True
+    assert read_scores(tmp_path)[1]["keep_distinct"] is True
 
 
 def test_one_line_keeps_the_spaces_inside_quotes() -> None:
@@ -449,3 +459,244 @@ def test_a_value_with_repeated_spaces_is_matched_as_it_is(tmp_path: Path) -> Non
 
     assert score(right, spider, "test")["ex"]["all"] == 1.0
     assert score(wrong, spider, "test")["ex"]["all"] == 0.0
+
+
+@pytest.mark.parametrize(
+    ("reply", "sql"),
+    [
+        ("SELECT count(*) FROM singer", "SELECT count(*) FROM singer"),
+        ("SELECT count(*) FROM singer;", "SELECT count(*) FROM singer"),
+        (
+            "To count them, use this query:\n\n```sql\nSELECT COUNT(*)\nFROM singer;\n```\n\nIt counts the rows.",
+            "SELECT COUNT(*)\nFROM singer",
+        ),
+        ("```\nSELECT name FROM singer\n```", "SELECT name FROM singer"),
+        ("```SQL\nSELECT name FROM singer\n```", "SELECT name FROM singer"),
+        ("```SELECT name FROM singer```", "SELECT name FROM singer"),
+        (
+            "```SELECT\nname FROM singer```",
+            "SELECT\nname FROM singer",
+        ),  # SELECT is not a language tag
+        ("```sql\nSELECT 1\n```\n```sql\nSELECT 2\n```", "SELECT 1"),  # the first block
+        ("Use this:\n```sql\nSELECT name FROM singer", "SELECT name FROM singer"),  # never closed
+        ("SELECT name FROM singer; This lists the singers.", "SELECT name FROM singer"),
+        (
+            "SELECT name FROM singer WHERE name = 'a;b'; DROP TABLE x",
+            "SELECT name FROM singer WHERE name = 'a;b'",
+        ),
+        (
+            'SELECT name FROM singer WHERE name = "a;b"',
+            'SELECT name FROM singer WHERE name = "a;b"',
+        ),
+        (
+            "Jetblue Airways is affiliated with the United States.",
+            "Jetblue Airways is affiliated with the United States.",
+        ),
+        ("", ""),
+        ("  \n ", ""),
+    ],
+)
+def test_extract_sql(reply: str, sql: str) -> None:
+    assert extract_sql(reply) == sql
+
+
+def fenced(gold: str) -> str:
+    return (
+        f"To answer the question, use this query:\n\n```sql\n{gold};\n```\n\nIt returns the rows."
+    )
+
+
+def test_score_takes_the_sql_out_of_the_replies_by_default(
+    spider_dir: Path, suite_dir: Path
+) -> None:
+    predictions = [
+        Prediction(id=i, db_id="concert", predicted=fenced(gold))
+        for i, (gold, _, _) in enumerate(QUESTIONS)
+    ]
+
+    report = score(predictions, spider_dir, "dev", suite_dir)
+
+    assert report["ex"]["all"] == report["ts"]["all"] == report["em"]["all"] == 1.0  # type: ignore[index]
+
+
+def test_score_can_score_the_replies_as_written(spider_dir: Path, suite_dir: Path) -> None:
+    predictions = [
+        Prediction(id=i, db_id="concert", predicted=fenced(gold))
+        for i, (gold, _, _) in enumerate(QUESTIONS)
+    ]
+
+    report = score(predictions, spider_dir, "dev", suite_dir, extract=False)
+
+    assert report["ex"]["all"] == report["em"]["all"] == 0.0  # the fence is not SQL
+
+
+def test_main_raw_scores_the_replies_as_written(
+    spider_dir: Path,
+    suite_dir: Path,
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    path = tmp_path / "run.jsonl"
+    path.write_text(
+        "".join(
+            json.dumps({"id": i, "db_id": "concert", "predicted": fenced(gold)}) + "\n"
+            for i, (gold, _, _) in enumerate(QUESTIONS)
+        )
+    )
+    argv = ["score", str(path), "--spider-dir", str(spider_dir), "--test-suite-dir", str(suite_dir)]
+    monkeypatch.setattr(sys, "argv", argv)
+
+    main()
+    assert "scored as written" not in capsys.readouterr().out
+    first, first_metadata = read_scores(tmp_path)
+    assert first["ex"]["all"] == 1.0
+    assert first_metadata["predictions_sha256"] == hashlib.sha256(path.read_bytes()).hexdigest()
+
+    monkeypatch.setattr(sys, "argv", [*argv, "--raw"])
+    main()
+    assert "scored as written" in capsys.readouterr().out
+    scores, metadata = read_scores(tmp_path)
+    assert metadata["extraction"] is False
+    assert scores["ex"]["all"] == 0.0
+
+
+def predictions_file(
+    tmp_path: Path, predictions: list[Prediction], metadata: dict[str, object] | None
+) -> Path:
+    """Writes `run.jsonl` and, if given, `run.meta.json` with the hash of the predictions."""
+    path = tmp_path / "run.jsonl"
+    path.write_text("".join(json.dumps(p) + "\n" for p in predictions))
+    if metadata is not None:
+        sha256 = hashlib.sha256(path.read_bytes()).hexdigest()
+        (tmp_path / "run.meta.json").write_text(
+            json.dumps({"predictions_sha256": sha256, **metadata})
+        )
+    return path
+
+
+METADATA = {
+    "model": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+    "model_revision": "abc123",
+    "run": "baseline",
+    "split": "dev",
+    "generation": {"do_sample": False, "max_new_tokens": 256, "batch_size": 16},
+}
+
+
+def run_main(
+    path: Path, spider_dir: Path, suite_dir: Path, monkeypatch: pytest.MonkeyPatch
+) -> dict[str, Any]:
+    argv = ["score", str(path), "--spider-dir", str(spider_dir), "--test-suite-dir", str(suite_dir)]
+    monkeypatch.setattr(sys, "argv", argv)
+    main()
+    scores = json.loads((Path("scores") / f"{path.stem}.report.json").read_text())
+    metadata = json.loads((Path("scores") / f"{path.stem}.report.meta.json").read_text())
+    return {**scores, **metadata}
+
+
+def test_main_reads_the_metadata_next_to_the_predictions(
+    tmp_path: Path,
+    spider_dir: Path,
+    suite_dir: Path,
+    predictions: list[Prediction],
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    path = predictions_file(tmp_path, predictions, METADATA)
+
+    report = run_main(path, spider_dir, suite_dir, monkeypatch)
+
+    assert (report["model"], report["run"], report["model_revision"]) == (
+        METADATA["model"],
+        "baseline",
+        "abc123",
+    )
+
+
+def test_main_scores_without_metadata_and_leaves_the_fields_empty(
+    tmp_path: Path,
+    spider_dir: Path,
+    suite_dir: Path,
+    predictions: list[Prediction],
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    path = predictions_file(tmp_path, predictions, None)
+
+    report = run_main(path, spider_dir, suite_dir, monkeypatch)
+
+    assert report["model"] is None
+
+
+def test_main_stops_when_the_metadata_belongs_to_another_predictions_file(
+    tmp_path: Path,
+    spider_dir: Path,
+    suite_dir: Path,
+    predictions: list[Prediction],
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    path = predictions_file(tmp_path, predictions, METADATA)
+    meta = json.loads((tmp_path / "run.meta.json").read_text())
+    (tmp_path / "run.meta.json").write_text(json.dumps({**meta, "predictions_sha256": "0" * 64}))
+
+    with pytest.raises(SystemExit):
+        run_main(path, spider_dir, suite_dir, monkeypatch)
+
+    assert "describes another predictions file" in capsys.readouterr().err
+    assert not (tmp_path / "scores").exists()
+
+
+def test_main_accepts_metadata_without_a_hash(
+    tmp_path: Path,
+    spider_dir: Path,
+    suite_dir: Path,
+    predictions: list[Prediction],
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    path = predictions_file(tmp_path, predictions, METADATA)
+    (tmp_path / "run.meta.json").write_text(json.dumps(METADATA))  # no predictions_sha256
+
+    assert run_main(path, spider_dir, suite_dir, monkeypatch)["run"] == "baseline"
+
+
+def test_main_warns_when_the_metadata_is_for_another_split(
+    tmp_path: Path,
+    spider_dir: Path,
+    suite_dir: Path,
+    predictions: list[Prediction],
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    path = predictions_file(tmp_path, predictions, {**METADATA, "split": "test"})
+
+    run_main(path, spider_dir, suite_dir, monkeypatch)
+
+    assert "metadata is for the test split, scoring dev" in capsys.readouterr().err
+
+
+def test_write_report_writes_only_the_scores(
+    spider_dir: Path, suite_dir: Path, predictions: list[Prediction], tmp_path: Path
+) -> None:
+    report = score(predictions, spider_dir, "dev", suite_dir)
+
+    write_report(report, tmp_path / "out" / "x.report.json")
+
+    assert json.loads((tmp_path / "out" / "x.report.json").read_text()) == report
+    assert [p.name for p in (tmp_path / "out").iterdir()] == ["x.report.json"]
+
+
+def test_main_writes_the_metadata_next_to_the_scores_and_keeps_them_apart(
+    tmp_path: Path,
+    spider_dir: Path,
+    suite_dir: Path,
+    predictions: list[Prediction],
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    path = predictions_file(tmp_path, predictions, None)
+    run_main(path, spider_dir, suite_dir, monkeypatch)
+
+    scores, metadata = read_scores(tmp_path)
+
+    assert set(scores) == {"count", "ex", "ts", "em", "cm"}
+    assert not set(scores) & set(metadata)
+    assert metadata["predictions_sha256"] == hashlib.sha256(path.read_bytes()).hexdigest()

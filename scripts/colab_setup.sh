@@ -14,6 +14,6 @@ else
 fi
 cd "$REPO_DIR"
 
-# install the project and the train dependencies
+# install the project and the Colab dependencies
 pip install uv
-uv pip install --system . --group train
+uv pip install --system . --group colab

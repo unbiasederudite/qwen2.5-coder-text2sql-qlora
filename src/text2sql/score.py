@@ -12,6 +12,7 @@ from typing import Any, TypedDict
 
 import nltk
 
+from text2sql.meta import read_generation_metadata, write_scoring_metadata
 from text2sql.spider import Example, Split, load_examples
 from text2sql.spider_evaluation.evaluation import build_foreign_key_map_from_json, evaluate
 
@@ -29,6 +30,11 @@ COMPONENTS = (
     "keywords",
 )
 EMPTY_PREDICTION = "SELECT"  # a blank line would end a session in the official file format
+# the first markdown code block: an optional language tag (not SELECT or WITH), then the code
+FENCE = re.compile(
+    r"```[ \t]*(?:sql\b[ \t]*|(?!(?:select|with)\b)[\w+-]+[ \t]*\n)?(.*?)(?:```|\Z)",
+    re.DOTALL | re.IGNORECASE,
+)
 
 # the vendored functions have no annotations
 _evaluate: Callable[..., dict[str, Any]] = evaluate
@@ -46,8 +52,6 @@ class Prediction(TypedDict):
 class Report(TypedDict):
     """Scores of one predictions file, by difficulty level and over all questions."""
 
-    split: Split  # scored split
-    keep_distinct: bool  # DISTINCT kept in EX and TS (EM and CM always ignore it)
     count: dict[str, int]  # questions
     ex: dict[str, float]  # execution accuracy on the original database
     ts: dict[str, float] | None  # test-suite accuracy, None without the test suite
@@ -140,6 +144,28 @@ def one_line(sql: str) -> str:
     ).strip()
 
 
+def extract_sql(reply: str) -> str:
+    """Returns the SQL query of a model reply.
+
+    Args:
+        reply (str): Reply of the model.
+
+    Returns:
+        str: Query without the code fence, the text around it and the end of statement.
+    """
+    match = FENCE.search(reply)
+    text = match.group(1) if match else reply
+    quote = ""
+    for i, char in enumerate(text):
+        if quote:
+            quote = "" if char == quote else quote
+        elif char in "'\"`":
+            quote = char
+        elif char == ";":
+            return text[:i].strip()
+    return text.strip()
+
+
 def run_official(
     gold: Path,
     predicted: Path,
@@ -173,6 +199,7 @@ def score(
     split: Split,
     test_suite_dir: Path | None = None,
     keep_distinct: bool = False,
+    extract: bool = True,
 ) -> Report:
     """Scores predictions against the gold SQL of one split.
 
@@ -182,6 +209,7 @@ def score(
         split (Split): Split the predictions are for.
         test_suite_dir (Path | None): Test-suite databases, for the test-suite accuracy.
         keep_distinct (bool): Keep `DISTINCT` in EX and TS (EM and CM ignore it).
+        extract (bool): Take the SQL query out of each reply, or score the replies as written.
 
     Returns:
         Report: Scores by difficulty level.
@@ -194,6 +222,8 @@ def score(
         raise RuntimeError("could not download the nltk tokenizer data")
     examples = load_examples(spider_dir, split)
     predicted = align(predictions, examples)
+    if extract:
+        predicted = [extract_sql(reply) for reply in predicted]
     test = split == "test"
     kmaps = _build_kmaps(str(spider_dir / ("test_tables.json" if test else "tables.json")))
     original = spider_dir / ("test_database" if test else "database")
@@ -213,8 +243,6 @@ def score(
             ex = run_official(gold_file, predicted_file, original, "exec", None, keep_distinct)
             ts = full
     return Report(
-        split=split,
-        keep_distinct=keep_distinct,
         count={level: full[level]["count"] for level in LEVELS},
         ex={level: float(ex[level]["exec"]) for level in LEVELS},
         ts=None if ts is None else {level: float(ts[level]["exec"]) for level in LEVELS},
@@ -233,6 +261,17 @@ def score(
     )
 
 
+def write_report(report: Report, path: Path) -> None:
+    """Writes the scores of a report.
+
+    Args:
+        report (Report): Report from `score`.
+        path (Path): File for the scores. Its folder is created if needed.
+    """
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(report, indent=2) + "\n")
+
+
 def format_report(report: Report) -> str:
     """Formats the report as a table of accuracies by difficulty level.
 
@@ -248,13 +287,11 @@ def format_report(report: Report) -> str:
     for name, values in rows.items():
         cells = ["      -" if values is None else f"{values[level]:.3f}" for level in LEVELS]
         lines.append(f"{name:6}" + "".join(f"{cell:>9}" for cell in cells))
-    if report["keep_distinct"]:
-        lines.append("DISTINCT kept in EX and TS")
     return "\n".join(lines)
 
 
 def main() -> None:
-    """Scores a predictions file, prints the report and writes it as JSON next to the file."""
+    """Scores a predictions file, prints the table and writes the scores and their metadata."""
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("predictions", type=Path, help="predictions file (JSON Lines)")
     parser.add_argument("--split", choices=["dev", "test"], default="dev")
@@ -271,24 +308,38 @@ def main() -> None:
         help="keep DISTINCT in EX and TS, the official script strips it (EM and CM always ignore it)",
     )
     parser.add_argument(
-        "--report", type=Path, help="report file (default: next to the predictions)"
+        "--raw",
+        action="store_true",
+        help="score the replies as written, without taking the SQL out of code blocks",
     )
     args = parser.parse_args()
 
     suite = args.test_suite_dir if args.split == "dev" else None
     if suite is not None and not suite.exists():
         parser.error(f"{suite} not found, download it: bash scripts/download_data.sh test-suite")
+    try:
+        generation_metadata = read_generation_metadata(args.predictions, args.split)
+    except ValueError as error:
+        parser.error(str(error))
     report = score(
         load_predictions(args.predictions),
         args.spider_dir,
         args.split,
         suite,
         args.keep_distinct,
+        not args.raw,
     )
     print(format_report(report))
-    path = args.report or args.predictions.with_suffix(".report.json")
-    path.write_text(json.dumps(report, indent=2) + "\n")
-    print(f"report written to {path}")
+    if args.keep_distinct:
+        print("DISTINCT kept in EX and TS")
+    if args.raw:
+        print("replies scored as written, without extraction")
+    path = Path("scores") / f"{args.predictions.stem}.report.json"
+    write_report(report, path)
+    metadata_path = write_scoring_metadata(
+        path, args.predictions, args.split, args.keep_distinct, not args.raw, generation_metadata
+    )
+    print(f"scores written to {path}, metadata to {metadata_path}")
 
 
 if __name__ == "__main__":

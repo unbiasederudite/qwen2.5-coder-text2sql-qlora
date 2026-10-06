@@ -12,25 +12,30 @@ import text2sql
 from text2sql.prompt import Message
 
 PROMPT_IDS = [10, 11, 12]
-NEW_IDS = [7, 8]
-MESSAGES = [
-    Message(role="system", content="SCHEMA"),
-    Message(role="user", content="QUESTION"),
+CONVERSATIONS = [
+    [Message(role="system", content="SCHEMA"), Message(role="user", content="FIRST")],
+    [Message(role="system", content="SCHEMA"), Message(role="user", content="SECOND")],
 ]
 
 
+def new_ids(row: int) -> list[int]:
+    """The two tokens the stand-in model writes for a row."""
+    return [100 + row, 200 + row]
+
+
 class FakeTokens(list[Any]):
-    """Mimics a 2D tensor of token ids, which `generate` slices as `output[0, n:]`."""
+    """Mimics a 2D tensor of token ids, which `generate_batch` slices as `output[:, n:]`."""
 
     def __getitem__(self, key: object) -> object:
         if isinstance(key, tuple):
-            row, rest = key
-            return super().__getitem__(row)[rest]
+            rows, columns = key
+            return FakeTokens([row[columns] for row in super().__getitem__(rows)])
         return super().__getitem__(key)
 
 
 class FakeIds:
-    shape = (1, len(PROMPT_IDS))
+    def __init__(self, rows: int) -> None:
+        self.shape = (rows, len(PROMPT_IDS))
 
 
 class FakeBatch(dict[str, Any]):
@@ -51,13 +56,16 @@ class FakeModel:
 
     def generate(self, **kwargs: object) -> FakeTokens:
         self.generate_kwargs = kwargs
-        return FakeTokens([PROMPT_IDS + NEW_IDS])  # the prompt, then the new tokens
+        rows = kwargs["input_ids"].shape[0]  # type: ignore[attr-defined]
+        return FakeTokens([PROMPT_IDS + new_ids(row) for row in range(rows)])  # prompt, then reply
 
 
 class FakeTokenizer:
+    padding_side = "right"  # the default of the Qwen tokenizer
+
     def __init__(self, name: str) -> None:
         self.name = name
-        self.template_call: dict[str, Any] = {}
+        self.templated: list[dict[str, Any]] = []
         self.tokenize_call: dict[str, Any] = {}
         self.decode_call: dict[str, Any] = {}
         self.batch = FakeBatch()
@@ -65,25 +73,34 @@ class FakeTokenizer:
     def apply_chat_template(
         self, messages: list[Message], tokenize: bool, add_generation_prompt: bool
     ) -> str:
-        self.template_call = {
-            "messages": messages,
-            "tokenize": tokenize,
-            "add_generation_prompt": add_generation_prompt,
-        }
-        return "TEMPLATED PROMPT"
+        self.templated.append(
+            {
+                "messages": messages,
+                "tokenize": tokenize,
+                "add_generation_prompt": add_generation_prompt,
+            }
+        )
+        return f"PROMPT {messages[-1]['content']}"
 
-    def __call__(self, text: str, add_special_tokens: bool, return_tensors: str) -> FakeBatch:
+    def __call__(
+        self, texts: list[str], add_special_tokens: bool, padding: bool, return_tensors: str
+    ) -> FakeBatch:
         self.tokenize_call = {
-            "text": text,
+            "texts": texts,
             "add_special_tokens": add_special_tokens,
+            "padding": padding,
+            "padding_side": self.padding_side,  # what it is when the prompts are tokenized
             "return_tensors": return_tensors,
         }
-        self.batch = FakeBatch(input_ids=FakeIds(), attention_mask="MASK")
+        self.batch = FakeBatch(input_ids=FakeIds(len(texts)), attention_mask="MASK")
         return self.batch
 
-    def decode(self, ids: list[int], skip_special_tokens: bool) -> str:
-        self.decode_call = {"ids": list(ids), "skip_special_tokens": skip_special_tokens}
-        return "DECODED"
+    def batch_decode(self, ids: list[list[int]], skip_special_tokens: bool) -> list[str]:
+        self.decode_call = {
+            "ids": [list(row) for row in ids],
+            "skip_special_tokens": skip_special_tokens,
+        }
+        return ["-".join(map(str, row)) for row in ids]
 
 
 def fake_transformers() -> types.ModuleType:
@@ -126,52 +143,65 @@ def model_module(monkeypatch: pytest.MonkeyPatch) -> Iterator[types.ModuleType]:
     text2sql.__dict__.pop("model", None)
 
 
-def test_generate_returns_only_the_new_tokens(model_module: types.ModuleType) -> None:
+def test_generate_batch_returns_the_new_tokens_of_each_conversation(
+    model_module: types.ModuleType,
+) -> None:
     model, tokenizer = model_module.load_model("some/model")
 
-    reply = model_module.generate(model, tokenizer, MESSAGES)
+    replies = model_module.generate_batch(model, tokenizer, CONVERSATIONS)
 
-    assert reply == "DECODED"
-    assert tokenizer.decode_call == {"ids": NEW_IDS, "skip_special_tokens": True}
+    assert replies == ["100-200", "101-201"]  # the prompts are cut off, the order is kept
+    assert tokenizer.decode_call == {
+        "ids": [new_ids(0), new_ids(1)],
+        "skip_special_tokens": True,
+    }
 
 
-def test_generate_is_plain_greedy(model_module: types.ModuleType) -> None:
+def test_generate_batch_is_plain_greedy(model_module: types.ModuleType) -> None:
     model, tokenizer = model_module.load_model("some/model")
 
-    model_module.generate(model, tokenizer, MESSAGES)
+    model_module.generate_batch(model, tokenizer, CONVERSATIONS)
 
     assert model.generate_kwargs["do_sample"] is False
     assert model.generate_kwargs["repetition_penalty"] == 1.0
     # the longest gold query is 202 Qwen tokens (train_spider), counting the closing <|im_end|>
     assert model.generate_kwargs["max_new_tokens"] >= 202
+    assert "padding_side" not in model.generate_kwargs  # it is a tokenizer setting
     assert model.generate_kwargs["input_ids"] is tokenizer.batch["input_ids"]
     assert model.generate_kwargs["attention_mask"] == "MASK"
 
 
-def test_generate_passes_the_token_limit_through(model_module: types.ModuleType) -> None:
+def test_generate_batch_formats_every_conversation_and_tokenizes_them_together(
+    model_module: types.ModuleType,
+) -> None:
     model, tokenizer = model_module.load_model("some/model")
 
-    model_module.generate(model, tokenizer, MESSAGES, max_new_tokens=256)
+    model_module.generate_batch(model, tokenizer, CONVERSATIONS)
 
-    assert model.generate_kwargs["max_new_tokens"] == 256
-
-
-def test_generate_formats_the_prompt_with_the_chat_template(model_module: types.ModuleType) -> None:
-    model, tokenizer = model_module.load_model("some/model")
-
-    model_module.generate(model, tokenizer, MESSAGES)
-
-    assert tokenizer.template_call == {
-        "messages": MESSAGES,
-        "tokenize": False,
-        "add_generation_prompt": True,
-    }
-    assert tokenizer.tokenize_call == {
-        "text": "TEMPLATED PROMPT",
-        "add_special_tokens": False,
-        "return_tensors": "pt",
-    }
+    assert tokenizer.templated == [
+        {"messages": messages, "tokenize": False, "add_generation_prompt": True}
+        for messages in CONVERSATIONS
+    ]
+    assert tokenizer.tokenize_call["texts"] == ["PROMPT FIRST", "PROMPT SECOND"]
+    assert tokenizer.tokenize_call["add_special_tokens"] is False
+    assert tokenizer.tokenize_call["padding"] is True
+    assert tokenizer.tokenize_call["return_tensors"] == "pt"
     assert tokenizer.batch.device == "cuda:0"
+
+
+def test_generate_batch_pads_on_the_left(model_module: types.ModuleType) -> None:
+    model, tokenizer = model_module.load_model("some/model")
+    assert tokenizer.padding_side == "right"
+
+    model_module.generate_batch(model, tokenizer, CONVERSATIONS)
+
+    assert tokenizer.tokenize_call["padding_side"] == "left"  # set before the prompts are padded
+
+
+def test_generate_batch_works_for_a_single_conversation(model_module: types.ModuleType) -> None:
+    model, tokenizer = model_module.load_model("some/model")
+
+    assert model_module.generate_batch(model, tokenizer, CONVERSATIONS[:1]) == ["100-200"]
 
 
 def test_load_model_uses_4bit_nf4_with_double_quantization(model_module: types.ModuleType) -> None:

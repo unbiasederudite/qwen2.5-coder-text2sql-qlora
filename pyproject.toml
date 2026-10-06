@@ -11,6 +11,7 @@ dependencies = []
 
 [dependency-groups]
 dev = [
+    "google-colab-cli>=0.7.4",
     "ipykernel>=7.4.0",
     "mypy>=2.3.1",
     "pytest>=9.1.1",
@@ -22,7 +23,7 @@ eval = [
     "sqlparse>=0.6.0",
     "tqdm>=4.70.1",
 ]
-train = [
+colab = [
     "bitsandbytes>=0.50.2",
     "peft>=0.21.2",
     "transformers>=5.18.0",
@@ -56,8 +57,8 @@ strict = true
 files = ["src"]
 
 [[tool.mypy.overrides]]
-module = ["torch.*", "transformers.*"]
-ignore_missing_imports = true  # installed only in the train group
+module = ["torch.*", "transformers.*", "huggingface_hub.*"]
+ignore_missing_imports = true  # installed only in the colab group
 
 [[tool.mypy.overrides]]
 module = ["nltk.*"]

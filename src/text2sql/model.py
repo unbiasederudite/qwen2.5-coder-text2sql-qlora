@@ -1,4 +1,4 @@
-"""Qwen model loading and generation."""
+"""Qwen model loading and batch generation."""
 
 import torch
 from transformers import (
@@ -12,6 +12,12 @@ from transformers import (
 from text2sql.prompt import Message
 
 MODELS = ["Qwen/Qwen2.5-Coder-1.5B-Instruct", "Qwen/Qwen2.5-Coder-3B-Instruct"]
+GENERATION = {
+    "max_new_tokens": 256,  # the longest gold query is 202 Qwen tokens
+    "do_sample": False,  # greedy
+    "repetition_penalty": 1.0,
+    "padding_side": "left",  # the replies must follow the prompts, not the padding
+}
 
 
 def load_model(name: str) -> tuple[PreTrainedModel, PreTrainedTokenizerBase]:
@@ -35,28 +41,33 @@ def load_model(name: str) -> tuple[PreTrainedModel, PreTrainedTokenizerBase]:
     return model, AutoTokenizer.from_pretrained(name)
 
 
-def generate(
+def generate_batch(
     model: PreTrainedModel,
     tokenizer: PreTrainedTokenizerBase,
-    messages: list[Message],
-    max_new_tokens: int = 256,
-) -> str:
-    """Generates the assistant reply to a conversation.
+    conversations: list[list[Message]],
+) -> list[str]:
+    """Generates the assistant replies to several conversations at once.
+
+    Decodes with the settings in `GENERATION` and sets the tokenizer to left padding.
 
     Args:
         model (PreTrainedModel): Model from `load_model`.
         tokenizer (PreTrainedTokenizerBase): Tokenizer from `load_model`.
-        messages (list[Message]): Conversation to reply to.
-        max_new_tokens (int): Maximum number of new tokens.
+        conversations (list[list[Message]]): Conversations to reply to.
 
     Returns:
-        str: Reply without the prompt.
+        list[str]: Replies without the prompts, in the order of the conversations.
     """
-    prompt = tokenizer.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
-    inputs = tokenizer(prompt, add_special_tokens=False, return_tensors="pt").to(model.device)
-    output = model.generate(
-        **inputs, max_new_tokens=max_new_tokens, do_sample=False, repetition_penalty=1.0
+    prompts = [
+        tokenizer.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
+        for messages in conversations
+    ]
+    settings = dict(GENERATION)
+    tokenizer.padding_side = settings.pop("padding_side")
+    inputs = tokenizer(prompts, add_special_tokens=False, padding=True, return_tensors="pt").to(
+        model.device
     )
-    return str(
-        tokenizer.decode(output[0, inputs["input_ids"].shape[1] :], skip_special_tokens=True)
+    output = model.generate(**inputs, **settings)
+    return list(
+        tokenizer.batch_decode(output[:, inputs["input_ids"].shape[1] :], skip_special_tokens=True)
     )
