@@ -1,0 +1,12 @@
+{
+  "run": "baseline",
+  "model": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+  "model_revision": "2e1fd397ee46e1388853d2af2c993145b0f1098a",
+  "split": "dev",
+  "predictions_sha256": "66bb50697bc7addbb1ec62b2d59651339ed28b66ab46dae6dc1e6f73a846b6a1",
+  "keep_distinct": false,
+  "extraction": true,
+  "repo": "unbiasederudite/qwen2.5-coder-text2sql-qlora",
+  "commit": "bee91028839e915d0fa8eacc715c5e4d52cc98f2",
+  "sqlite_version": "3.53.1"
+}

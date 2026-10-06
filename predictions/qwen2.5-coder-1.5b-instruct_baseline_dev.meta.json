@@ -1,0 +1,44 @@
+{
+  "run": "baseline",
+  "model": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+  "model_revision": "2e1fd397ee46e1388853d2af2c993145b0f1098a",
+  "quantization": {
+    "quant_method": "bitsandbytes",
+    "_load_in_8bit": false,
+    "_load_in_4bit": true,
+    "llm_int8_threshold": 6.0,
+    "llm_int8_skip_modules": null,
+    "llm_int8_enable_fp32_cpu_offload": false,
+    "llm_int8_has_fp16_weight": false,
+    "bnb_4bit_quant_type": "nf4",
+    "bnb_4bit_use_double_quant": true,
+    "bnb_4bit_compute_dtype": "float16",
+    "bnb_4bit_quant_storage": "uint8",
+    "load_in_4bit": true,
+    "load_in_8bit": false
+  },
+  "generation": {
+    "max_new_tokens": 256,
+    "do_sample": false,
+    "repetition_penalty": 1.0,
+    "padding_side": "left",
+    "batch_size": 16
+  },
+  "split": "dev",
+  "split_file_sha256": "30d64a3fccde493226df79687aed9e4a1c0129525baf44f29c0573d914d758a4",
+  "questions": 1034,
+  "already_done": 0,
+  "predictions_sha256": "66bb50697bc7addbb1ec62b2d59651339ed28b66ab46dae6dc1e6f73a846b6a1",
+  "started_at": "2026-10-06T22:19:11+00:00",
+  "finished_at": "2026-10-06T22:25:31+00:00",
+  "duration_seconds": 380,
+  "repo": "unbiasederudite/qwen2.5-coder-text2sql-qlora",
+  "commit": "bee91028839e915d0fa8eacc715c5e4d52cc98f2",
+  "python": "3.13.15",
+  "packages": {
+    "torch": "2.11.0+cu130",
+    "transformers": "5.18.0",
+    "bitsandbytes": "0.50.2"
+  },
+  "gpu": "Tesla T4"
+}

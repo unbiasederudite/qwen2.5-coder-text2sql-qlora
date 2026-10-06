@@ -56,6 +56,17 @@ Scoring is built around the vendored official [test-suite evaluation](https://gi
 
 Only text-to-SQL is evaluated. The fine-tuned models are intended for this task only, and any loss of general capabilities is possible and not measured.
 
+## Baseline results
+
+Scores of the models on the Spider dev split before fine-tuning:
+
+| Model | EX | TS | EM |
+| --- | --- | --- | --- |
+| `Qwen/Qwen2.5-Coder-1.5B-Instruct` | 0.652 | 0.555 | 0.428 |
+| `Qwen/Qwen2.5-Coder-3B-Instruct` | 0.712 | 0.627 | 0.457 |
+
+The scores and their metadata are in `scores/`, the predictions in `predictions/`. See [Reproduce the results](#reproduce-the-results) to run them again.
+
 ## Training sample
 
 Each sample is three chat messages:

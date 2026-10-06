@@ -1,0 +1,1034 @@
+{"id": 1000, "db_id": "singer", "predicted": "SELECT count(*) FROM singer"}
+{"id": 1001, "db_id": "singer", "predicted": "SELECT count(*) FROM singer"}
+{"id": 1018, "db_id": "singer", "predicted": "SELECT T1.Title, T2.Name FROM song AS T1 JOIN singer AS T2 ON T1.Singer_ID = T2.Singer_ID"}
+{"id": 1019, "db_id": "singer", "predicted": "SELECT T1.Title, T2.Name FROM song AS T1 JOIN singer AS T2 ON T1.Singer_ID = T2.Singer_ID"}
+{"id": 1015, "db_id": "singer", "predicted": "SELECT Citizenship FROM singer GROUP BY Citizenship ORDER BY COUNT(*) DESC LIMIT 1"}
+{"id": 1004, "db_id": "singer", "predicted": "SELECT Birth_Year, Citizenship FROM singer"}
+{"id": 1014, "db_id": "singer", "predicted": "SELECT Citizenship FROM singer GROUP BY Citizenship ORDER BY COUNT(*) DESC LIMIT 1"}
+{"id": 1026, "db_id": "singer", "predicted": "SELECT Name FROM singer WHERE Singer_ID NOT IN (SELECT Singer_ID FROM song)"}
+{"id": 1017, "db_id": "singer", "predicted": "SELECT Citizenship, MAX(Net_Worth_Millions) FROM singer GROUP BY Citizenship"}
+{"id": 1011, "db_id": "singer", "predicted": "SELECT Name FROM singer ORDER BY Net_Worth_Millions DESC LIMIT 1"}
+{"id": 1022, "db_id": "singer", "predicted": "SELECT Name FROM singer WHERE Singer_ID IN (SELECT Singer_ID FROM song GROUP BY Singer_ID HAVING COUNT(*) > 1)"}
+{"id": 1002, "db_id": "singer", "predicted": "SELECT Name FROM singer ORDER BY Net_Worth_Millions ASC"}
+{"id": 1005, "db_id": "singer", "predicted": "SELECT Birth_Year, Citizenship FROM singer"}
+{"id": 1010, "db_id": "singer", "predicted": "SELECT Name FROM singer ORDER BY Net_Worth_Millions DESC LIMIT 1"}
+{"id": 1006, "db_id": "singer", "predicted": "SELECT Name FROM singer WHERE Citizenship != \"France\""}
+{"id": 1027, "db_id": "singer", "predicted": "SELECT name FROM singer WHERE singer_id NOT IN (SELECT singer_id FROM song)"}
+{"id": 1003, "db_id": "singer", "predicted": "SELECT Name FROM singer ORDER BY Net_Worth_Millions ASC"}
+{"id": 1013, "db_id": "singer", "predicted": "SELECT citizenship, COUNT(*) FROM singer GROUP BY citizenship"}
+{"id": 1024, "db_id": "singer", "predicted": "SELECT T1.Name, SUM(T2.Sales) AS Total_Sales\nFROM singer AS T1\nJOIN song AS T2 ON T1.Singer_ID = T2.Singer_ID\nGROUP BY T1.Singer_ID, T1.Name;"}
+{"id": 1007, "db_id": "singer", "predicted": "SELECT Name FROM singer WHERE Citizenship != 'France'"}
+{"id": 1025, "db_id": "singer", "predicted": "SELECT T1.Name, SUM(T2.Sales) AS Total_Sales\nFROM singer AS T1\nJOIN song AS T2 ON T1.Singer_ID = T2.Singer_ID\nGROUP BY T1.Name"}
+{"id": 1023, "db_id": "singer", "predicted": "SELECT Name FROM singer WHERE Singer_ID IN (SELECT Singer_ID FROM song GROUP BY Singer_ID HAVING COUNT(*) > 1)"}
+{"id": 1008, "db_id": "singer", "predicted": "SELECT Name FROM singer WHERE Birth_Year IN (1948, 1949)"}
+{"id": 647, "db_id": "poker_player", "predicted": "SELECT count(*) FROM poker_player"}
+{"id": 648, "db_id": "poker_player", "predicted": "SELECT count(*) FROM poker_player"}
+{"id": 1020, "db_id": "singer", "predicted": "SELECT DISTINCT T1.Name FROM singer AS T1 JOIN song AS T2 ON T1.Singer_ID = T2.Singer_ID WHERE T2.Sales > 300000"}
+{"id": 659, "db_id": "poker_player", "predicted": "SELECT Name FROM people"}
+{"id": 1009, "db_id": "singer", "predicted": "SELECT Name FROM singer WHERE Birth_Year IN (1948, 1949)"}
+{"id": 1021, "db_id": "singer", "predicted": "SELECT Name FROM singer WHERE Sales > 300000"}
+{"id": 660, "db_id": "poker_player", "predicted": "SELECT Name FROM poker_player"}
+{"id": 685, "db_id": "poker_player", "predicted": "SELECT count(DISTINCT Nationality) FROM people"}
+{"id": 1028, "db_id": "singer", "predicted": "SELECT T1.Citizenship FROM singer AS T1 JOIN singer AS T2 ON T1.Singer_ID = T2.Singer_ID WHERE T1.Birth_Year < 1945 INTERSECT SELECT T1.Citizenship FROM singer AS T1 JOIN singer AS T2 ON T1.Singer_ID = T2.Singer_ID WHERE T1.Birth_Year > 1955"}
+{"id": 686, "db_id": "poker_player", "predicted": "SELECT count(DISTINCT Nationality) FROM people"}
+{"id": 1012, "db_id": "singer", "predicted": "SELECT citizenship, COUNT(*) FROM singer GROUP BY citizenship"}
+{"id": 1016, "db_id": "singer", "predicted": "SELECT citizenship, MAX(Net_Worth_Millions) FROM singer GROUP BY citizenship"}
+{"id": 653, "db_id": "poker_player", "predicted": "SELECT AVG(Earnings) FROM poker_player"}
+{"id": 674, "db_id": "poker_player", "predicted": "SELECT Nationality, COUNT(*) FROM people GROUP BY Nationality"}
+{"id": 675, "db_id": "poker_player", "predicted": "SELECT Nationality FROM people GROUP BY Nationality ORDER BY COUNT(*) DESC LIMIT 1"}
+{"id": 667, "db_id": "poker_player", "predicted": "SELECT Money_Rank FROM poker_player ORDER BY Height DESC LIMIT 1"}
+{"id": 684, "db_id": "poker_player", "predicted": "SELECT Name FROM people WHERE People_ID NOT IN (SELECT People_ID FROM poker_player)"}
+{"id": 683, "db_id": "poker_player", "predicted": "SELECT Name FROM people WHERE People_ID NOT IN (SELECT People_ID FROM poker_player)"}
+{"id": 654, "db_id": "poker_player", "predicted": "SELECT AVG(Earnings) FROM poker_player"}
+{"id": 682, "db_id": "poker_player", "predicted": "SELECT Name FROM people WHERE Nationality != 'Russia'"}
+{"id": 649, "db_id": "poker_player", "predicted": "SELECT Earnings FROM poker_player ORDER BY Earnings DESC"}
+{"id": 681, "db_id": "poker_player", "predicted": "SELECT Name FROM people WHERE Nationality != \"Russia\""}
+{"id": 1029, "db_id": "singer", "predicted": "SELECT Citizenship FROM singer WHERE Birth_Year BETWEEN 1945 AND 1955 GROUP BY Citizenship"}
+{"id": 676, "db_id": "poker_player", "predicted": "SELECT Nationality FROM people GROUP BY Nationality ORDER BY COUNT(*) DESC LIMIT 1"}
+{"id": 656, "db_id": "poker_player", "predicted": "SELECT Money_Rank FROM poker_player ORDER BY Earnings DESC LIMIT 1"}
+{"id": 662, "db_id": "poker_player", "predicted": "SELECT T1.Name FROM poker_player AS T1 INNER JOIN people AS T2 ON T1.People_ID = T2.People_ID WHERE T1.Earnings > 300000"}
+{"id": 670, "db_id": "poker_player", "predicted": "SELECT AVG(Earnings) FROM poker_player WHERE Height > 200"}
+{"id": 678, "db_id": "poker_player", "predicted": "SELECT Nationality FROM people GROUP BY Nationality HAVING COUNT(*)  >=  2"}
+{"id": 651, "db_id": "poker_player", "predicted": "SELECT Final_Table_Made, Best_Finish FROM poker_player"}
+{"id": 677, "db_id": "poker_player", "predicted": "SELECT Nationality FROM people GROUP BY Nationality HAVING COUNT(*) > 1"}
+{"id": 666, "db_id": "poker_player", "predicted": "SELECT Birth_Date FROM poker_player ORDER BY Earnings ASC LIMIT 1"}
+{"id": 668, "db_id": "poker_player", "predicted": "SELECT Money_Rank FROM poker_player ORDER BY Height DESC LIMIT 1"}
+{"id": 650, "db_id": "poker_player", "predicted": "SELECT Earnings FROM poker_player ORDER BY Earnings DESC"}
+{"id": 665, "db_id": "poker_player", "predicted": "SELECT Birth_Date FROM poker_player ORDER BY Earnings ASC LIMIT 1"}
+{"id": 671, "db_id": "poker_player", "predicted": "SELECT Name FROM poker_player ORDER BY Earnings DESC"}
+{"id": 655, "db_id": "poker_player", "predicted": "SELECT Money_Rank FROM poker_player ORDER BY Earnings DESC LIMIT 1"}
+{"id": 672, "db_id": "poker_player", "predicted": "SELECT Name FROM poker_player ORDER BY Earnings DESC"}
+{"id": 652, "db_id": "poker_player", "predicted": "SELECT Final_Table_Made, Best_Finish FROM poker_player"}
+{"id": 661, "db_id": "poker_player", "predicted": "SELECT T1.Name FROM poker_player AS T1 INNER JOIN people AS T2 ON T1.People_ID = T2.People_ID WHERE T1.Earnings > 300000"}
+{"id": 669, "db_id": "poker_player", "predicted": "SELECT AVG(Earnings) FROM poker_player WHERE Height > 200"}
+{"id": 679, "db_id": "poker_player", "predicted": "SELECT Name, Birth_Date FROM people ORDER BY Name ASC"}
+{"id": 663, "db_id": "poker_player", "predicted": "SELECT Name FROM poker_player ORDER BY Final_Table_Made ASC"}
+{"id": 680, "db_id": "poker_player", "predicted": "SELECT Name, Birth_Date FROM people ORDER BY Name ASC"}
+{"id": 658, "db_id": "poker_player", "predicted": "SELECT MAX(Final_Table_Made) FROM poker_player WHERE Earnings < 200000"}
+{"id": 657, "db_id": "poker_player", "predicted": "SELECT MAX(Final_Table_Made) FROM poker_player WHERE Earnings < 200000"}
+{"id": 673, "db_id": "poker_player", "predicted": "SELECT Nationality, COUNT(*) FROM people GROUP BY Nationality"}
+{"id": 664, "db_id": "poker_player", "predicted": "SELECT Name FROM poker_player ORDER BY Final_Table_Made ASC"}
+{"id": 381, "db_id": "course_teach", "predicted": "SELECT count(*) FROM teacher"}
+{"id": 392, "db_id": "course_teach", "predicted": "SELECT T1.Hometown FROM teacher AS T1 INNER JOIN course_arrange AS T2 ON T1.Teacher_ID = T2.Teacher_ID ORDER BY T2.Grade ASC LIMIT 1"}
+{"id": 873, "db_id": "network_1", "predicted": "SELECT ID FROM Highschooler WHERE name = 'Kyle'"}
+{"id": 382, "db_id": "course_teach", "predicted": "SELECT count(*) FROM teacher"}
+{"id": 868, "db_id": "network_1", "predicted": "SELECT grade FROM Highschooler WHERE name = 'Kyle'"}
+{"id": 385, "db_id": "course_teach", "predicted": "SELECT Age, Hometown FROM teacher"}
+{"id": 395, "db_id": "course_teach", "predicted": "SELECT Hometown FROM teacher GROUP BY Hometown ORDER BY COUNT(*) DESC LIMIT 1"}
+{"id": 391, "db_id": "course_teach", "predicted": "SELECT T1.Hometown FROM teacher AS T1 WHERE T1.Age = (SELECT MIN(Age) FROM teacher)"}
+{"id": 386, "db_id": "course_teach", "predicted": "SELECT Age, Hometown FROM teacher"}
+{"id": 389, "db_id": "course_teach", "predicted": "SELECT Name FROM teacher WHERE Age = 32 OR Age = 33"}
+{"id": 394, "db_id": "course_teach", "predicted": "SELECT hometown, COUNT(*) FROM teacher GROUP BY hometown"}
+{"id": 912, "db_id": "network_1", "predicted": "SELECT COUNT(*) FROM Likes WHERE student_id = (SELECT ID FROM Highschooler WHERE name = 'Kyle');"}
+{"id": 396, "db_id": "course_teach", "predicted": "SELECT Hometown FROM teacher GROUP BY Hometown ORDER BY COUNT(*) DESC LIMIT 1"}
+{"id": 403, "db_id": "course_teach", "predicted": "SELECT T.Name FROM teacher AS T JOIN course_arrange AS CA ON T.Teacher_ID = CA.Teacher_ID JOIN course AS C ON CA.Course_ID = C.Course_ID WHERE C.Course = 'Math'"}
+{"id": 397, "db_id": "course_teach", "predicted": "SELECT T1.Hometown FROM teacher AS T1 JOIN teacher AS T2 ON T1.Hometown = T2.Hometown GROUP BY T1.Hometown HAVING COUNT(*) >= 2"}
+{"id": 862, "db_id": "network_1", "predicted": "SELECT count(*) FROM Highschooler"}
+{"id": 863, "db_id": "network_1", "predicted": "SELECT count(*) FROM Highschooler"}
+{"id": 383, "db_id": "course_teach", "predicted": "SELECT Name FROM teacher ORDER BY Age ASC"}
+{"id": 411, "db_id": "museum_visit", "predicted": "SELECT COUNT(*) FROM visitor WHERE Age < 30"}
+{"id": 893, "db_id": "network_1", "predicted": "SELECT COUNT(*) FROM Friend WHERE student_id = (SELECT ID FROM Highschooler WHERE name = 'Kyle');"}
+{"id": 407, "db_id": "course_teach", "predicted": "SELECT T.Name FROM teacher AS T JOIN course_arrange AS CA ON T.Teacher_ID = CA.Teacher_ID GROUP BY T.Teacher_ID HAVING COUNT(DISTINCT CA.Course_ID) >= 2"}
+{"id": 191, "db_id": "flight_2", "predicted": "SELECT count(*) FROM flights"}
+{"id": 404, "db_id": "course_teach", "predicted": "SELECT T1.Name FROM teacher AS T1 JOIN course_arrange AS T2 ON T1.Teacher_ID = T2.Teacher_ID JOIN course AS T3 ON T2.Course_ID = T3.Course_ID WHERE T3.Course = 'Math'"}
+{"id": 187, "db_id": "flight_2", "predicted": "SELECT count(*) FROM airlines"}
+{"id": 189, "db_id": "flight_2", "predicted": "SELECT count(*) FROM airports"}
+{"id": 192, "db_id": "flight_2", "predicted": "SELECT count(*) FROM flights"}
+{"id": 867, "db_id": "network_1", "predicted": "SELECT grade FROM Highschooler"}
+{"id": 878, "db_id": "network_1", "predicted": "SELECT grade FROM Highschooler GROUP BY grade ORDER BY COUNT(*) DESC LIMIT 1"}
+{"id": 883, "db_id": "network_1", "predicted": "SELECT H1.name, COUNT(F.friend_id) AS num_friends\nFROM Highschooler H1\nJOIN Friend F ON H1.ID = F.student_id\nGROUP BY H1.ID"}
+{"id": 190, "db_id": "flight_2", "predicted": "SELECT count(*) FROM airports"}
+{"id": 195, "db_id": "flight_2", "predicted": "SELECT COUNT(*) FROM airlines WHERE Country = 'USA'"}
+{"id": 866, "db_id": "network_1", "predicted": "SELECT grade FROM Highschooler"}
+{"id": 877, "db_id": "network_1", "predicted": "SELECT grade, COUNT(*) FROM Highschooler GROUP BY grade"}
+{"id": 384, "db_id": "course_teach", "predicted": "SELECT Name FROM teacher ORDER BY Age ASC"}
+{"id": 400, "db_id": "course_teach", "predicted": "SELECT T1.Name, T2.Course FROM teacher AS T1 JOIN course_arrange AS T2 ON T1.Teacher_ID = T2.Teacher_ID"}
+{"id": 405, "db_id": "course_teach", "predicted": "SELECT T1.Name, COUNT(T2.Course_ID) FROM teacher AS T1 JOIN course_arrange AS T2 ON T1.Teacher_ID = T2.Teacher_ID GROUP BY T1.Teacher_ID"}
+{"id": 881, "db_id": "network_1", "predicted": "SELECT grade FROM Highschooler GROUP BY grade HAVING COUNT(*) >= 4"}
+{"id": 872, "db_id": "network_1", "predicted": "SELECT ID FROM Highschooler WHERE name = 'Kyle'"}
+{"id": 398, "db_id": "course_teach", "predicted": "SELECT DISTINCT T1.Hometown FROM teacher AS T1 JOIN teacher AS T2 ON T1.Hometown = T2.Hometown GROUP BY T1.Hometown HAVING COUNT(*) > 1"}
+{"id": 903, "db_id": "network_1", "predicted": "SELECT student_id, COUNT(*) AS likes_count FROM Likes GROUP BY student_id"}
+{"id": 203, "db_id": "flight_2", "predicted": "SELECT COUNT(*) FROM flights WHERE SourceAirport = 'APG'"}
+{"id": 902, "db_id": "network_1", "predicted": "SELECT student_id, COUNT(*) FROM Likes GROUP BY student_id"}
+{"id": 390, "db_id": "course_teach", "predicted": "SELECT Name FROM teacher WHERE Age = 32 OR Age = 33"}
+{"id": 188, "db_id": "flight_2", "predicted": "SELECT count(*) FROM airlines"}
+{"id": 193, "db_id": "flight_2", "predicted": "SELECT Airline FROM airlines WHERE Abbreviation = 'UAL'"}
+{"id": 206, "db_id": "flight_2", "predicted": "SELECT COUNT(*) FROM flights WHERE SourceAirport = 'ATO'"}
+{"id": 230, "db_id": "flight_2", "predicted": "SELECT T1.Airline FROM flights AS T1 JOIN airlines AS T2 ON T1.Airline = T2.uid GROUP BY T1.Airline ORDER BY COUNT(*) DESC LIMIT 1"}
+{"id": 864, "db_id": "network_1", "predicted": "SELECT name, grade FROM Highschooler"}
+{"id": 205, "db_id": "flight_2", "predicted": "SELECT COUNT(*) FROM flights WHERE DestAirport = 'ATO'"}
+{"id": 399, "db_id": "course_teach", "predicted": "SELECT T.Name, C.Course FROM teacher AS T JOIN course_arrange AS CA ON T.Teacher_ID = CA.Teacher_ID JOIN course AS C ON CA.Course_ID = C.Course_ID"}
+{"id": 408, "db_id": "course_teach", "predicted": "SELECT T.Name FROM teacher AS T JOIN course_arrange AS CA ON T.Teacher_ID = CA.Teacher_ID GROUP BY T.Teacher_ID HAVING COUNT(*) >= 2"}
+{"id": 870, "db_id": "network_1", "predicted": "SELECT name FROM Highschooler WHERE grade = 10"}
+{"id": 876, "db_id": "network_1", "predicted": "SELECT grade, COUNT(*) FROM Highschooler GROUP BY grade"}
+{"id": 880, "db_id": "network_1", "predicted": "SELECT grade FROM Highschooler GROUP BY grade HAVING COUNT(*) >= 4"}
+{"id": 907, "db_id": "network_1", "predicted": "SELECT T1.name FROM Highschooler AS T1 JOIN Likes AS T2 ON T1.ID = T2.student_id GROUP BY T1.ID ORDER BY COUNT(*) DESC LIMIT 1"}
+{"id": 422, "db_id": "museum_visit", "predicted": "SELECT Name FROM museum WHERE Museum_ID NOT IN (SELECT Museum_ID FROM visit)"}
+{"id": 428, "db_id": "museum_visit", "predicted": "SELECT COUNT(*) FROM museum WHERE Open_Year LIKE '2013%' OR Open_Year LIKE '2008%'"}
+{"id": 869, "db_id": "network_1", "predicted": "SELECT grade FROM Highschooler WHERE name = 'Kyle'"}
+{"id": 242, "db_id": "flight_2", "predicted": "SELECT A.Airline FROM airlines AS A JOIN flights AS F ON A.uid = F.Airline GROUP BY A.Airline HAVING COUNT(*) >= 10"}
+{"id": 874, "db_id": "network_1", "predicted": "SELECT COUNT(*) FROM Highschooler WHERE grade IN (9, 10);"}
+{"id": 897, "db_id": "network_1", "predicted": "SELECT name FROM Highschooler WHERE ID NOT IN (SELECT student_id FROM Friend)"}
+{"id": 194, "db_id": "flight_2", "predicted": "SELECT Airline FROM airlines WHERE Abbreviation = 'UAL'"}
+{"id": 196, "db_id": "flight_2", "predicted": "SELECT COUNT(*) FROM airlines WHERE Country = 'USA'"}
+{"id": 229, "db_id": "flight_2", "predicted": "SELECT T1.Airline FROM flights AS T1 JOIN airlines AS T2 ON T1.Airline = T2.uid GROUP BY T1.Airline ORDER BY COUNT(*) DESC LIMIT 1"}
+{"id": 201, "db_id": "flight_2", "predicted": "SELECT AirportName FROM airports WHERE City = 'Aberdeen'"}
+{"id": 244, "db_id": "flight_2", "predicted": "SELECT A.Airline FROM airlines AS A JOIN flights AS F ON A.uid = F.Airline GROUP BY A.Airline HAVING COUNT(*) < 200"}
+{"id": 406, "db_id": "course_teach", "predicted": "SELECT T1.Name, COUNT(T2.Course_ID) FROM teacher AS T1 JOIN course_arrange AS T2 ON T1.Teacher_ID = T2.Teacher_ID GROUP BY T1.Teacher_ID"}
+{"id": 421, "db_id": "museum_visit", "predicted": "SELECT T1.Museum_ID, T1.Name FROM visit AS T1 JOIN museum AS T2 ON T1.Museum_ID = T2.Museum_ID GROUP BY T1.Museum_ID ORDER BY COUNT(*) DESC LIMIT 1"}
+{"id": 865, "db_id": "network_1", "predicted": "SELECT name, grade FROM Highschooler"}
+{"id": 871, "db_id": "network_1", "predicted": "SELECT name FROM Highschooler WHERE grade = 10"}
+{"id": 875, "db_id": "network_1", "predicted": "SELECT COUNT(*) FROM Highschooler WHERE grade IN (9, 10);"}
+{"id": 894, "db_id": "network_1", "predicted": "SELECT ID FROM Highschooler WHERE ID NOT IN (SELECT student_id FROM Friend)"}
+{"id": 908, "db_id": "network_1", "predicted": "SELECT name FROM Highschooler WHERE ID IN (SELECT student_id FROM Likes GROUP BY student_id HAVING COUNT(*) >= 2)"}
+{"id": 199, "db_id": "flight_2", "predicted": "SELECT AirportName FROM airports WHERE AirportCode = 'AKO'"}
+{"id": 202, "db_id": "flight_2", "predicted": "SELECT AirportName FROM airports WHERE City = 'Aberdeen'"}
+{"id": 207, "db_id": "flight_2", "predicted": "SELECT COUNT(*) FROM flights WHERE SourceAirport = 'ABE'"}
+{"id": 209, "db_id": "flight_2", "predicted": "SELECT COUNT(*) FROM flights WHERE DestAirport = 'ABE'"}
+{"id": 214, "db_id": "flight_2", "predicted": "SELECT COUNT(*) FROM flights WHERE Airline = (SELECT uid FROM airlines WHERE Airline = 'JetBlue Airways')"}
+{"id": 409, "db_id": "course_teach", "predicted": "SELECT T.Name FROM teacher AS T WHERE T.Teacher_ID NOT IN (SELECT T2.Teacher_ID FROM course_arrange AS T1 JOIN teacher AS T2 ON T1.Teacher_ID = T2.Teacher_ID)"}
+{"id": 410, "db_id": "course_teach", "predicted": "SELECT T.Name FROM teacher AS T WHERE T.Teacher_ID NOT IN (SELECT T2.Teacher_ID FROM course_arrange AS T1 JOIN teacher AS T2 ON T1.Teacher_ID = T2.Teacher_ID)"}
+{"id": 915, "db_id": "network_1", "predicted": "SELECT AVG(grade) FROM Highschooler WHERE ID IN (SELECT student_id FROM Friend)"}
+{"id": 916, "db_id": "network_1", "predicted": "SELECT MIN(grade) FROM Highschooler WHERE ID NOT IN (SELECT student_id FROM Friend)"}
+{"id": 212, "db_id": "flight_2", "predicted": "SELECT COUNT(*) FROM flights WHERE SourceAirport = 'ABE' AND DestAirport = 'ASH'"}
+{"id": 256, "db_id": "flight_2", "predicted": "SELECT COUNT(*) FROM flights WHERE SourceAirport = 'ABIL' OR DestAirport = 'ABIL'"}
+{"id": 892, "db_id": "network_1", "predicted": "SELECT COUNT(*) FROM Friend WHERE student_id = (SELECT ID FROM Highschooler WHERE name = 'Kyle');"}
+{"id": 909, "db_id": "network_1", "predicted": "SELECT name FROM Highschooler WHERE ID IN (SELECT student_id FROM Likes GROUP BY student_id HAVING COUNT(*) >= 2)"}
+{"id": 197, "db_id": "flight_2", "predicted": "SELECT T1.City, T1.Country FROM airports AS T1 INNER JOIN flights AS T2 ON T1.AirportCode = T2.SourceAirport WHERE T2.SourceAirport = 'ALTN'"}
+{"id": 200, "db_id": "flight_2", "predicted": "SELECT AirportName FROM airports WHERE AirportCode = 'AKO'"}
+{"id": 221, "db_id": "flight_2", "predicted": "SELECT T1.City FROM airports AS T1 JOIN flights AS T2 ON T1.AirportCode = T2.SourceAirport GROUP BY T1.City ORDER BY COUNT(*) DESC LIMIT 1"}
+{"id": 224, "db_id": "flight_2", "predicted": "SELECT T1.City FROM airports AS T1 JOIN flights AS T2 ON T1.AirportCode = T2.SourceAirport GROUP BY T1.City ORDER BY COUNT(*) DESC LIMIT 1"}
+{"id": 890, "db_id": "network_1", "predicted": "SELECT T1.name FROM Highschooler AS T1 JOIN Friend AS T2 ON T1.ID = T2.student_id JOIN Highschooler AS T3 ON T2.friend_id = T3.ID WHERE T3.name = 'Kyle'"}
+{"id": 180, "db_id": "flight_2", "predicted": "Jetblue Airways is affiliated with the United States."}
+{"id": 198, "db_id": "flight_2", "predicted": "SELECT City, Country FROM airports WHERE AirportCode = 'ALON'"}
+{"id": 223, "db_id": "flight_2", "predicted": "SELECT T1.City FROM airports AS T1 JOIN flights AS T2 ON T1.AirportCode = T2.SourceAirport GROUP BY T1.City ORDER BY COUNT(*) DESC LIMIT 1"}
+{"id": 241, "db_id": "flight_2", "predicted": "SELECT A.Airline FROM airlines AS A JOIN flights AS F ON A.uid = F.Airline GROUP BY A.Airline HAVING COUNT(*) >= 10"}
+{"id": 204, "db_id": "flight_2", "predicted": "SELECT COUNT(*) FROM flights WHERE SourceAirport = 'APG'"}
+{"id": 891, "db_id": "network_1", "predicted": "SELECT T2.name FROM Highschooler AS T1 JOIN Friend AS T2 ON T1.ID = T2.student_id WHERE T1.name = 'Kyle'"}
+{"id": 182, "db_id": "flight_2", "predicted": "Jetblue Airways has the abbreviation \"JBL\"."}
+{"id": 210, "db_id": "flight_2", "predicted": "SELECT COUNT(*) FROM flights WHERE DestAirport = 'ABE'"}
+{"id": 250, "db_id": "flight_2", "predicted": "SELECT FlightNo FROM flights WHERE DestAirport = 'APG'"}
+{"id": 888, "db_id": "network_1", "predicted": "SELECT name FROM Highschooler WHERE ID IN (SELECT student_id FROM Friend GROUP BY student_id HAVING COUNT(*) >= 3)"}
+{"id": 914, "db_id": "network_1", "predicted": "SELECT AVG(grade) FROM Highschooler WHERE ID IN (SELECT student_id FROM Friend GROUP BY student_id HAVING COUNT(*) > 0)"}
+{"id": 243, "db_id": "flight_2", "predicted": "SELECT A.Airline FROM airlines AS A JOIN flights AS F ON A.uid = F.Airline GROUP BY A.Airline HAVING COUNT(*) < 200"}
+{"id": 415, "db_id": "museum_visit", "predicted": "SELECT Museum_ID, Name FROM museum ORDER BY Num_of_Staff DESC LIMIT 1"}
+{"id": 228, "db_id": "flight_2", "predicted": "SELECT T1.AirportName FROM airports AS T1 INNER JOIN flights AS T2 ON T1.AirportCode = T2.SourceAirport GROUP BY T1.AirportName ORDER BY COUNT(*) ASC LIMIT 1"}
+{"id": 248, "db_id": "flight_2", "predicted": "SELECT FlightNo FROM flights WHERE SourceAirport = 'APG'"}
+{"id": 208, "db_id": "flight_2", "predicted": "SELECT COUNT(*) FROM flights WHERE SourceAirport = 'ABE'"}
+{"id": 213, "db_id": "flight_2", "predicted": "SELECT COUNT(*) FROM flights WHERE Airline = 'JetBlue Airways'"}
+{"id": 222, "db_id": "flight_2", "predicted": "SELECT T1.City FROM airports AS T1 JOIN flights AS T2 ON T1.AirportCode = T2.DestAirport GROUP BY T1.City ORDER BY COUNT(*) DESC LIMIT 1"}
+{"id": 234, "db_id": "flight_2", "predicted": "SELECT DISTINCT T1.Airline FROM flights AS T1 INNER JOIN airports AS T2 ON T1.SourceAirport = T2.AirportCode WHERE T2.AirportCode = 'AHD'"}
+{"id": 245, "db_id": "flight_2", "predicted": "SELECT FlightNo FROM flights WHERE Airline = 'United Airlines'"}
+{"id": 879, "db_id": "network_1", "predicted": "SELECT grade FROM Highschooler GROUP BY grade ORDER BY COUNT(*) DESC LIMIT 1"}
+{"id": 889, "db_id": "network_1", "predicted": "SELECT name FROM Highschooler WHERE ID IN (SELECT student_id FROM Friend GROUP BY student_id HAVING COUNT(*) >= 3)"}
+{"id": 181, "db_id": "flight_2", "predicted": "SELECT Abbreviation FROM airlines WHERE Airline = 'JetBlue Airways'"}
+{"id": 185, "db_id": "flight_2", "predicted": "SELECT AirportCode, AirportName FROM airports WHERE City = 'Anthony'"}
+{"id": 393, "db_id": "course_teach", "predicted": "SELECT T1.Hometown, COUNT(*) FROM teacher AS T1 JOIN course_arrange AS T2 ON T1.Teacher_ID = T2.Teacher_ID GROUP BY T1.Hometown"}
+{"id": 887, "db_id": "network_1", "predicted": "SELECT T1.name FROM Highschooler AS T1 JOIN Friend AS T2 ON T1.ID = T2.student_id GROUP BY T1.ID ORDER BY COUNT(*) DESC LIMIT 1"}
+{"id": 895, "db_id": "network_1", "predicted": "SELECT ID FROM Highschooler WHERE ID NOT IN (SELECT student_id FROM Friend)"}
+{"id": 899, "db_id": "network_1", "predicted": "SELECT T1.ID FROM Highschooler AS T1 JOIN Friend AS T2 ON T1.ID = T2.student_id JOIN Likes AS T3 ON T2.friend_id = T3.liked_id"}
+{"id": 913, "db_id": "network_1", "predicted": "SELECT COUNT(*) FROM Likes WHERE student_id = (SELECT ID FROM Highschooler WHERE name = 'Kyle')"}
+{"id": 917, "db_id": "network_1", "predicted": "SELECT MIN(grade) FROM Highschooler WHERE ID NOT IN (SELECT student_id FROM Friend)"}
+{"id": 179, "db_id": "flight_2", "predicted": "SELECT Country FROM airlines WHERE Airline = 'JetBlue Airways'"}
+{"id": 215, "db_id": "flight_2", "predicted": "SELECT COUNT(*) FROM flights WHERE SourceAirport = 'ASY' AND Airline = (SELECT uid FROM airlines WHERE Airline = 'United Airlines')"}
+{"id": 219, "db_id": "flight_2", "predicted": "SELECT COUNT(*) FROM flights WHERE SourceAirport = 'ABERDEEN' AND Airline = (SELECT uid FROM airlines WHERE Airline = 'United Airlines')"}
+{"id": 387, "db_id": "course_teach", "predicted": "SELECT Name FROM teacher WHERE Hometown != 'Little Lever Urban District'"}
+{"id": 882, "db_id": "network_1", "predicted": "SELECT student_id, count(*) FROM Friend GROUP BY student_id"}
+{"id": 183, "db_id": "flight_2", "predicted": "SELECT Airline, Abbreviation FROM airlines WHERE Country = 'USA'"}
+{"id": 254, "db_id": "flight_2", "predicted": "SELECT FlightNo FROM flights WHERE DestAirport = 'ABE'"}
+{"id": 424, "db_id": "museum_visit", "predicted": "SELECT AVG(Num_of_Ticket) AS Average_Tickets, MAX(Num_of_Ticket) AS Maximum_Tickets FROM visit"}
+{"id": 896, "db_id": "network_1", "predicted": "SELECT name FROM Highschooler WHERE ID NOT IN (SELECT student_id FROM Friend)"}
+{"id": 252, "db_id": "flight_2", "predicted": "SELECT FlightNo FROM flights WHERE SourceAirport = 'ABE'"}
+{"id": 258, "db_id": "flight_2", "predicted": "SELECT City FROM airports WHERE AirportCode NOT IN (SELECT SourceAirport FROM flights UNION SELECT DestAirport FROM flights)"}
+{"id": 423, "db_id": "museum_visit", "predicted": "SELECT T1.Name, T1.Age FROM visitor AS T1 JOIN visit AS T2 ON T1.ID = T2.visitor_ID GROUP BY T1.ID ORDER BY SUM(T2.Num_of_Ticket) DESC LIMIT 1"}
+{"id": 236, "db_id": "flight_2", "predicted": "SELECT DISTINCT T1.Airline FROM flights AS T1 INNER JOIN airports AS T2 ON T1.DestAirport = T2.AirportCode WHERE T2.AirportName = 'AHD'"}
+{"id": 246, "db_id": "flight_2", "predicted": "SELECT FlightNo FROM flights WHERE Airline = (SELECT uid FROM airlines WHERE Airline = 'United Airlines')"}
+{"id": 427, "db_id": "museum_visit", "predicted": "SELECT COUNT(T1.ID) FROM visitor AS T1 JOIN visit AS T2 ON T1.ID = T2.visitor_ID WHERE T2.Museum_ID NOT IN (SELECT Museum_ID FROM museum WHERE Open_Year > '2010')"}
+{"id": 417, "db_id": "museum_visit", "predicted": "SELECT Open_Year, Num_of_Staff FROM museum WHERE Name = 'Plaza Museum'"}
+{"id": 217, "db_id": "flight_2", "predicted": "SELECT COUNT(*) FROM flights WHERE SourceAirport = 'AHD' AND Airline = (SELECT uid FROM airlines WHERE Airline = 'United Airlines')"}
+{"id": 249, "db_id": "flight_2", "predicted": "SELECT FlightNo FROM flights WHERE DestAirport = 'APG'"}
+{"id": 425, "db_id": "museum_visit", "predicted": "SELECT SUM(Total_spent) FROM visit WHERE visitor_ID IN (SELECT ID FROM visitor WHERE Level_of_membership = 1)"}
+{"id": 226, "db_id": "flight_2", "predicted": "SELECT AirportCode FROM flights GROUP BY SourceAirport ORDER BY COUNT(*) DESC LIMIT 1"}
+{"id": 227, "db_id": "flight_2", "predicted": "SELECT AirportCode FROM airports WHERE AirportCode = (SELECT SourceAirport FROM flights GROUP BY SourceAirport ORDER BY COUNT(*) ASC LIMIT 1)"}
+{"id": 235, "db_id": "flight_2", "predicted": "SELECT DISTINCT T1.Airline FROM flights AS T1 INNER JOIN airports AS T2 ON T1.SourceAirport = T2.AirportCode WHERE T2.AirportName = 'AHD'"}
+{"id": 901, "db_id": "network_1", "predicted": "SELECT T1.name FROM Highschooler AS T1 JOIN Friend AS T2 ON T1.ID = T2.student_id JOIN Likes AS T3 ON T2.friend_id = T3.liked_id"}
+{"id": 253, "db_id": "flight_2", "predicted": "SELECT FlightNo FROM flights WHERE DestAirport = 'ABERDEEN'"}
+{"id": 419, "db_id": "museum_visit", "predicted": "SELECT T1.ID, T1.Name, T1.Age FROM visitor AS T1 JOIN visit AS T2 ON T1.ID = T2.visitor_ID GROUP BY T1.ID, T1.Name, T1.Age HAVING COUNT(DISTINCT T2.Museum_ID) > 1"}
+{"id": 247, "db_id": "flight_2", "predicted": "SELECT FlightNo FROM flights WHERE SourceAirport = 'APG'"}
+{"id": 388, "db_id": "course_teach", "predicted": "SELECT Name FROM teacher WHERE Hometown != 'Little Lever Urban District'"}
+{"id": 906, "db_id": "network_1", "predicted": "SELECT T1.name FROM Highschooler AS T1 JOIN Likes AS T2 ON T1.ID = T2.student_id GROUP BY T1.ID ORDER BY COUNT(*) DESC LIMIT 1"}
+{"id": 240, "db_id": "flight_2", "predicted": "SELECT DISTINCT T1.Airline FROM flights AS T1 INNER JOIN airports AS T2 ON T1.SourceAirport = T2.AirportCode WHERE T2.CountryAbbrev = 'CVO' EXCEPT SELECT DISTINCT T1.Airline FROM flights AS T1 INNER JOIN airports AS T2 ON T1.DestAirport = T2.AirportCode WHERE T2.CountryAbbrev = 'APG'"}
+{"id": 257, "db_id": "flight_2", "predicted": "SELECT AirportName FROM airports WHERE AirportCode NOT IN (SELECT SourceAirport FROM flights UNION SELECT DestAirport FROM flights)"}
+{"id": 885, "db_id": "network_1", "predicted": "SELECT H.name, COUNT(F.friend_id) FROM Highschooler H JOIN Friend F ON H.ID = F.student_id GROUP BY H.ID"}
+{"id": 886, "db_id": "network_1", "predicted": "SELECT T1.name FROM Highschooler AS T1 JOIN Friend AS T2 ON T1.ID = T2.student_id GROUP BY T1.ID ORDER BY COUNT(*) DESC LIMIT 1"}
+{"id": 225, "db_id": "flight_2", "predicted": "SELECT AirportCode FROM flights GROUP BY SourceAirport ORDER BY COUNT(*) DESC LIMIT 1"}
+{"id": 251, "db_id": "flight_2", "predicted": "SELECT FlightNo FROM flights WHERE SourceAirport = 'ABERDEEN'"}
+{"id": 216, "db_id": "flight_2", "predicted": "SELECT COUNT(*) FROM flights WHERE SourceAirport = 'ASY' AND Airline = (SELECT uid FROM airlines WHERE Airline = 'United Airlines')"}
+{"id": 220, "db_id": "flight_2", "predicted": "SELECT COUNT(*) FROM flights WHERE SourceAirport = 'ABE' AND DestAirport = 'ABE' AND Airline = (SELECT uid FROM airlines WHERE Airline = 'United Airlines')"}
+{"id": 413, "db_id": "museum_visit", "predicted": "SELECT AVG(Age) FROM visitor WHERE Level_of_membership <= 4"}
+{"id": 416, "db_id": "museum_visit", "predicted": "SELECT AVG(Num_of_Staff) FROM museum WHERE Open_Year < '2009'"}
+{"id": 904, "db_id": "network_1", "predicted": "SELECT H.name, COUNT(L.liked_id) AS num_likes\nFROM Highschooler H\nJOIN Likes L ON H.ID = L.student_id\nGROUP BY H.ID, H.name;"}
+{"id": 184, "db_id": "flight_2", "predicted": "SELECT Airline, Abbreviation FROM airlines WHERE Country = 'USA'"}
+{"id": 233, "db_id": "flight_2", "predicted": "SELECT DISTINCT T1.Airline FROM flights AS T1 INNER JOIN airports AS T2 ON T1.SourceAirport = T2.AirportCode WHERE T2.AirportCode = 'AHD'"}
+{"id": 238, "db_id": "flight_2", "predicted": "SELECT DISTINCT T1.Airline FROM flights AS T1 INNER JOIN airports AS T2 ON T1.SourceAirport = T2.AirportCode WHERE T2.AirportCode = 'APG' INTERSECT SELECT DISTINCT T1.Airline FROM flights AS T1 INNER JOIN airports AS T2 ON T1.DestAirport = T2.AirportCode WHERE T2.AirportCode = 'CVO'"}
+{"id": 218, "db_id": "flight_2", "predicted": "SELECT COUNT(*) FROM flights WHERE SourceAirport = 'AHD' AND Airline = 'United Airlines'"}
+{"id": 255, "db_id": "flight_2", "predicted": "SELECT COUNT(*) FROM flights WHERE DestAirport IN ('ABERDEEN', 'ABILENE')"}
+{"id": 884, "db_id": "network_1", "predicted": "SELECT H.name, COUNT(F.friend_id) as num_friends\nFROM Highschooler H\nLEFT JOIN Friend F ON H.ID = F.student_id\nGROUP BY H.ID"}
+{"id": 237, "db_id": "flight_2", "predicted": "SELECT DISTINCT T1.Airline FROM flights AS T1 INNER JOIN airports AS T2 ON T1.SourceAirport = T2.AirportCode WHERE T2.AirportCode = 'APG' INTERSECT SELECT DISTINCT T1.Airline FROM flights AS T1 INNER JOIN airports AS T2 ON T1.DestAirport = T2.AirportCode WHERE T2.AirportCode = 'CVO'"}
+{"id": 186, "db_id": "flight_2", "predicted": "SELECT AirportCode, AirportName FROM airports WHERE City = 'Anthony'"}
+{"id": 898, "db_id": "network_1", "predicted": "SELECT H1.ID FROM Highschooler H1 JOIN Friend F ON H1.ID = F.student_id JOIN Likes L ON F.friend_id = L.liked_id"}
+{"id": 900, "db_id": "network_1", "predicted": "SELECT T1.name FROM Highschooler AS T1 JOIN Friend AS T2 ON T1.ID = T2.student_id JOIN Likes AS T3 ON T3.liked_id = T2.friend_id"}
+{"id": 239, "db_id": "flight_2", "predicted": "SELECT DISTINCT T1.Airline FROM flights AS T1 INNER JOIN airports AS T2 ON T1.SourceAirport = T2.AirportCode WHERE T2.AirportCode = 'CVO' EXCEPT SELECT DISTINCT T1.Airline FROM flights AS T1 INNER JOIN airports AS T2 ON T1.SourceAirport = T2.AirportCode WHERE T2.AirportCode = 'APG'"}
+{"id": 910, "db_id": "network_1", "predicted": "SELECT T1.name FROM Highschooler AS T1 JOIN Friend AS T2 ON T1.ID = T2.student_id JOIN Friend AS T3 ON T2.friend_id = T3.student_id WHERE T1.grade > 5 GROUP BY T1.ID HAVING COUNT(DISTINCT T3.friend_id) >= 2"}
+{"id": 905, "db_id": "network_1", "predicted": "SELECT T1.name, COUNT(T2.liked_id) FROM Highschooler AS T1 JOIN Likes AS T2 ON T1.ID = T2.student_id GROUP BY T1.name"}
+{"id": 47, "db_id": "pets_1", "predicted": "SELECT weight FROM Pets WHERE PetType = 'Dog' ORDER BY pet_age ASC LIMIT 1"}
+{"id": 48, "db_id": "pets_1", "predicted": "SELECT weight FROM Pets WHERE pet_type = 'Dog' ORDER BY pet_age ASC LIMIT 1"}
+{"id": 211, "db_id": "flight_2", "predicted": "SELECT COUNT(*) FROM flights WHERE SourceAirport = 'Aberdeen' AND DestAirport = 'Ashley'"}
+{"id": 911, "db_id": "network_1", "predicted": "SELECT name FROM Highschooler WHERE grade > 5 AND COUNT(*) >= 2"}
+{"id": 55, "db_id": "pets_1", "predicted": "SELECT count(DISTINCT PetType) FROM Pets"}
+{"id": 56, "db_id": "pets_1", "predicted": "SELECT COUNT(DISTINCT PetType) FROM Pets"}
+{"id": 73, "db_id": "pets_1", "predicted": "SELECT PetType, AVG(weight) FROM Pets GROUP BY PetType"}
+{"id": 231, "db_id": "flight_2", "predicted": "SELECT T1.Abbreviation, T1.Country FROM airlines AS T1 JOIN flights AS T2 ON T1.uid = T2.Airline GROUP BY T1.Abbreviation, T1.Country ORDER BY COUNT(*) ASC LIMIT 1"}
+{"id": 46, "db_id": "pets_1", "predicted": "SELECT COUNT(*) FROM Pets WHERE weight > 10"}
+{"id": 67, "db_id": "pets_1", "predicted": "SELECT PetType, weight FROM Pets ORDER BY pet_age ASC LIMIT 1"}
+{"id": 54, "db_id": "pets_1", "predicted": "SELECT COUNT(*) FROM Has_Pet AS H JOIN Pets AS P ON H.PetID = P.PetID JOIN Student AS S ON H.StuID = S.StuID WHERE S.Sex = 'F' AND P.PetType = 'Dog'"}
+{"id": 74, "db_id": "pets_1", "predicted": "SELECT PetType, AVG(weight) FROM Pets GROUP BY PetType"}
+{"id": 232, "db_id": "flight_2", "predicted": "SELECT T1.Abbreviation, T2.Country FROM airlines AS T1 JOIN flights AS T2 ON T1.uid = T2.Airline GROUP BY T1.Abbreviation ORDER BY COUNT(*) ASC LIMIT 1"}
+{"id": 63, "db_id": "pets_1", "predicted": "SELECT StuID FROM Student WHERE StuID NOT IN (SELECT StuID FROM Has_Pet WHERE PetType = 'Cat')"}
+{"id": 401, "db_id": "course_teach", "predicted": "SELECT T.Name, C.Course FROM teacher AS T JOIN course_arrange AS CA ON T.Teacher_ID = CA.Teacher_ID JOIN course AS C ON CA.Course_ID = C.Course_ID ORDER BY T.Name"}
+{"id": 426, "db_id": "museum_visit", "predicted": "SELECT T1.Name FROM visitor AS T1 JOIN visit AS T2 ON T1.ID = T2.visitor_ID JOIN museum AS T3 ON T2.Museum_ID = T3.Museum_ID WHERE T3.Open_Year < '2009' INTERSECT SELECT T1.Name FROM visitor AS T1 JOIN visit AS T2 ON T1.ID = T2.visitor_ID JOIN museum AS T3 ON T2.Museum_ID = T3.Museum_ID WHERE T3.Open_Year > '2011'"}
+{"id": 402, "db_id": "course_teach", "predicted": "SELECT T1.Name, T2.Course FROM teacher AS T1 JOIN course_arrange AS T2 ON T1.Teacher_ID = T2.Teacher_ID ORDER BY T1.Name"}
+{"id": 491, "db_id": "battle_death", "predicted": "SELECT COUNT(*) FROM death WHERE killed = 1"}
+{"id": 50, "db_id": "pets_1", "predicted": "SELECT PetType, MAX(weight) FROM Pets GROUP BY PetType"}
+{"id": 71, "db_id": "pets_1", "predicted": "SELECT PetType, AVG(Age) AS AvgAge, MAX(Age) AS MaxAge FROM Has_Pet GROUP BY PetType"}
+{"id": 72, "db_id": "pets_1", "predicted": "SELECT PetType, AVG(Age) AS Average_Age, MAX(Age) AS Maximum_Age FROM Has_Pet GROUP BY PetType"}
+{"id": 418, "db_id": "museum_visit", "predicted": "SELECT Name FROM museum WHERE Num_of_Staff > (SELECT MIN(Num_of_Staff) FROM museum WHERE Open_Year > '2010')"}
+{"id": 75, "db_id": "pets_1", "predicted": "SELECT T1.fname, T1.age FROM Student AS T1 INNER JOIN Has_Pet AS T2 ON T1.StuID = T2.StuID"}
+{"id": 45, "db_id": "pets_1", "predicted": "SELECT COUNT(*) FROM Pets WHERE weight > 10"}
+{"id": 57, "db_id": "pets_1", "predicted": "SELECT T1.fname FROM Student AS T1 JOIN Has_Pet AS T2 ON T1.StuID = T2.StuID JOIN Pets AS T3 ON T2.PetID = T3.PetID WHERE T3.PetType IN ('cat', 'dog')"}
+{"id": 85, "db_id": "pets_1", "predicted": "SELECT AVG(Age) FROM Student WHERE StuID NOT IN (SELECT StuID FROM Has_Pet)"}
+{"id": 493, "db_id": "battle_death", "predicted": "SELECT name, date, result FROM battle"}
+{"id": 70, "db_id": "pets_1", "predicted": "SELECT PetID, weight FROM Pets WHERE pet_age > 1"}
+{"id": 51, "db_id": "pets_1", "predicted": "SELECT COUNT(PetID) FROM Has_Pet WHERE StuID IN (SELECT StuID FROM Student WHERE Age > 20)"}
+{"id": 61, "db_id": "pets_1", "predicted": "SELECT T1.Major, T1.Age FROM Student AS T1 INNER JOIN Has_Pet AS T2 ON T1.StuID = T2.StuID WHERE T2.PetType != 'Cat'"}
+{"id": 64, "db_id": "pets_1", "predicted": "SELECT StuID FROM Student WHERE StuID NOT IN (SELECT StuID FROM Has_Pet WHERE PetType = 'Cat')"}
+{"id": 69, "db_id": "pets_1", "predicted": "SELECT PetID, weight FROM Pets WHERE pet_age > 1"}
+{"id": 83, "db_id": "pets_1", "predicted": "SELECT T1.Lname FROM Student AS T1 INNER JOIN Has_Pet AS T2 ON T1.StuID = T2.StuID INNER JOIN Pets AS T3 ON T2.PetID = T3.PetID WHERE T3.PetType = 'Cat' AND T3.pet_age = 3"}
+{"id": 59, "db_id": "pets_1", "predicted": "SELECT T1.fname FROM Student AS T1 JOIN Has_Pet AS T2 ON T1.StuID = T2.StuID JOIN Pets AS T3 ON T2.PetID = T3.PetID WHERE T3.PetType = 'Cat' INTERSECT SELECT T1.fname FROM Student AS T1 JOIN Has_Pet AS T2 ON T1.StuID = T2.StuID JOIN Pets AS T3 ON T2.PetID = T3.PetID WHERE T3.PetType = 'Dog'"}
+{"id": 502, "db_id": "battle_death", "predicted": "SELECT count(DISTINCT result) FROM battle"}
+{"id": 86, "db_id": "pets_1", "predicted": "SELECT AVG(Age) FROM Student WHERE StuID NOT IN (SELECT StuID FROM Has_Pet)"}
+{"id": 77, "db_id": "pets_1", "predicted": "SELECT T1.PetID FROM Student AS T1 INNER JOIN Has_Pet AS T2 ON T1.StuID = T2.StuID WHERE T1.LName = 'Smith'"}
+{"id": 412, "db_id": "museum_visit", "predicted": "SELECT Name FROM visitor WHERE Level_of_membership > 4 ORDER BY Level_of_membership DESC"}
+{"id": 68, "db_id": "pets_1", "predicted": "SELECT T1.PetType, T1.weight FROM Pets AS T1 INNER JOIN Has_Pet AS T2 ON T1.PetID = T2.PetID ORDER BY T2.Age ASC LIMIT 1"}
+{"id": 494, "db_id": "battle_death", "predicted": "SELECT max(killed) ,  min(killed) FROM death"}
+{"id": 495, "db_id": "battle_death", "predicted": "SELECT AVG(injured) FROM death"}
+{"id": 52, "db_id": "pets_1", "predicted": "SELECT COUNT(*) FROM Has_Pet WHERE StuID IN (SELECT StuID FROM Student WHERE Age > 20)"}
+{"id": 81, "db_id": "pets_1", "predicted": "SELECT T1.fname ,  T1.sex FROM Student AS T1 JOIN Has_Pet AS T2 ON T1.StuID  =  T2.StuID GROUP BY T1.fname ,  T1.sex HAVING COUNT(*)  >  1"}
+{"id": 503, "db_id": "battle_death", "predicted": "SELECT COUNT(*) FROM battle WHERE id NOT IN (SELECT lost_in_battle FROM ship WHERE tonnage = '225')"}
+{"id": 60, "db_id": "pets_1", "predicted": "SELECT T1.fname FROM Student AS T1 INNER JOIN Has_Pet AS T2 ON T1.StuID = T2.StuID INNER JOIN Pets AS T3 ON T2.PetID = T3.PetID WHERE T3.PetType = 'Cat' INTERSECT SELECT T1.fname FROM Student AS T1 INNER JOIN Has_Pet AS T2 ON T1.StuID = T2.StuID INNER JOIN Pets AS T3 ON T2.PetID = T3.PetID WHERE T3.PetType = 'Dog'"}
+{"id": 84, "db_id": "pets_1", "predicted": "SELECT T1.Lname FROM Student AS T1 INNER JOIN Has_Pet AS T2 ON T1.StuID = T2.StuID INNER JOIN Pets AS T3 ON T2.PetID = T3.PetID WHERE T3.PetType = 'Cat' AND T3.pet_age = 3"}
+{"id": 58, "db_id": "pets_1", "predicted": "SELECT T1.fname FROM Student AS T1 INNER JOIN Has_Pet AS T2 ON T1.StuID = T2.StuID INNER JOIN Pets AS T3 ON T2.PetID = T3.PetID WHERE T3.PetType = 'Cat' OR T3.PetType = 'Dog'"}
+{"id": 79, "db_id": "pets_1", "predicted": "SELECT COUNT(PetID), StuID FROM Has_Pet GROUP BY StuID"}
+{"id": 420, "db_id": "museum_visit", "predicted": "SELECT T1.ID, T1.Name, T1.Level_of_membership FROM visitor AS T1 JOIN visit AS T2 ON T1.ID = T2.visitor_ID GROUP BY T1.ID, T1.Name, T1.Level_of_membership ORDER BY SUM(T2.Total_spent) DESC LIMIT 1"}
+{"id": 500, "db_id": "battle_death", "predicted": "SELECT T1.id, T1.name FROM death AS T1 JOIN ship AS T2 ON T1.caused_by_ship_id = T2.id GROUP BY T1.caused_by_ship_id ORDER BY SUM(T1.killed) + SUM(T1.injured) DESC LIMIT 1"}
+{"id": 78, "db_id": "pets_1", "predicted": "SELECT T1.PetID FROM Has_Pet AS T1 INNER JOIN Student AS T2 ON T1.StuID = T2.StuID WHERE T2.LName = 'Smith'"}
+{"id": 414, "db_id": "museum_visit", "predicted": "SELECT T1.Name, T1.Level_of_membership FROM visitor AS T1 WHERE T1.Level_of_membership > 4 ORDER BY T1.Age ASC"}
+{"id": 53, "db_id": "pets_1", "predicted": "SELECT COUNT(*) FROM Has_Pet AS H JOIN Student AS S ON H.StuID = S.StuID WHERE S.Sex = 'F' AND H.PetType = 'Dog'"}
+{"id": 76, "db_id": "pets_1", "predicted": "SELECT T1.fname, T1.age FROM Student AS T1 INNER JOIN Has_Pet AS T2 ON T1.StuID = T2.StuID"}
+{"id": 66, "db_id": "pets_1", "predicted": "SELECT T1.fname FROM Student AS T1 INNER JOIN Has_Pet AS T2 ON T1.StuID = T2.StuID INNER JOIN Pets AS T3 ON T2.PetID = T3.PetID WHERE T3.PetType = 'Dog' AND T3.PetID NOT IN (SELECT PetID FROM Pets WHERE PetType = 'Cat')"}
+{"id": 506, "db_id": "battle_death", "predicted": "SELECT note FROM death WHERE note LIKE '%East%'"}
+{"id": 49, "db_id": "pets_1", "predicted": "SELECT pet_type, MAX(weight) FROM Pets GROUP BY pet_type"}
+{"id": 82, "db_id": "pets_1", "predicted": "SELECT T1.fname ,  T1.sex FROM Student AS T1 JOIN Has_Pet AS T2 ON T1.StuID  =  T2.StuID GROUP BY T1.fname ,  T1.sex HAVING COUNT(*)  >  1"}
+{"id": 65, "db_id": "pets_1", "predicted": "SELECT T1.fname, T1.age FROM Student AS T1 INNER JOIN Has_Pet AS T2 ON T1.StuID = T2.StuID INNER JOIN Pets AS T3 ON T2.PetID = T3.PetID WHERE T3.PetType = 'Dog' AND T3.PetID NOT IN (SELECT PetID FROM Pets WHERE PetType = 'Cat')"}
+{"id": 62, "db_id": "pets_1", "predicted": "SELECT T1.Major, T1.Age FROM Student AS T1 INNER JOIN Has_Pet AS T2 ON T1.StuID = T2.StuID WHERE T2.PetID NOT IN (SELECT PetID FROM Pets WHERE PetType = 'Cat')"}
+{"id": 496, "db_id": "battle_death", "predicted": "SELECT T2.killed, T2.injured FROM death AS T1 INNER JOIN ship AS T2 ON T1.caused_by_ship_id = T2.id WHERE T2.tonnage = 't'"}
+{"id": 492, "db_id": "battle_death", "predicted": "SELECT name ,  tonnage FROM ship ORDER BY name DESC"}
+{"id": 498, "db_id": "battle_death", "predicted": "SELECT id, name FROM battle WHERE lost_in_battle IN (SELECT id FROM ship WHERE ship_type = 'Brig')"}
+{"id": 497, "db_id": "battle_death", "predicted": "SELECT name, result FROM battle WHERE bulgarian_commander != 'Boril'"}
+{"id": 80, "db_id": "pets_1", "predicted": "SELECT StuID ,  COUNT(*) FROM Has_Pet GROUP BY StuID"}
+{"id": 499, "db_id": "battle_death", "predicted": "SELECT id, name FROM battle WHERE result LIKE '%Killed%' GROUP BY id, name HAVING SUM(killed) > 10"}
+{"id": 505, "db_id": "battle_death", "predicted": "SELECT T1.name, T1.result, T1.bulgarian_commander FROM battle AS T1 JOIN ship AS T2 ON T1.id = T2.lost_in_battle WHERE T2.location = 'English Channel' AND T2.lost_in_battle IS NULL"}
+{"id": 504, "db_id": "battle_death", "predicted": "SELECT T1.name, T1.date FROM battle AS T1 INNER JOIN ship AS T2 ON T1.id = T2.lost_in_battle WHERE T2.name = 'Lettice' INTERSECT SELECT T1.name, T1.date FROM battle AS T1 INNER JOIN ship AS T2 ON T1.id = T2.lost_in_battle WHERE T2.name = 'HMS Atalanta'"}
+{"id": 501, "db_id": "battle_death", "predicted": "SELECT DISTINCT name FROM battle WHERE bulgarian_commander = 'Kaloyan' AND latin_commander = 'Baldwin I'"}
+{"id": 687, "db_id": "voter_1", "predicted": "SELECT count(*) FROM AREA_CODE_STATE"}
+{"id": 697, "db_id": "voter_1", "predicted": "SELECT COUNT(*) FROM CONTESTANTS WHERE contestant_number NOT IN (SELECT contestant_number FROM VOTES)"}
+{"id": 696, "db_id": "voter_1", "predicted": "SELECT COUNT(*) FROM VOTES WHERE state IN ('NY', 'CA')"}
+{"id": 698, "db_id": "voter_1", "predicted": "SELECT T1.area_code FROM VOTES AS T1 JOIN AREA_CODE_STATE AS T2 ON T1.state = T2.state GROUP BY T1.area_code ORDER BY COUNT(*) DESC LIMIT 1"}
+{"id": 690, "db_id": "voter_1", "predicted": "SELECT MAX(area_code) AS max_area_code, MIN(area_code) AS min_area_code FROM AREA_CODE_STATE"}
+{"id": 691, "db_id": "voter_1", "predicted": "SELECT MAX(created) FROM VOTES WHERE state = 'CA'"}
+{"id": 689, "db_id": "voter_1", "predicted": "SELECT vote_id, phone_number, state FROM VOTES"}
+{"id": 693, "db_id": "voter_1", "predicted": "SELECT DISTINCT state ,  created FROM VOTES"}
+{"id": 692, "db_id": "voter_1", "predicted": "SELECT contestant_name FROM CONTESTANTS WHERE contestant_name != 'Jessie Alloway'"}
+{"id": 701, "db_id": "voter_1", "predicted": "SELECT contestant_name FROM CONTESTANTS WHERE contestant_name LIKE '%Al%'"}
+{"id": 688, "db_id": "voter_1", "predicted": "SELECT T1.contestant_number, T1.contestant_name FROM CONTESTANTS AS T1 ORDER BY T1.contestant_name DESC"}
+{"id": 694, "db_id": "voter_1", "predicted": "SELECT T1.contestant_number, T1.contestant_name FROM CONTESTANTS AS T1 INNER JOIN VOTES AS T2 ON T1.contestant_number = T2.contestant_number GROUP BY T1.contestant_number, T1.contestant_name HAVING COUNT(*) >= 2"}
+{"id": 259, "db_id": "employee_hire_evaluation", "predicted": "SELECT count(*) FROM employee"}
+{"id": 260, "db_id": "employee_hire_evaluation", "predicted": "SELECT count(*) FROM employee"}
+{"id": 291, "db_id": "employee_hire_evaluation", "predicted": "SELECT * FROM hiring"}
+{"id": 292, "db_id": "employee_hire_evaluation", "predicted": "The hiring table contains information about the hiring of employees by shops. It includes the shop ID, employee ID, start date, and whether the position is full-time or not. The table is linked to the employee and shop tables using foreign keys."}
+{"id": 267, "db_id": "employee_hire_evaluation", "predicted": "SELECT LOCATION, COUNT(*) FROM shop GROUP BY LOCATION"}
+{"id": 268, "db_id": "employee_hire_evaluation", "predicted": "SELECT LOCATION, COUNT(*) FROM shop GROUP BY LOCATION"}
+{"id": 264, "db_id": "employee_hire_evaluation", "predicted": "SELECT city, COUNT(*) FROM employee GROUP BY city"}
+{"id": 289, "db_id": "employee_hire_evaluation", "predicted": "SELECT SUM(Bonus) FROM evaluation"}
+{"id": 295, "db_id": "employee_hire_evaluation", "predicted": "SELECT count(DISTINCT LOCATION) FROM shop"}
+{"id": 296, "db_id": "employee_hire_evaluation", "predicted": "SELECT count(DISTINCT LOCATION) FROM shop"}
+{"id": 263, "db_id": "employee_hire_evaluation", "predicted": "SELECT city, COUNT(*) FROM employee GROUP BY city"}
+{"id": 695, "db_id": "voter_1", "predicted": "SELECT T1.contestant_number, T1.contestant_name FROM VOTES AS T1 JOIN CONTESTANTS AS T2 ON T1.contestant_number = T2.contestant_number ORDER BY COUNT(*) ASC LIMIT 1"}
+{"id": 700, "db_id": "voter_1", "predicted": "SELECT DISTINCT T1.area_code FROM VOTES AS T1 INNER JOIN CONTESTANTS AS T2 ON T1.contestant_number = T2.contestant_number WHERE T2.contestant_name = 'Tabatha Gehling' INTERSECT SELECT DISTINCT T1.area_code FROM VOTES AS T1 INNER JOIN CONTESTANTS AS T2 ON T1.contestant_number = T2.contestant_number WHERE T2.contestant_name = 'Kelly Clauss'"}
+{"id": 699, "db_id": "voter_1", "predicted": "SELECT T1.created, T1.state, T1.phone_number FROM VOTES AS T1 INNER JOIN CONTESTANTS AS T2 ON T1.contestant_number = T2.contestant_number WHERE T2.contestant_name = 'Tabatha Gehling'"}
+{"id": 261, "db_id": "employee_hire_evaluation", "predicted": "SELECT Name FROM employee ORDER BY Age ASC"}
+{"id": 286, "db_id": "employee_hire_evaluation", "predicted": "SELECT Name FROM shop WHERE Shop_ID NOT IN (SELECT Shop_ID FROM hiring)"}
+{"id": 587, "db_id": "tvshow", "predicted": "SELECT Title FROM Cartoon WHERE Directed_by = 'Ben Jones'"}
+{"id": 284, "db_id": "employee_hire_evaluation", "predicted": "SELECT T2.Name FROM hiring AS T1 JOIN shop AS T2 ON T1.Shop_ID = T2.Shop_ID GROUP BY T2.Name ORDER BY COUNT(*) DESC LIMIT 1"}
+{"id": 285, "db_id": "employee_hire_evaluation", "predicted": "SELECT Name FROM shop WHERE Shop_ID NOT IN (SELECT Shop_ID FROM hiring)"}
+{"id": 603, "db_id": "tvshow", "predicted": "SELECT COUNT(*) FROM TV_Channel WHERE Language = 'English'"}
+{"id": 628, "db_id": "tvshow", "predicted": "SELECT T1.directed_by, COUNT(T1.id) FROM Cartoon AS T1 JOIN Cartoon AS T2 ON T1.id = T2.directed_by GROUP BY T1.directed_by"}
+{"id": 600, "db_id": "tvshow", "predicted": "The content of the series Sky Radio is \"Sky Radio\"."}
+{"id": 290, "db_id": "employee_hire_evaluation", "predicted": "SELECT SUM(Bonus) FROM evaluation"}
+{"id": 604, "db_id": "tvshow", "predicted": "SELECT COUNT(*) FROM TV_Channel WHERE Language = 'English'"}
+{"id": 617, "db_id": "tvshow", "predicted": "SELECT MIN(Share) ,  MAX(Share) FROM TV_series"}
+{"id": 265, "db_id": "employee_hire_evaluation", "predicted": "SELECT T1.City FROM employee AS T1 JOIN hiring AS T2 ON T1.Employee_ID = T2.Employee_ID WHERE T1.Age < 30 GROUP BY T1.City HAVING COUNT(*) > 1"}
+{"id": 266, "db_id": "employee_hire_evaluation", "predicted": "SELECT T1.City FROM employee AS T1 JOIN hiring AS T2 ON T1.Employee_ID = T2.Employee_ID WHERE T1.Age < 30 GROUP BY T1.City HAVING COUNT(*) > 1"}
+{"id": 271, "db_id": "employee_hire_evaluation", "predicted": "SELECT MIN(Number_products) ,  MAX(Number_products) FROM shop"}
+{"id": 589, "db_id": "tvshow", "predicted": "SELECT COUNT(*) FROM Cartoon WHERE Written_by = 'Joseph Kuhr'"}
+{"id": 614, "db_id": "tvshow", "predicted": "SELECT Episode FROM TV_series ORDER BY Rating"}
+{"id": 620, "db_id": "tvshow", "predicted": "The episode \"A Love of a Lifetime\" aired on July 24, 2019."}
+{"id": 262, "db_id": "employee_hire_evaluation", "predicted": "SELECT Name FROM employee ORDER BY Age ASC"}
+{"id": 279, "db_id": "employee_hire_evaluation", "predicted": "SELECT Name FROM employee WHERE Employee_ID = (SELECT Employee_ID FROM evaluation ORDER BY Bonus DESC LIMIT 1)"}
+{"id": 613, "db_id": "tvshow", "predicted": "SELECT Episode FROM TV_series ORDER BY Rating"}
+{"id": 585, "db_id": "tvshow", "predicted": "SELECT Title FROM Cartoon ORDER BY Title"}
+{"id": 280, "db_id": "employee_hire_evaluation", "predicted": "SELECT e.Name FROM employee e JOIN evaluation e1 ON e.Employee_ID = e1.Employee_ID ORDER BY e1.Bonus DESC LIMIT 1"}
+{"id": 590, "db_id": "tvshow", "predicted": "SELECT COUNT(*) FROM Cartoon WHERE Written_by = 'Joseph Kuhr'"}
+{"id": 281, "db_id": "employee_hire_evaluation", "predicted": "SELECT Name FROM employee WHERE Employee_ID NOT IN (SELECT Employee_ID FROM evaluation)"}
+{"id": 282, "db_id": "employee_hire_evaluation", "predicted": "SELECT Name FROM employee WHERE Employee_ID NOT IN (SELECT Employee_ID FROM evaluation)"}
+{"id": 618, "db_id": "tvshow", "predicted": "SELECT MAX(Share), MIN(Share) FROM TV_series"}
+{"id": 626, "db_id": "tvshow", "predicted": "SELECT Episode FROM TV_series WHERE Channel = 'Sky Radio'"}
+{"id": 588, "db_id": "tvshow", "predicted": "SELECT Title FROM Cartoon WHERE Directed_by = 'Ben Jones'"}
+{"id": 586, "db_id": "tvshow", "predicted": "SELECT Title FROM Cartoon ORDER BY Title"}
+{"id": 607, "db_id": "tvshow", "predicted": "SELECT Language, COUNT(*) FROM TV_Channel GROUP BY Language"}
+{"id": 272, "db_id": "employee_hire_evaluation", "predicted": "SELECT MIN(Number_products) ,  MAX(Number_products) FROM shop"}
+{"id": 276, "db_id": "employee_hire_evaluation", "predicted": "SELECT T2.Name FROM shop AS T1 JOIN hiring AS T2 ON T1.Shop_ID = T2.Shop_ID GROUP BY T1.Shop_ID HAVING AVG(T1.Number_products) > (SELECT AVG(Number_products) FROM shop)"}
+{"id": 277, "db_id": "employee_hire_evaluation", "predicted": "SELECT e.Name FROM employee e JOIN evaluation e1 ON e.Employee_ID = e1.Employee_ID GROUP BY e.Employee_ID ORDER BY COUNT(e1.Employee_ID) DESC LIMIT 1"}
+{"id": 283, "db_id": "employee_hire_evaluation", "predicted": "SELECT T2.Name FROM hiring AS T1 JOIN shop AS T2 ON T1.Shop_ID = T2.Shop_ID GROUP BY T2.Name ORDER BY COUNT(*) DESC LIMIT 1"}
+{"id": 287, "db_id": "employee_hire_evaluation", "predicted": "SELECT T2.Name, COUNT(T1.Employee_ID) FROM hiring AS T1 JOIN shop AS T2 ON T1.Shop_ID = T2.Shop_ID GROUP BY T2.Name"}
+{"id": 608, "db_id": "tvshow", "predicted": "SELECT Language, COUNT(*) FROM TV_Channel GROUP BY Language"}
+{"id": 599, "db_id": "tvshow", "predicted": "SELECT Content FROM TV_Channel WHERE series_name = 'Sky Radio'"}
+{"id": 622, "db_id": "tvshow", "predicted": "SELECT Weekly_Rank FROM TV_series WHERE Episode = 'A Love of a Lifetime'"}
+{"id": 278, "db_id": "employee_hire_evaluation", "predicted": "SELECT e.Name FROM employee e JOIN evaluation e1 ON e.Employee_ID = e1.Employee_ID GROUP BY e.Employee_ID ORDER BY SUM(e1.Bonus) DESC LIMIT 1"}
+{"id": 591, "db_id": "tvshow", "predicted": "SELECT Title, Directed_by FROM Cartoon ORDER BY Original_air_date"}
+{"id": 621, "db_id": "tvshow", "predicted": "SELECT Weekly_Rank FROM TV_series WHERE Episode = 'A Love of a Lifetime'"}
+{"id": 627, "db_id": "tvshow", "predicted": "SELECT COUNT(T1.id) AS Number_of_cartoons, T1.directed_by AS Director FROM Cartoon AS T1 JOIN Cartoon AS T2 ON T1.id = T2.id GROUP BY T1.directed_by"}
+{"id": 630, "db_id": "tvshow", "predicted": "SELECT Production_code ,  Channel FROM Cartoon ORDER BY Air_Date DESC LIMIT 1"}
+{"id": 601, "db_id": "tvshow", "predicted": "SELECT Package_Option FROM TV_Channel WHERE series_name = 'Sky Radio'"}
+{"id": 619, "db_id": "tvshow", "predicted": "SELECT Air_Date FROM TV_series WHERE Episode = 'A Love of a Lifetime'"}
+{"id": 642, "db_id": "tvshow", "predicted": "SELECT id FROM TV_Channel GROUP BY id HAVING count(*)  >  2"}
+{"id": 288, "db_id": "employee_hire_evaluation", "predicted": "SELECT T2.Name, COUNT(T1.Employee_ID) FROM hiring AS T1 JOIN shop AS T2 ON T1.Shop_ID = T2.Shop_ID GROUP BY T2.Name"}
+{"id": 269, "db_id": "employee_hire_evaluation", "predicted": "SELECT T2.Manager_name, T2.District FROM shop AS T1 JOIN shop AS T2 ON T1.Shop_ID = T2.Shop_ID ORDER BY T1.Number_products DESC LIMIT 1"}
+{"id": 629, "db_id": "tvshow", "predicted": "SELECT Production_code ,  Channel FROM Cartoon ORDER BY Air_Date DESC LIMIT 1"}
+{"id": 0, "db_id": "concert_singer", "predicted": "SELECT count(*) FROM singer"}
+{"id": 593, "db_id": "tvshow", "predicted": "SELECT Title FROM Cartoon WHERE Directed_by = 'Ben Jones' OR Directed_by = 'Brandon Vietti'"}
+{"id": 598, "db_id": "tvshow", "predicted": "SELECT COUNT(DISTINCT series_name, content) FROM TV_Channel"}
+{"id": 624, "db_id": "tvshow", "predicted": "SELECT T2.series_name FROM TV_series AS T1 INNER JOIN TV_Channel AS T2 ON T1.Channel = T2.id WHERE T1.Episode = 'A Love of a Lifetime'"}
+{"id": 636, "db_id": "tvshow", "predicted": "SELECT Country FROM TV_Channel WHERE Channel NOT IN (SELECT Channel FROM Cartoon WHERE Written_by = 'Todd Casey')"}
+{"id": 594, "db_id": "tvshow", "predicted": "SELECT Title FROM Cartoon WHERE Directed_by = 'Ben Jones' OR Directed_by = 'Brandon Vietti'"}
+{"id": 633, "db_id": "tvshow", "predicted": "SELECT T1.Country FROM TV_Channel AS T1 INNER JOIN Cartoon AS T2 ON T1.id = T2.Channel WHERE T2.Written_by = 'Todd Casey'"}
+{"id": 275, "db_id": "employee_hire_evaluation", "predicted": "SELECT Name FROM shop WHERE Number_products > (SELECT AVG(Number_products) FROM shop)"}
+{"id": 615, "db_id": "tvshow", "predicted": "SELECT T2.Episode, T2.Rating FROM TV_series AS T1 INNER JOIN TV_series AS T2 ON T1.id = T2.Channel ORDER BY T1.Rating DESC LIMIT 3"}
+{"id": 643, "db_id": "tvshow", "predicted": "SELECT T1.id FROM TV_Channel AS T1 JOIN Cartoon AS T2 ON T1.id = T2.Channel WHERE T2.Directed_by != 'Ben Jones'"}
+{"id": 270, "db_id": "employee_hire_evaluation", "predicted": "SELECT T2.Manager_name, T2.District FROM shop AS T1 JOIN hiring AS T2 ON T1.Shop_ID = T2.Shop_ID ORDER BY T1.Number_products DESC LIMIT 1"}
+{"id": 597, "db_id": "tvshow", "predicted": "SELECT count(DISTINCT series_name), count(DISTINCT content) FROM TV_Channel"}
+{"id": 635, "db_id": "tvshow", "predicted": "SELECT T1.Country FROM TV_Channel AS T1 JOIN Cartoon AS T2 ON T1.id = T2.Channel WHERE T2.Written_by != 'Todd Casey'"}
+{"id": 273, "db_id": "employee_hire_evaluation", "predicted": "SELECT Name, Location, District FROM shop ORDER BY Number_products DESC"}
+{"id": 592, "db_id": "tvshow", "predicted": "SELECT Title, Directed_by FROM Cartoon ORDER BY Original_air_date"}
+{"id": 634, "db_id": "tvshow", "predicted": "SELECT Country FROM Cartoon WHERE Written_by = 'Todd Casey'"}
+{"id": 602, "db_id": "tvshow", "predicted": "SELECT Package_Option FROM TV_Channel WHERE series_name = 'Sky Radio'"}
+{"id": 1, "db_id": "concert_singer", "predicted": "SELECT count(*) FROM singer"}
+{"id": 596, "db_id": "tvshow", "predicted": "SELECT Country, COUNT(*) FROM TV_Channel GROUP BY Country ORDER BY COUNT(*) DESC LIMIT 1"}
+{"id": 611, "db_id": "tvshow", "predicted": "SELECT T2.Title FROM TV_Channel AS T1 INNER JOIN Cartoon AS T2 ON T1.id = T2.Channel WHERE T1.series_name = 'Sky Radio'"}
+{"id": 639, "db_id": "tvshow", "predicted": "SELECT T1.Pixel_aspect_ratio_PAR, T1.Country FROM TV_Channel AS T1 JOIN TV_series AS T2 ON T1.id = T2.Channel WHERE T2.Language != 'English'"}
+{"id": 11, "db_id": "concert_singer", "predicted": "SELECT Country, COUNT(*) FROM singer GROUP BY Country"}
+{"id": 26, "db_id": "concert_singer", "predicted": "SELECT YEAR FROM concert GROUP BY YEAR ORDER BY COUNT(*) DESC LIMIT 1"}
+{"id": 625, "db_id": "tvshow", "predicted": "SELECT T2.Episode FROM TV_series AS T1 INNER JOIN TV_Channel AS T2 ON T1.Channel = T2.id WHERE T1.Series_name = 'Sky Radio'"}
+{"id": 631, "db_id": "tvshow", "predicted": "SELECT T2.Package_Option, T1.series_name FROM TV_Channel AS T1 INNER JOIN TV_series AS T2 ON T1.id = T2.Channel WHERE T1.Hight_definition_TV = 'Yes'"}
+{"id": 293, "db_id": "employee_hire_evaluation", "predicted": "SELECT T1.District FROM shop AS T1 JOIN hiring AS T2 ON T1.Shop_ID = T2.Shop_ID WHERE T1.Number_products < 3000 INTERSECT SELECT T1.District FROM shop AS T1 JOIN hiring AS T2 ON T1.Shop_ID = T2.Shop_ID WHERE T1.Number_products > 10000"}
+{"id": 641, "db_id": "tvshow", "predicted": "SELECT T1.id FROM TV_Channel AS T1 JOIN (SELECT Country FROM TV_Channel GROUP BY Country HAVING COUNT(*) > 2) AS T2 ON T1.Country = T2.Country"}
+{"id": 644, "db_id": "tvshow", "predicted": "SELECT T1.id FROM TV_Channel AS T1 JOIN Cartoon AS T2 ON T1.id = T2.Channel WHERE T2.Directed_by != 'Ben Jones'"}
+{"id": 21, "db_id": "concert_singer", "predicted": "SELECT COUNT(*) FROM concert WHERE YEAR = '2014' OR YEAR = '2015'"}
+{"id": 28, "db_id": "concert_singer", "predicted": "SELECT Name FROM stadium WHERE Stadium_ID NOT IN (SELECT Stadium_ID FROM concert)"}
+{"id": 616, "db_id": "tvshow", "predicted": "SELECT Episode, Rating FROM TV_series ORDER BY Rating DESC LIMIT 3"}
+{"id": 27, "db_id": "concert_singer", "predicted": "SELECT YEAR FROM concert GROUP BY YEAR ORDER BY COUNT(*) DESC LIMIT 1"}
+{"id": 605, "db_id": "tvshow", "predicted": "SELECT Language ,  COUNT(*) FROM TV_Channel GROUP BY Language ORDER BY COUNT(*) ASC LIMIT 1"}
+{"id": 606, "db_id": "tvshow", "predicted": "SELECT Language, COUNT(*) FROM TV_Channel GROUP BY Language ORDER BY COUNT(*) ASC LIMIT 1"}
+{"id": 23, "db_id": "concert_singer", "predicted": "SELECT COUNT(T2.concert_ID) FROM stadium AS T1 JOIN concert AS T2 ON T1.Stadium_ID = T2.Stadium_ID GROUP BY T1.Stadium_ID"}
+{"id": 37, "db_id": "concert_singer", "predicted": "SELECT T1.Name FROM singer AS T1 JOIN singer_in_concert AS T2 ON T1.Singer_ID = T2.Singer_ID JOIN concert AS T3 ON T2.concert_ID = T3.concert_ID WHERE T3.Year = '2014'"}
+{"id": 595, "db_id": "tvshow", "predicted": "SELECT Country, COUNT(*) FROM TV_Channel GROUP BY Country ORDER BY COUNT(*) DESC LIMIT 1"}
+{"id": 645, "db_id": "tvshow", "predicted": "SELECT T1.Package_Option FROM TV_Channel AS T1 JOIN Cartoon AS T2 ON T1.id = T2.Channel WHERE T2.Directed_by != 'Ben Jones'"}
+{"id": 20, "db_id": "concert_singer", "predicted": "SELECT COUNT(*) FROM concert WHERE YEAR = '2014' OR YEAR = '2015'"}
+{"id": 610, "db_id": "tvshow", "predicted": "SELECT T1.series_name FROM TV_Channel AS T1 INNER JOIN Cartoon AS T2 ON T1.id = T2.Channel WHERE T2.Title = 'The Rise of the Blue Beetle'"}
+{"id": 640, "db_id": "tvshow", "predicted": "SELECT Pixel_aspect_ratio_PAR, Country FROM TV_Channel WHERE Language != 'English'"}
+{"id": 612, "db_id": "tvshow", "predicted": "SELECT T2.Title FROM TV_Channel AS T1 INNER JOIN Cartoon AS T2 ON T1.id = T2.Channel WHERE T1.series_name = 'Sky Radio'"}
+{"id": 12, "db_id": "concert_singer", "predicted": "SELECT T1.Song_Name FROM singer AS T1 JOIN singer_in_concert AS T2 ON T1.Singer_ID = T2.Singer_ID JOIN concert AS T3 ON T2.concert_ID = T3.concert_ID WHERE T1.Age > (SELECT AVG(Age) FROM singer)"}
+{"id": 274, "db_id": "employee_hire_evaluation", "predicted": "SELECT Name, Location, District FROM shop ORDER BY Number_products DESC"}
+{"id": 29, "db_id": "concert_singer", "predicted": "SELECT Name FROM stadium WHERE Stadium_ID NOT IN (SELECT Stadium_ID FROM concert)"}
+{"id": 35, "db_id": "concert_singer", "predicted": "SELECT T1.Name, COUNT(T2.concert_ID) FROM singer AS T1 JOIN singer_in_concert AS T2 ON T1.Singer_ID = T2.Singer_ID GROUP BY T1.Singer_ID"}
+{"id": 646, "db_id": "tvshow", "predicted": "SELECT DISTINCT T1.Package_Option FROM TV_Channel AS T1 INNER JOIN Cartoon AS T2 ON T1.id = T2.Channel WHERE T2.Directed_by != 'Ben Jones'"}
+{"id": 9, "db_id": "concert_singer", "predicted": "SELECT Country FROM singer WHERE Age > 20 GROUP BY Country"}
+{"id": 10, "db_id": "concert_singer", "predicted": "SELECT T1.Country, COUNT(T2.Singer_ID) FROM singer AS T1 JOIN singer_in_concert AS T2 ON T1.Singer_ID = T2.Singer_ID GROUP BY T1.Country"}
+{"id": 17, "db_id": "concert_singer", "predicted": "SELECT AVG(Capacity) ,  MAX(Capacity) FROM stadium"}
+{"id": 623, "db_id": "tvshow", "predicted": "SELECT T1.id, T1.series_name FROM TV_Channel AS T1 INNER JOIN TV_series AS T2 ON T1.id = T2.Channel WHERE T2.Episode = 'A Love of a Lifetime'"}
+{"id": 16, "db_id": "concert_singer", "predicted": "SELECT MAX(Capacity), AVG(Average) FROM stadium"}
+{"id": 632, "db_id": "tvshow", "predicted": "SELECT Package_Option, series_name FROM TV_Channel WHERE Hight_definition_TV = 'Yes'"}
+{"id": 294, "db_id": "employee_hire_evaluation", "predicted": "SELECT DISTINCT T1.District FROM shop AS T1 JOIN hiring AS T2 ON T1.Shop_ID = T2.Shop_ID WHERE T1.Number_products < 3000 INTERSECT SELECT DISTINCT T1.District FROM shop AS T1 JOIN hiring AS T2 ON T1.Shop_ID = T2.Shop_ID WHERE T1.Number_products > 10000"}
+{"id": 22, "db_id": "concert_singer", "predicted": "SELECT T1.Name, COUNT(T2.concert_ID) FROM stadium AS T1 JOIN concert AS T2 ON T1.Stadium_ID = T2.Stadium_ID GROUP BY T1.Stadium_ID"}
+{"id": 13, "db_id": "concert_singer", "predicted": "SELECT T1.Song_Name FROM singer AS T1 JOIN concert AS T2 ON T1.Singer_ID = T2.Singer_ID JOIN singer_in_concert AS T3 ON T2.concert_ID = T3.concert_ID JOIN concert AS T4 ON T3.concert_ID = T4.concert_ID WHERE T1.Age > (SELECT AVG(Age) FROM singer)"}
+{"id": 609, "db_id": "tvshow", "predicted": "SELECT T1.`Country`, T1.`Language`, T1.`Content`, T1.`Pixel_aspect_ratio_PAR`, T1.`Hight_definition_TV`, T1.`Pay_per_view_PPV`, T1.`Package_Option`, T2.`series_name` FROM `TV_Channel` AS T1 INNER JOIN `TV_series` AS T2 ON T1.`id` = T2.`Channel` WHERE T2.`Title` = 'The Rise of the Blue Beetle!';"}
+{"id": 8, "db_id": "concert_singer", "predicted": "SELECT DISTINCT Country FROM singer WHERE Age > 20"}
+{"id": 5, "db_id": "concert_singer", "predicted": "SELECT AVG(Age) ,  MIN(Age) ,  MAX(Age) FROM singer WHERE Country = 'France'"}
+{"id": 38, "db_id": "concert_singer", "predicted": "SELECT T1.Name FROM singer AS T1 JOIN singer_in_concert AS T2 ON T1.Singer_ID = T2.Singer_ID JOIN concert AS T3 ON T2.concert_ID = T3.concert_ID WHERE T3.Year = '2014'"}
+{"id": 6, "db_id": "concert_singer", "predicted": "SELECT T1.Song_Name, T1.Song_release_year FROM singer AS T1 JOIN singer_in_concert AS T2 ON T1.Singer_ID = T2.Singer_ID JOIN concert AS T3 ON T2.concert_ID = T3.concert_ID ORDER BY T1.Age ASC LIMIT 1"}
+{"id": 32, "db_id": "concert_singer", "predicted": "SELECT T1.Name FROM stadium AS T1 WHERE T1.Stadium_ID NOT IN (SELECT T2.Stadium_ID FROM concert AS T2 WHERE T2.Year = '2014')"}
+{"id": 34, "db_id": "concert_singer", "predicted": "SELECT T1.concert_Name ,  T1.theme ,  count(*) FROM concert AS T1 JOIN singer_in_concert AS T2 ON T1.concert_ID  =  T2.concert_ID JOIN singer AS T3 ON T2.Singer_ID  =  T3.Singer_ID GROUP BY T1.concert_Name ,  T1.theme"}
+{"id": 4, "db_id": "concert_singer", "predicted": "SELECT AVG(Age) ,  MIN(Age) ,  MAX(Age) FROM singer WHERE Country = 'France'"}
+{"id": 36, "db_id": "concert_singer", "predicted": "SELECT T1.Name, COUNT(T2.concert_ID) FROM singer AS T1 JOIN singer_in_concert AS T2 ON T1.Singer_ID = T2.Singer_ID GROUP BY T1.Singer_ID"}
+{"id": 30, "db_id": "concert_singer", "predicted": "SELECT Country FROM singer WHERE Age > 40 INTERSECT SELECT Country FROM singer WHERE Age < 30"}
+{"id": 637, "db_id": "tvshow", "predicted": "SELECT T1.series_name, T1.Country FROM TV_Channel AS T1 INNER JOIN Cartoon AS T2 ON T1.id = T2.Channel WHERE T2.Directed_by = 'Ben Jones' AND T2.Written_by = 'Michael Chang'"}
+{"id": 7, "db_id": "concert_singer", "predicted": "SELECT T1.Name, T1.Song_Release_year FROM singer AS T1 INNER JOIN singer_in_concert AS T2 ON T1.Singer_ID = T2.Singer_ID INNER JOIN concert AS T3 ON T2.concert_ID = T3.concert_ID ORDER BY T1.Age ASC LIMIT 1"}
+{"id": 18, "db_id": "concert_singer", "predicted": "SELECT T1.Name, T1.Capacity FROM stadium AS T1 JOIN concert AS T2 ON T1.Stadium_ID = T2.Stadium_ID ORDER BY T1.Average DESC LIMIT 1"}
+{"id": 31, "db_id": "concert_singer", "predicted": "SELECT Name FROM stadium WHERE Stadium_ID NOT IN (SELECT Stadium_ID FROM concert WHERE YEAR = '2014')"}
+{"id": 14, "db_id": "concert_singer", "predicted": "SELECT LOCATION ,  NAME FROM stadium WHERE capacity BETWEEN 5000 AND 10000"}
+{"id": 43, "db_id": "concert_singer", "predicted": "SELECT COUNT(*) FROM concert WHERE Stadium_ID = (SELECT Stadium_ID FROM stadium ORDER BY Capacity DESC LIMIT 1)"}
+{"id": 25, "db_id": "concert_singer", "predicted": "SELECT T1.Name, T1.Capacity FROM stadium AS T1 JOIN concert AS T2 ON T1.Stadium_ID = T2.Stadium_ID WHERE T2.Year > '2013' GROUP BY T1.Stadium_ID ORDER BY COUNT(*) DESC LIMIT 1"}
+{"id": 19, "db_id": "concert_singer", "predicted": "SELECT T1.Name, T1.Capacity FROM stadium AS T1 JOIN concert AS T2 ON T1.Stadium_ID = T2.Stadium_ID ORDER BY T1.Average DESC LIMIT 1"}
+{"id": 33, "db_id": "concert_singer", "predicted": "SELECT T1.concert_Name, T1.theme, COUNT(T2.Singer_ID) FROM concert AS T1 JOIN singer_in_concert AS T2 ON T1.concert_ID = T2.concert_ID GROUP BY T1.concert_Name, T1.theme"}
+{"id": 39, "db_id": "concert_singer", "predicted": "SELECT T1.Name, T1.Country FROM singer AS T1 INNER JOIN singer_in_concert AS T2 ON T1.Singer_ID = T2.Singer_ID INNER JOIN concert AS T3 ON T2.concert_ID = T3.concert_ID WHERE T3.Theme LIKE '%Hey%'"}
+{"id": 3, "db_id": "concert_singer", "predicted": "SELECT Name, Country, Age FROM singer ORDER BY Age DESC"}
+{"id": 15, "db_id": "concert_singer", "predicted": "SELECT LOCATION ,  NAME FROM stadium WHERE capacity BETWEEN 5000 AND 10000"}
+{"id": 24, "db_id": "concert_singer", "predicted": "SELECT T1.Name, T1.Capacity FROM stadium AS T1 JOIN concert AS T2 ON T1.Stadium_ID = T2.Stadium_ID WHERE T2.Year >= '2014' GROUP BY T1.Stadium_ID ORDER BY COUNT(*) DESC LIMIT 1"}
+{"id": 2, "db_id": "concert_singer", "predicted": "SELECT Name, Country, Age FROM singer ORDER BY Age ASC"}
+{"id": 44, "db_id": "concert_singer", "predicted": "SELECT COUNT(*) FROM concert WHERE Stadium_ID = (SELECT Stadium_ID FROM stadium ORDER BY Capacity DESC LIMIT 1)"}
+{"id": 638, "db_id": "tvshow", "predicted": "SELECT T1.series_name, T1.Country FROM TV_Channel AS T1 INNER JOIN Cartoon AS T2 ON T1.id = T2.Channel WHERE T2.Directed_by = 'Ben Jones' OR T2.Directed_by = 'Michael Chang'"}
+{"id": 40, "db_id": "concert_singer", "predicted": "SELECT T1.Name, T1.Country FROM singer AS T1 INNER JOIN singer_in_concert AS T2 ON T1.Singer_ID = T2.Singer_ID INNER JOIN concert AS T3 ON T2.concert_ID = T3.concert_ID WHERE T3.Theme LIKE '%Hey%'"}
+{"id": 42, "db_id": "concert_singer", "predicted": "SELECT T1.Name, T1.Location FROM stadium AS T1 JOIN concert AS T2 ON T1.Stadium_ID = T2.Stadium_ID WHERE T2.Year = '2014' INTERSECT SELECT T1.Name, T1.Location FROM stadium AS T1 JOIN concert AS T2 ON T1.Stadium_ID = T2.Stadium_ID WHERE T2.Year = '2015'"}
+{"id": 41, "db_id": "concert_singer", "predicted": "SELECT T1.Name, T1.Location FROM stadium AS T1 JOIN concert AS T2 ON T1.Stadium_ID = T2.Stadium_ID WHERE T2.Year IN ('2014', '2015')"}
+{"id": 822, "db_id": "orchestra", "predicted": "SELECT count(*) FROM conductor"}
+{"id": 823, "db_id": "orchestra", "predicted": "SELECT count(*) FROM conductor"}
+{"id": 830, "db_id": "orchestra", "predicted": "SELECT AVG(Attendance) FROM show"}
+{"id": 831, "db_id": "orchestra", "predicted": "SELECT AVG(Attendance) FROM show"}
+{"id": 825, "db_id": "orchestra", "predicted": "SELECT Name FROM conductor ORDER BY Age"}
+{"id": 834, "db_id": "orchestra", "predicted": "SELECT COUNT(DISTINCT Nationality) FROM conductor"}
+{"id": 849, "db_id": "orchestra", "predicted": "SELECT Record_Company, COUNT(*) FROM orchestra GROUP BY Record_Company"}
+{"id": 854, "db_id": "orchestra", "predicted": "SELECT T1.Orchestra FROM orchestra AS T1 WHERE T1.Orchestra_ID NOT IN (SELECT T2.Orchestra_ID FROM performance AS T2)"}
+{"id": 824, "db_id": "orchestra", "predicted": "SELECT Name FROM conductor ORDER BY Age ASC"}
+{"id": 835, "db_id": "orchestra", "predicted": "SELECT count(DISTINCT Nationality) FROM conductor"}
+{"id": 855, "db_id": "orchestra", "predicted": "SELECT orchestra FROM orchestra WHERE orchestra_id NOT IN (SELECT orchestra_id FROM performance)"}
+{"id": 838, "db_id": "orchestra", "predicted": "SELECT Name FROM conductor ORDER BY Year_of_Work DESC LIMIT 1"}
+{"id": 836, "db_id": "orchestra", "predicted": "SELECT Name FROM conductor ORDER BY Year_of_Work DESC"}
+{"id": 852, "db_id": "orchestra", "predicted": "SELECT Record_Company FROM orchestra GROUP BY Record_Company ORDER BY COUNT(*) DESC LIMIT 1"}
+{"id": 826, "db_id": "orchestra", "predicted": "SELECT Name FROM conductor WHERE Nationality != \"USA\""}
+{"id": 858, "db_id": "orchestra", "predicted": "SELECT COUNT(*) FROM orchestra WHERE Major_Record_Format IN ('CD', 'DVD')"}
+{"id": 840, "db_id": "orchestra", "predicted": "SELECT T1.Name, T2.Orchestra FROM conductor AS T1 JOIN orchestra AS T2 ON T1.Conductor_ID = T2.Conductor_ID"}
+{"id": 853, "db_id": "orchestra", "predicted": "SELECT Record_Company FROM orchestra GROUP BY Record_Company ORDER BY COUNT(*) DESC LIMIT 1"}
+{"id": 827, "db_id": "orchestra", "predicted": "SELECT Name FROM conductor WHERE Nationality != \"USA\""}
+{"id": 845, "db_id": "orchestra", "predicted": "SELECT T1.Name FROM conductor AS T1 JOIN orchestra AS T2 ON T1.Conductor_ID = T2.Conductor_ID GROUP BY T1.Conductor_ID ORDER BY COUNT(*) DESC LIMIT 1"}
+{"id": 850, "db_id": "orchestra", "predicted": "SELECT Major_Record_Format FROM orchestra GROUP BY Major_Record_Format ORDER BY COUNT(*) ASC"}
+{"id": 842, "db_id": "orchestra", "predicted": "SELECT T1.Name FROM conductor AS T1 JOIN orchestra AS T2 ON T1.Conductor_ID = T2.Conductor_ID GROUP BY T1.Name HAVING COUNT(*) > 1"}
+{"id": 859, "db_id": "orchestra", "predicted": "SELECT COUNT(*) FROM orchestra WHERE Major_Record_Format LIKE '%CD%' OR Major_Record_Format LIKE '%DVD%'"}
+{"id": 851, "db_id": "orchestra", "predicted": "SELECT Major_Record_Format FROM orchestra GROUP BY Major_Record_Format ORDER BY COUNT(*) DESC"}
+{"id": 839, "db_id": "orchestra", "predicted": "SELECT Name FROM conductor ORDER BY Year_of_Work DESC LIMIT 1"}
+{"id": 843, "db_id": "orchestra", "predicted": "SELECT T1.Name FROM conductor AS T1 JOIN orchestra AS T2 ON T1.Conductor_ID = T2.Conductor_ID GROUP BY T1.Name HAVING COUNT(DISTINCT T2.Orchestra_ID) > 1"}
+{"id": 844, "db_id": "orchestra", "predicted": "SELECT T1.Name FROM conductor AS T1 JOIN orchestra AS T2 ON T1.Conductor_ID = T2.Conductor_ID GROUP BY T1.Conductor_ID ORDER BY COUNT(*) DESC LIMIT 1"}
+{"id": 856, "db_id": "orchestra", "predicted": "SELECT Record_Company FROM orchestra WHERE Year_of_Founded < 2003 INTERSECT SELECT Record_Company FROM orchestra WHERE Year_of_Founded > 2003"}
+{"id": 832, "db_id": "orchestra", "predicted": "SELECT MAX(Share) ,  MIN(Share) FROM performance WHERE Type != \"Live final\""}
+{"id": 848, "db_id": "orchestra", "predicted": "SELECT Record_Company, COUNT(*) FROM orchestra GROUP BY Record_Company"}
+{"id": 846, "db_id": "orchestra", "predicted": "SELECT T1.Name FROM conductor AS T1 JOIN orchestra AS T2 ON T1.Conductor_ID = T2.Conductor_ID WHERE T2.Year_of_Founded > 2008"}
+{"id": 861, "db_id": "orchestra", "predicted": "SELECT Year_of_Founded FROM orchestra WHERE Year_of_Founded > 1"}
+{"id": 860, "db_id": "orchestra", "predicted": "SELECT YEAR_OF_FOUNDED FROM ORCHESTRA WHERE ORCHESTRA_ID IN (SELECT ORCHESTRA_ID FROM performance GROUP BY ORCHESTRA_ID HAVING COUNT(*) > 1)"}
+{"id": 847, "db_id": "orchestra", "predicted": "SELECT T1.Name FROM conductor AS T1 JOIN orchestra AS T2 ON T1.Conductor_ID = T2.Conductor_ID WHERE T2.Year_of_Founded > 2008"}
+{"id": 837, "db_id": "orchestra", "predicted": "SELECT Name FROM conductor ORDER BY Year_of_Work DESC"}
+{"id": 833, "db_id": "orchestra", "predicted": "SELECT MAX(Share) ,  MIN(Share) FROM performance WHERE Type != \"Live final\""}
+{"id": 841, "db_id": "orchestra", "predicted": "SELECT T1.Name, T2.Orchestra FROM conductor AS T1 JOIN orchestra AS T2 ON T1.Conductor_ID = T2.Conductor_ID"}
+{"id": 828, "db_id": "orchestra", "predicted": "SELECT Record_Company FROM orchestra ORDER BY Year_of_Founded DESC"}
+{"id": 829, "db_id": "orchestra", "predicted": "SELECT Record_Company FROM orchestra ORDER BY Year_of_Founded DESC"}
+{"id": 857, "db_id": "orchestra", "predicted": "SELECT Record_Company FROM orchestra WHERE Year_of_Founded < 2003 INTERSECT SELECT Record_Company FROM orchestra WHERE Year_of_Founded >= 2003"}
+{"id": 92, "db_id": "car_1", "predicted": "SELECT count(*) FROM countries"}
+{"id": 87, "db_id": "car_1", "predicted": "SELECT count(*) FROM continents"}
+{"id": 91, "db_id": "car_1", "predicted": "SELECT count(*) FROM countries"}
+{"id": 122, "db_id": "car_1", "predicted": "SELECT Maker, Model FROM model_list"}
+{"id": 88, "db_id": "car_1", "predicted": "SELECT count(*) FROM continents"}
+{"id": 146, "db_id": "car_1", "predicted": "SELECT COUNT(*) FROM cars_data WHERE YEAR = 1980"}
+{"id": 121, "db_id": "car_1", "predicted": "SELECT DISTINCT maker, model FROM model_list"}
+{"id": 163, "db_id": "car_1", "predicted": "SELECT COUNT(*) FROM cars_data WHERE Cylinders > 6"}
+{"id": 145, "db_id": "car_1", "predicted": "SELECT COUNT(*) FROM cars_data WHERE YEAR = 1980"}
+{"id": 113, "db_id": "car_1", "predicted": "SELECT COUNT(*) FROM car_makers WHERE Country = 'France'"}
+{"id": 143, "db_id": "car_1", "predicted": "SELECT COUNT(*) FROM cars_data WHERE Cylinders > 4"}
+{"id": 138, "db_id": "car_1", "predicted": "SELECT AVG(edispl) FROM cars_data WHERE Make = 'Volvo'"}
+{"id": 142, "db_id": "car_1", "predicted": "SELECT Model FROM car_names GROUP BY Model ORDER BY COUNT(*) DESC LIMIT 1"}
+{"id": 115, "db_id": "car_1", "predicted": "SELECT COUNT(*) FROM car_names WHERE Country = 'USA'"}
+{"id": 134, "db_id": "car_1", "predicted": "SELECT Model FROM car_names ORDER BY MPG DESC LIMIT 1"}
+{"id": 127, "db_id": "car_1", "predicted": "SELECT AVG(Weight) AS AverageWeight, YEAR FROM cars_data GROUP BY YEAR"}
+{"id": 114, "db_id": "car_1", "predicted": "SELECT COUNT(*) FROM car_makers WHERE Country = 'France'"}
+{"id": 141, "db_id": "car_1", "predicted": "SELECT Model FROM car_names GROUP BY Model ORDER BY COUNT(*) DESC LIMIT 1"}
+{"id": 161, "db_id": "car_1", "predicted": "SELECT COUNT(DISTINCT T1.CountryName) FROM countries AS T1 INNER JOIN car_makers AS T2 ON T1.CountryId = T2.Country WHERE COUNT(DISTINCT T2.Maker) > 2"}
+{"id": 164, "db_id": "car_1", "predicted": "SELECT COUNT(*) FROM cars_data WHERE Cylinders > 6"}
+{"id": 95, "db_id": "car_1", "predicted": "SELECT Model FROM car_names WHERE Horsepower = (SELECT MIN(Horsepower) FROM cars_data)"}
+{"id": 128, "db_id": "car_1", "predicted": "SELECT AVG(Weight), YEAR FROM cars_data GROUP BY YEAR"}
+{"id": 103, "db_id": "car_1", "predicted": "SELECT DISTINCT T1.Model FROM car_names AS T1 INNER JOIN cars_data AS T2 ON T1.MakeId = T2.Id WHERE T2.Year > 1980"}
+{"id": 137, "db_id": "car_1", "predicted": "SELECT AVG(edispl) FROM cars_data WHERE Model = 'Volvo'"}
+{"id": 144, "db_id": "car_1", "predicted": "SELECT COUNT(*) FROM cars_data WHERE Cylinders > 4"}
+{"id": 135, "db_id": "car_1", "predicted": "SELECT AVG(Horsepower) FROM cars_data WHERE Year < 1980"}
+{"id": 174, "db_id": "car_1", "predicted": "SELECT T1.CountryName FROM countries AS T1 INNER JOIN car_makers AS T2 ON T1.CountryId = T2.Country WHERE T2.Country IS NULL"}
+{"id": 108, "db_id": "car_1", "predicted": "SELECT T2.CountryName FROM car_makers AS T1 JOIN countries AS T2 ON T1.Country = T2.CountryId GROUP BY T2.CountryName ORDER BY COUNT(*) DESC LIMIT 1"}
+{"id": 129, "db_id": "car_1", "predicted": "SELECT T1.CountryName FROM countries AS T1 INNER JOIN car_makers AS T2 ON T1.CountryId = T2.Country WHERE T1.Continent = 'Europe' GROUP BY T1.CountryName HAVING COUNT(DISTINCT T2.Maker) >= 3"}
+{"id": 125, "db_id": "car_1", "predicted": "SELECT COUNT(*) FROM cars_data WHERE Horsepower > 150"}
+{"id": 162, "db_id": "car_1", "predicted": "SELECT COUNT(CountryId) FROM countries WHERE Continent IN (SELECT ContId FROM continents WHERE Continent = 'North America')"}
+{"id": 126, "db_id": "car_1", "predicted": "SELECT COUNT(*) FROM cars_data WHERE Horsepower > 150"}
+{"id": 155, "db_id": "car_1", "predicted": "SELECT T1.Horsepower FROM cars_data AS T1 INNER JOIN car_names AS T2 ON T1.Id = T2.MakeId ORDER BY T1.Accelerate DESC LIMIT 1"}
+{"id": 140, "db_id": "car_1", "predicted": "SELECT MAX(Accelerate) FROM cars_data"}
+{"id": 156, "db_id": "car_1", "predicted": "SELECT Horsepower FROM cars_data ORDER BY Accelerate DESC LIMIT 1"}
+{"id": 104, "db_id": "car_1", "predicted": "SELECT DISTINCT T1.Model FROM car_names AS T1 INNER JOIN cars_data AS T2 ON T1.MakeId = T2.Id WHERE T2.Year > 1980"}
+{"id": 357, "db_id": "cre_Doc_Template_Mgt", "predicted": "SELECT COUNT(*) FROM Paragraphs"}
+{"id": 139, "db_id": "car_1", "predicted": "SELECT cylinders, MAX(accelerate) FROM cars_data GROUP BY cylinders"}
+{"id": 150, "db_id": "car_1", "predicted": "SELECT T1.FullName, T1.Id FROM car_makers AS T1 JOIN model_list AS T2 ON T1.Id = T2.Maker GROUP BY T1.FullName, T1.Id HAVING COUNT(*) > 3"}
+{"id": 297, "db_id": "cre_Doc_Template_Mgt", "predicted": "SELECT COUNT(*) FROM Documents"}
+{"id": 298, "db_id": "cre_Doc_Template_Mgt", "predicted": "SELECT COUNT(*) FROM Documents"}
+{"id": 317, "db_id": "cre_Doc_Template_Mgt", "predicted": "SELECT COUNT(*) FROM Templates"}
+{"id": 318, "db_id": "cre_Doc_Template_Mgt", "predicted": "SELECT COUNT(*) FROM Templates"}
+{"id": 111, "db_id": "car_1", "predicted": "SELECT Accelerate FROM cars_data WHERE Make = 'AMC' AND Model = 'Hornet Sportabout (SW)'"}
+{"id": 116, "db_id": "car_1", "predicted": "SELECT COUNT(*) FROM car_names WHERE Country = 'United States'"}
+{"id": 136, "db_id": "car_1", "predicted": "SELECT AVG(Horsepower) FROM cars_data WHERE Year < 1980"}
+{"id": 358, "db_id": "cre_Doc_Template_Mgt", "predicted": "SELECT COUNT(*) FROM Paragraphs"}
+{"id": 97, "db_id": "car_1", "predicted": "SELECT Model FROM car_names WHERE Weight < (SELECT AVG(Weight) FROM car_names)"}
+{"id": 96, "db_id": "car_1", "predicted": "SELECT T2.Model FROM cars_data AS T1 INNER JOIN model_list AS T2 ON T1.Model = T2.Model ORDER BY T1.Horsepower ASC LIMIT 1"}
+{"id": 166, "db_id": "car_1", "predicted": "SELECT T2.Model FROM cars_data AS T1 INNER JOIN model_list AS T2 ON T1.Model = T2.Model WHERE T1.Cylinders = 4 ORDER BY T1.Horsepower DESC LIMIT 1"}
+{"id": 90, "db_id": "car_1", "predicted": "SELECT c.ContId, c.Continent, COUNT(c.CountryId) FROM continents c JOIN countries c2 ON c.ContId = c2.Continent GROUP BY c.ContId, c.Continent"}
+{"id": 98, "db_id": "car_1", "predicted": "SELECT Model FROM car_names WHERE Weight < (SELECT AVG(Weight) FROM car_names)"}
+{"id": 107, "db_id": "car_1", "predicted": "SELECT T2.CountryName FROM car_makers AS T1 JOIN countries AS T2 ON T1.Country = T2.CountryId GROUP BY T2.CountryName ORDER BY COUNT(*) DESC LIMIT 1"}
+{"id": 165, "db_id": "car_1", "predicted": "SELECT T2.Model FROM cars_data AS T1 INNER JOIN model_list AS T2 ON T1.Model = T2.Model WHERE T1.Cylinders = 4 ORDER BY T1.Horsepower DESC LIMIT 1"}
+{"id": 112, "db_id": "car_1", "predicted": "SELECT Accelerate FROM cars_data WHERE Model = 'AMC Hornet Sportabout (SW)'"}
+{"id": 117, "db_id": "car_1", "predicted": "SELECT AVG(MPG) FROM cars_data WHERE Cylinders = 4"}
+{"id": 118, "db_id": "car_1", "predicted": "SELECT AVG(MPG) FROM cars_data WHERE Cylinders = 4"}
+{"id": 123, "db_id": "car_1", "predicted": "SELECT T2.CountryName, T2.CountryId FROM car_makers AS T1 INNER JOIN countries AS T2 ON T1.Country = T2.CountryId GROUP BY T2.CountryId, T2.CountryName HAVING COUNT(*) > 0"}
+{"id": 99, "db_id": "car_1", "predicted": "SELECT DISTINCT T1.Maker FROM car_names AS T1 INNER JOIN cars_data AS T2 ON T1.MakeId = T2.Id WHERE T2.Year = 1970"}
+{"id": 100, "db_id": "car_1", "predicted": "SELECT DISTINCT T1.Maker FROM car_names AS T1 INNER JOIN cars_data AS T2 ON T1.MakeId = T2.Id WHERE T2.Year = 1970"}
+{"id": 124, "db_id": "car_1", "predicted": "SELECT T1.CountryName, T1.CountryId FROM countries AS T1 INNER JOIN car_makers AS T2 ON T1.CountryId = T2.Country WHERE T2.CountryId IS NOT NULL"}
+{"id": 149, "db_id": "car_1", "predicted": "SELECT FullName, Id FROM car_makers WHERE Id IN (SELECT Maker FROM model_list GROUP BY Maker HAVING COUNT(*) > 3)"}
+{"id": 120, "db_id": "car_1", "predicted": "SELECT MIN(Weight) FROM cars_data WHERE Cylinders = 8 AND Year = 1974"}
+{"id": 173, "db_id": "car_1", "predicted": "SELECT T1.CountryName FROM countries AS T1 INNER JOIN car_makers AS T2 ON T1.CountryId = T2.Country WHERE T2.Country IS NULL"}
+{"id": 119, "db_id": "car_1", "predicted": "SELECT MIN(Weight) FROM cars_data WHERE Cylinders = 8 AND Year = 1974"}
+{"id": 130, "db_id": "car_1", "predicted": "SELECT T2.CountryName FROM countries AS T1 INNER JOIN car_makers AS T2 ON T1.CountryId = T2.Country WHERE T1.Continent = 'Europe' GROUP BY T2.CountryName HAVING COUNT(*) >= 3"}
+{"id": 171, "db_id": "car_1", "predicted": "SELECT T2.Model FROM car_names AS T1 INNER JOIN model_list AS T2 ON T1.Model = T2.Model WHERE T1.Weight < 3500 AND T1.Country != 'Ford Motor Company'"}
+{"id": 322, "db_id": "cre_Doc_Template_Mgt", "predicted": "The different template type codes are:\n\n- T1\n- T2\n- T3\n- T4\n- T5\n- T6\n- T7\n- T8\n- T9\n- T10\n- T11\n- T12\n- T13\n- T14\n- T15\n- T16\n- T17\n- T18\n- T19\n- T20\n- T21\n- T22\n- T23\n- T24\n- T25\n- T26\n- T27\n- T28\n- T29\n- T30\n- T31\n- T32\n- T33\n- T34\n- T35\n- T36\n- T37\n- T38\n- T39\n- T40\n- T41\n- T42\n- T43\n- T44\n- T45\n- T46\n- T47\n- T48\n- T49\n- T50\n- T51\n- T5"}
+{"id": 131, "db_id": "car_1", "predicted": "SELECT MAX(Horsepower), Maker FROM cars_data WHERE Cylinders = 3"}
+{"id": 157, "db_id": "car_1", "predicted": "SELECT COUNT(Cylinders) FROM cars_data WHERE Model = 'Volvo' ORDER BY Accelerate ASC LIMIT 1"}
+{"id": 159, "db_id": "car_1", "predicted": "SELECT COUNT(*) FROM cars_data WHERE Accelerate > (SELECT MAX(Horsepower) FROM cars_data)"}
+{"id": 326, "db_id": "cre_Doc_Template_Mgt", "predicted": "SELECT COUNT(*) FROM Templates WHERE Template_Type_Code = 'CV'"}
+{"id": 102, "db_id": "car_1", "predicted": "SELECT T1.Maker, T1.Year FROM cars_data AS T1 INNER JOIN car_names AS T2 ON T1.MakeId = T2.MakeId ORDER BY T1.Year ASC LIMIT 1"}
+{"id": 106, "db_id": "car_1", "predicted": "SELECT T1.Continent, COUNT(T2.Id) FROM continents AS T1 JOIN car_makers AS T2 ON T1.ContId = T2.Country GROUP BY T1.Continent"}
+{"id": 148, "db_id": "car_1", "predicted": "SELECT COUNT(*) FROM model_list WHERE Maker = 'American Motor Company'"}
+{"id": 325, "db_id": "cre_Doc_Template_Mgt", "predicted": "SELECT COUNT(*) FROM Templates WHERE Template_Type_Code = 'CV'"}
+{"id": 347, "db_id": "cre_Doc_Template_Mgt", "predicted": "SELECT Template_Type_Code, Template_Type_Description FROM Ref_Template_Types"}
+{"id": 158, "db_id": "car_1", "predicted": "SELECT COUNT(Cylinders) FROM cars_data WHERE Model = 'Volvo' ORDER BY Accelerate ASC LIMIT 1"}
+{"id": 377, "db_id": "cre_Doc_Template_Mgt", "predicted": "SELECT Document_ID FROM Paragraphs WHERE Document_ID IN (SELECT Document_ID FROM Documents WHERE Paragraph_Count BETWEEN 1 AND 2)"}
+{"id": 153, "db_id": "car_1", "predicted": "SELECT YEAR FROM cars_data WHERE Weight BETWEEN 3000 AND 4000"}
+{"id": 305, "db_id": "cre_Doc_Template_Mgt", "predicted": "SELECT COUNT(DISTINCT T1.Template_ID) FROM Documents AS T1 INNER JOIN Templates AS T2 ON T1.Template_ID = T2.Template_ID"}
+{"id": 93, "db_id": "car_1", "predicted": "SELECT car_makers.FullName, car_makers.Id, COUNT(model_list.Model) FROM car_makers JOIN model_list ON car_makers.Id = model_list.Maker GROUP BY car_makers.FullName, car_makers.Id"}
+{"id": 147, "db_id": "car_1", "predicted": "SELECT COUNT(*) FROM car_makers WHERE FullName = 'American Motor Company'"}
+{"id": 101, "db_id": "car_1", "predicted": "SELECT T1.Make, T1.Year FROM cars_data AS T1 INNER JOIN car_names AS T2 ON T1.MakeId = T2.MakeId ORDER BY T1.Year ASC LIMIT 1"}
+{"id": 371, "db_id": "cre_Doc_Template_Mgt", "predicted": "SELECT Document_ID FROM Paragraphs GROUP BY Document_ID HAVING COUNT(*) >= 2"}
+{"id": 133, "db_id": "car_1", "predicted": "SELECT Model FROM car_names ORDER BY MPG DESC LIMIT 1"}
+{"id": 315, "db_id": "cre_Doc_Template_Mgt", "predicted": "SELECT T1.Template_ID FROM Templates AS T1 LEFT JOIN Documents AS T2 ON T1.Template_ID = T2.Template_ID WHERE T2.Document_ID IS NULL"}
+{"id": 105, "db_id": "car_1", "predicted": "SELECT T1.Continent, COUNT(T2.Id) FROM continents AS T1 INNER JOIN car_makers AS T2 ON T1.ContId = T2.Country GROUP BY T1.Continent"}
+{"id": 331, "db_id": "cre_Doc_Template_Mgt", "predicted": "SELECT T1.Template_Type_Code, COUNT(T2.Template_ID) AS Template_Count\nFROM Ref_Template_Types AS T1\nJOIN Templates AS T2 ON T1.Template_Type_Code = T2.Template_Type_Code\nGROUP BY T1.Template_Type_Code\nORDER BY Template_Count DESC\nLIMIT 1"}
+{"id": 169, "db_id": "car_1", "predicted": "SELECT MAX(MPG) FROM cars_data WHERE Cylinders = 8 OR Year < 1980"}
+{"id": 94, "db_id": "car_1", "predicted": "SELECT FullName, Id, COUNT(Model) FROM car_makers GROUP BY FullName"}
+{"id": 160, "db_id": "car_1", "predicted": "SELECT COUNT(*) FROM cars_data WHERE Accelerate > (SELECT MAX(Horsepower) FROM cars_data)"}
+{"id": 321, "db_id": "cre_Doc_Template_Mgt", "predicted": "SELECT DISTINCT Template_Type_Code FROM Templates"}
+{"id": 375, "db_id": "cre_Doc_Template_Mgt", "predicted": "SELECT Document_ID FROM Documents WHERE Document_ID = (SELECT Document_ID FROM Documents GROUP BY Document_ID ORDER BY COUNT(*) ASC LIMIT 1)"}
+{"id": 170, "db_id": "car_1", "predicted": "SELECT MAX(MPG) FROM cars_data WHERE Cylinders = 8 OR Year < 1980"}
+{"id": 324, "db_id": "cre_Doc_Template_Mgt", "predicted": "SELECT Template_ID FROM Templates WHERE Template_Type_Code IN ('PP', 'PPT')"}
+{"id": 361, "db_id": "cre_Doc_Template_Mgt", "predicted": "SELECT Other_Details FROM Paragraphs WHERE Paragraph_Text LIKE '%Korea%'"}
+{"id": 376, "db_id": "cre_Doc_Template_Mgt", "predicted": "SELECT Document_ID FROM Documents ORDER BY COUNT(*) ASC LIMIT 1"}
+{"id": 132, "db_id": "car_1", "predicted": "SELECT T1.Horsepower, T2.Maker FROM cars_data AS T1 INNER JOIN car_names AS T2 ON T1.MakeId = T2.MakeId WHERE T1.Cylinders = 3"}
+{"id": 109, "db_id": "car_1", "predicted": "SELECT COUNT(Model) ,  FullName FROM car_makers GROUP BY FullName"}
+{"id": 306, "db_id": "cre_Doc_Template_Mgt", "predicted": "SELECT COUNT(DISTINCT T1.Template_ID) FROM Documents AS T1 INNER JOIN Templates AS T2 ON T1.Template_ID = T2.Template_ID"}
+{"id": 300, "db_id": "cre_Doc_Template_Mgt", "predicted": "SELECT Document_ID, Document_Name, Document_Description FROM Documents"}
+{"id": 333, "db_id": "cre_Doc_Template_Mgt", "predicted": "SELECT Template_Type_Code FROM Ref_Template_Types WHERE Template_Type_Code IN (SELECT Template_Type_Code FROM Templates GROUP BY Template_Type_Code HAVING COUNT(*) < 3)"}
+{"id": 335, "db_id": "cre_Doc_Template_Mgt", "predicted": "SELECT MIN(Version_Number), Template_Type_Code FROM Templates"}
+{"id": 308, "db_id": "cre_Doc_Template_Mgt", "predicted": "SELECT COUNT(DISTINCT T1.Document_ID) FROM Documents AS T1 INNER JOIN Templates AS T2 ON T1.Template_ID = T2.Template_ID WHERE T2.Template_Type_Code = 'PPT'"}
+{"id": 343, "db_id": "cre_Doc_Template_Mgt", "predicted": "SELECT T1.Template_Type_Code, COUNT(DISTINCT T2.Document_ID) AS Document_Count\nFROM Ref_Template_Types AS T1\nJOIN Templates AS T2 ON T1.Template_Type_Code = T2.Template_Type_Code\nJOIN Documents AS T3 ON T2.Template_ID = T3.Template_ID\nGROUP BY T1.Template_Type_Code\nORDER BY Document_Count DESC\nLIMIT 1"}
+{"id": 359, "db_id": "cre_Doc_Template_Mgt", "predicted": "SELECT COUNT(*) FROM Paragraphs WHERE Document_ID = (SELECT Document_ID FROM Documents WHERE Document_Name = 'Summer Show')"}
+{"id": 365, "db_id": "cre_Doc_Template_Mgt", "predicted": "SELECT Paragraph_Text FROM Paragraphs WHERE Document_ID = (SELECT Document_ID FROM Documents WHERE Document_Name = 'Customer reviews')"}
+{"id": 372, "db_id": "cre_Doc_Template_Mgt", "predicted": "SELECT Document_ID FROM Paragraphs GROUP BY Document_ID HAVING COUNT(*) >= 2"}
+{"id": 329, "db_id": "cre_Doc_Template_Mgt", "predicted": "SELECT T1.Template_Type_Code, COUNT(T2.Template_ID) AS Number_of_Templates\nFROM Ref_Template_Types AS T1\nJOIN Templates AS T2 ON T1.Template_Type_Code = T2.Template_Type_Code\nGROUP BY T1.Template_Type_Code"}
+{"id": 307, "db_id": "cre_Doc_Template_Mgt", "predicted": "SELECT COUNT(DISTINCT T1.Document_ID) FROM Documents AS T1 INNER JOIN Templates AS T2 ON T1.Template_ID = T2.Template_ID WHERE T2.Template_Type_Code = 'PPT'"}
+{"id": 345, "db_id": "cre_Doc_Template_Mgt", "predicted": "SELECT Template_Type_Code FROM Ref_Template_Types WHERE Template_Type_Code NOT IN (SELECT Template_Type_Code FROM Documents)"}
+{"id": 323, "db_id": "cre_Doc_Template_Mgt", "predicted": "SELECT Template_ID FROM Templates WHERE Template_Type_Code IN ('PP', 'PPT')"}
+{"id": 348, "db_id": "cre_Doc_Template_Mgt", "predicted": "SELECT Template_Type_Code, Template_Type_Description FROM Ref_Template_Types"}
+{"id": 374, "db_id": "cre_Doc_Template_Mgt", "predicted": "SELECT T1.Document_ID, T1.Document_Name FROM Documents AS T1 INNER JOIN Paragraphs AS T2 ON T1.Document_ID = T2.Document_ID GROUP BY T1.Document_ID ORDER BY COUNT(T2.Paragraph_ID) DESC LIMIT 1"}
+{"id": 379, "db_id": "cre_Doc_Template_Mgt", "predicted": "SELECT D.Document_ID, P.Paragraph_Text FROM Documents D INNER JOIN Paragraphs P ON D.Document_ID = P.Document_ID WHERE P.Paragraph_Text IN ('Brazil', 'Ireland')"}
+{"id": 309, "db_id": "cre_Doc_Template_Mgt", "predicted": "SELECT T1.Template_ID, COUNT(DISTINCT D.Document_ID) AS Document_Count\nFROM Templates T1\nJOIN Documents D ON T1.Template_ID = D.Template_ID\nGROUP BY T1.Template_ID;"}
+{"id": 316, "db_id": "cre_Doc_Template_Mgt", "predicted": "SELECT T1.Template_ID FROM Templates AS T1 WHERE T1.Template_ID NOT IN (SELECT T2.Template_ID FROM Documents AS T2 INNER JOIN Paragraphs AS T3 ON T2.Document_ID = T3.Document_ID INNER JOIN Templates AS T4 ON T3.Template_ID = T4.Template_ID)"}
+{"id": 313, "db_id": "cre_Doc_Template_Mgt", "predicted": "SELECT T1.Template_ID FROM Templates AS T1 INNER JOIN Documents AS T2 ON T1.Template_ID = T2.Template_ID GROUP BY T1.Template_ID HAVING COUNT(DISTINCT T2.Document_ID) > 1"}
+{"id": 339, "db_id": "cre_Doc_Template_Mgt", "predicted": "SELECT T2.Document_Name FROM Templates AS T1 INNER JOIN Documents AS T2 ON T1.Template_ID = T2.Template_ID WHERE T1.Template_Type_Code = 'BK'"}
+{"id": 349, "db_id": "cre_Doc_Template_Mgt", "predicted": "SELECT Template_Type_Description FROM Ref_Template_Types WHERE Template_Type_Code = 'AD'"}
+{"id": 360, "db_id": "cre_Doc_Template_Mgt", "predicted": "SELECT COUNT(*) FROM Paragraphs WHERE Document_ID = (SELECT Document_ID FROM Documents WHERE Document_Name = 'Summer Show')"}
+{"id": 378, "db_id": "cre_Doc_Template_Mgt", "predicted": "SELECT Document_ID FROM Paragraphs GROUP BY Document_ID HAVING COUNT(*) BETWEEN 1 AND 2"}
+{"id": 152, "db_id": "car_1", "predicted": "SELECT DISTINCT T2.Model FROM car_names AS T1 INNER JOIN model_list AS T2 ON T1.Model = T2.Model WHERE T1.Country = 'USA' AND T2.Maker = 'General Motors' OR T1.Weight > 3500"}
+{"id": 172, "db_id": "car_1", "predicted": "SELECT DISTINCT T1.Model FROM car_names AS T1 INNER JOIN cars_data AS T2 ON T1.MakeId = T2.Id WHERE T2.Weight < 3500 AND T1.Maker != 'Ford'"}
+{"id": 176, "db_id": "car_1", "predicted": "SELECT T1.Id, T1.Maker FROM car_makers AS T1 JOIN model_list AS T2 ON T1.Id = T2.Maker GROUP BY T1.Id, T1.Maker HAVING COUNT(T2.Model) >= 2 AND COUNT(T1.Id) > 3"}
+{"id": 320, "db_id": "cre_Doc_Template_Mgt", "predicted": "SELECT Template_ID, Version_Number, Template_Type_Code FROM Templates"}
+{"id": 340, "db_id": "cre_Doc_Template_Mgt", "predicted": "SELECT T2.Document_Name FROM Documents AS T1 INNER JOIN Templates AS T2 ON T1.Template_ID = T2.Template_ID WHERE T2.Template_Type_Code = 'BK'"}
+{"id": 351, "db_id": "cre_Doc_Template_Mgt", "predicted": "SELECT Template_Type_Code FROM Ref_Template_Types WHERE Template_Type_Description = 'Book'"}
+{"id": 373, "db_id": "cre_Doc_Template_Mgt", "predicted": "SELECT D.Document_ID, D.Document_Name FROM Documents D JOIN Paragraphs P ON D.Document_ID = P.Document_ID GROUP BY D.Document_ID, D.Document_Name ORDER BY COUNT(*) DESC LIMIT 1"}
+{"id": 177, "db_id": "car_1", "predicted": "SELECT T1.CountryId, T1.CountryName FROM countries AS T1 INNER JOIN car_makers AS T2 ON T1.CountryId = T2.Country WHERE T2.FullName LIKE '%fiat%' GROUP BY T1.CountryId, T1.CountryName HAVING COUNT(*) > 3"}
+{"id": 334, "db_id": "cre_Doc_Template_Mgt", "predicted": "SELECT Template_Type_Code FROM Ref_Template_Types WHERE Template_Type_Code NOT IN (SELECT Template_Type_Code FROM Templates GROUP BY Template_Type_Code HAVING COUNT(*) < 3)"}
+{"id": 352, "db_id": "cre_Doc_Template_Mgt", "predicted": "SELECT Template_Type_Code FROM Ref_Template_Types WHERE Template_Type_Description = 'Book'"}
+{"id": 178, "db_id": "car_1", "predicted": "SELECT T1.CountryId ,  T1.CountryName FROM countries AS T1 JOIN car_makers AS T2 ON T1.CountryId  =  T2.Country WHERE T2.Country  =  'Italy' OR T2.Country  =  'Germany' OR T2.Country  =  'Japan' OR T2.Country  =  'France' OR T2.Country  =  'Spain' OR T2.Country  =  'Italy' OR T2.Country  =  'Germany' OR T2.Country  =  'Japan' OR T2.Country  =  'France' OR T2.Country  =  'Spain'"}
+{"id": 346, "db_id": "cre_Doc_Template_Mgt", "predicted": "SELECT Template_Type_Code FROM Ref_Template_Types WHERE Template_Type_Code NOT IN (SELECT Template_Type_Code FROM Documents)"}
+{"id": 355, "db_id": "cre_Doc_Template_Mgt", "predicted": "SELECT T1.Template_ID FROM Templates AS T1 INNER JOIN Ref_Template_Types AS T2 ON T1.Template_Type_Code = T2.Template_Type_Code WHERE T2.Template_Type_Description = 'Presentation'"}
+{"id": 362, "db_id": "cre_Doc_Template_Mgt", "predicted": "SELECT T2.Paragraph_Text FROM Documents AS T1 INNER JOIN Paragraphs AS T2 ON T1.Document_ID = T2.Document_ID WHERE T1.Document_Name = 'Sample Document' AND T2.Paragraph_Text LIKE '%Korea%'"}
+{"id": 151, "db_id": "car_1", "predicted": "SELECT DISTINCT T1.Model FROM car_names AS T1 INNER JOIN car_makers AS T2 ON T1.Make = T2.Id WHERE T2.FullName = 'General Motors' OR T1.Weight > 3500"}
+{"id": 311, "db_id": "cre_Doc_Template_Mgt", "predicted": "SELECT T2.Template_ID, T2.Template_Type_Code FROM Documents AS T1 INNER JOIN Templates AS T2 ON T1.Template_ID = T2.Template_ID GROUP BY T2.Template_ID ORDER BY COUNT(*) DESC LIMIT 1"}
+{"id": 341, "db_id": "cre_Doc_Template_Mgt", "predicted": "SELECT T1.Template_Type_Code, COUNT(DISTINCT T2.Document_ID) AS Document_Count\nFROM Ref_Template_Types AS T1\nJOIN Templates AS T2 ON T1.Template_Type_Code = T2.Template_Type_Code\nGROUP BY T1.Template_Type_Code"}
+{"id": 350, "db_id": "cre_Doc_Template_Mgt", "predicted": "SELECT Template_Type_Description FROM Ref_Template_Types WHERE Template_Type_Code = 'AD'"}
+{"id": 369, "db_id": "cre_Doc_Template_Mgt", "predicted": "SELECT D.Document_ID, D.Document_Name, COUNT(P.Paragraph_ID) AS Paragraph_Count\nFROM Documents D\nJOIN Paragraphs P ON D.Document_ID = P.Document_ID\nGROUP BY D.Document_ID, D.Document_Name;"}
+{"id": 89, "db_id": "car_1", "predicted": "SELECT T1.ContId, T1.Continent, COUNT(T2.CountryId) FROM continents AS T1 JOIN countries AS T2 ON T1.ContId = T2.Continent GROUP BY T1.ContId, T1.Continent"}
+{"id": 332, "db_id": "cre_Doc_Template_Mgt", "predicted": "SELECT T1.Template_Type_Code FROM Ref_Template_Types AS T1 INNER JOIN Templates AS T2 ON T1.Template_Type_Code = T2.Template_Type_Code GROUP BY T1.Template_Type_Code ORDER BY COUNT(*) DESC LIMIT 1"}
+{"id": 363, "db_id": "cre_Doc_Template_Mgt", "predicted": "SELECT Paragraph_ID, Paragraph_Text FROM Paragraphs WHERE Document_ID = (SELECT Document_ID FROM Documents WHERE Document_Name = 'Welcome to NY')"}
+{"id": 110, "db_id": "car_1", "predicted": "SELECT COUNT(Model) ,  car_makers.id ,  car_makers.fullname FROM car_makers JOIN model_list ON car_makers.id  =  model_list.maker GROUP BY car_makers.id ,  car_makers.fullname"}
+{"id": 344, "db_id": "cre_Doc_Template_Mgt", "predicted": "SELECT T1.Template_Type_Code FROM Documents AS T1 JOIN Templates AS T2 ON T1.Template_ID = T2.Template_ID GROUP BY T1.Template_Type_Code ORDER BY COUNT(*) DESC LIMIT 1"}
+{"id": 175, "db_id": "car_1", "predicted": "SELECT T1.Id ,  T1.Maker FROM car_makers AS T1 JOIN model_list AS T2 ON T1.Id  =  T2.Maker GROUP BY T1.Id ,  T1.Maker HAVING COUNT(*)  >=  2 AND COUNT(*)  <=  3"}
+{"id": 319, "db_id": "cre_Doc_Template_Mgt", "predicted": "SELECT Template_ID, Version_Number, Template_Type_Code FROM Templates"}
+{"id": 356, "db_id": "cre_Doc_Template_Mgt", "predicted": "SELECT Template_ID FROM Templates WHERE Template_Type_Code = 'PRES'"}
+{"id": 299, "db_id": "cre_Doc_Template_Mgt", "predicted": "SELECT Document_ID, Document_Name, Document_Description FROM Documents"}
+{"id": 314, "db_id": "cre_Doc_Template_Mgt", "predicted": "SELECT T1.Template_ID FROM Templates AS T1 INNER JOIN Documents AS T2 ON T1.Template_ID = T2.Template_ID GROUP BY T1.Template_ID HAVING COUNT(DISTINCT T2.Document_ID) > 1"}
+{"id": 366, "db_id": "cre_Doc_Template_Mgt", "predicted": "SELECT Paragraph_Text FROM Paragraphs WHERE Document_ID = (SELECT Document_ID FROM Documents WHERE Document_Name = 'Customer reviews')"}
+{"id": 364, "db_id": "cre_Doc_Template_Mgt", "predicted": "SELECT T1.Paragraph_ID, T1.Paragraph_Text FROM Documents AS T1 INNER JOIN Paragraphs AS T2 ON T1.Document_ID = T2.Document_ID WHERE T1.Document_Name = 'Welcome to NY'"}
+{"id": 342, "db_id": "cre_Doc_Template_Mgt", "predicted": "SELECT T1.Template_Type_Code, COUNT(DISTINCT T2.Document_ID) AS Documents_Using\nFROM Ref_Template_Types AS T1\nJOIN Templates AS T2 ON T1.Template_Type_Code = T2.Template_Type_Code\nGROUP BY T1.Template_Type_Code;"}
+{"id": 336, "db_id": "cre_Doc_Template_Mgt", "predicted": "SELECT T2.Version_Number, T1.Template_Type_Code FROM Templates AS T1 INNER JOIN Ref_Template_Types AS T2 ON T1.Template_Type_Code = T2.Template_Type_Code ORDER BY T1.Version_Number ASC LIMIT 1"}
+{"id": 354, "db_id": "cre_Doc_Template_Mgt", "predicted": "SELECT DISTINCT T2.Template_Type_Description FROM Documents AS T1 INNER JOIN Templates AS T2 ON T1.Template_ID = T2.Template_ID"}
+{"id": 303, "db_id": "cre_Doc_Template_Mgt", "predicted": "SELECT T2.Document_ID, T2.Template_ID, T2.Document_Description FROM Documents AS T1 INNER JOIN Documents AS T2 ON T1.Document_ID = T2.Document_ID WHERE T1.Document_Name = 'Robbin CV'"}
+{"id": 380, "db_id": "cre_Doc_Template_Mgt", "predicted": "SELECT T1.Document_ID FROM Documents AS T1 INNER JOIN Paragraphs AS T2 ON T1.Document_ID = T2.Document_ID WHERE T2.Paragraph_Text LIKE '%Brazil%' OR T2.Paragraph_Text LIKE '%Ireland%'"}
+{"id": 330, "db_id": "cre_Doc_Template_Mgt", "predicted": "SELECT Template_Type_Code, COUNT(*) FROM Templates GROUP BY Template_Type_Code"}
+{"id": 338, "db_id": "cre_Doc_Template_Mgt", "predicted": "SELECT T1.Template_Type_Code FROM Documents AS T1 INNER JOIN Templates AS T2 ON T1.Template_ID = T2.Template_ID WHERE T1.Document_Name = 'Data base'"}
+{"id": 370, "db_id": "cre_Doc_Template_Mgt", "predicted": "SELECT D.Document_ID, D.Document_Name, D.Document_Description, COUNT(P.Paragraph_ID) AS Paragraph_Count\nFROM Documents D\nJOIN Paragraphs P ON D.Document_ID = P.Document_ID\nGROUP BY D.Document_ID, D.Document_Name, D.Document_Description;"}
+{"id": 337, "db_id": "cre_Doc_Template_Mgt", "predicted": "SELECT T2.Template_Type_Code FROM Documents AS T1 INNER JOIN Templates AS T2 ON T1.Template_ID = T2.Template_ID WHERE T1.Document_Name = 'Data base'"}
+{"id": 367, "db_id": "cre_Doc_Template_Mgt", "predicted": "SELECT D.Document_ID, COUNT(P.Paragraph_ID) AS Paragraph_Count\nFROM Documents D\nJOIN Paragraphs P ON D.Document_ID = P.Document_ID\nGROUP BY D.Document_ID\nORDER BY D.Document_ID;"}
+{"id": 353, "db_id": "cre_Doc_Template_Mgt", "predicted": "SELECT DISTINCT T2.Template_Type_Description FROM Documents AS T1 INNER JOIN Templates AS T2 ON T1.Template_ID = T2.Template_ID"}
+{"id": 167, "db_id": "car_1", "predicted": "SELECT T1.MakeId, T1.Make FROM cars_data AS T1 INNER JOIN car_names AS T2 ON T1.MakeId = T2.MakeId WHERE T1.Horsepower > (SELECT MIN(Horsepower) FROM cars_data) AND T1.Cylinders <= 3"}
+{"id": 304, "db_id": "cre_Doc_Template_Mgt", "predicted": "SELECT T1.Document_ID, T1.Template_ID, T1.Document_Description FROM Documents AS T1 INNER JOIN Paragraphs AS T2 ON T1.Document_ID = T2.Document_ID WHERE T2.Paragraph_Text LIKE '%Robbin CV%'"}
+{"id": 312, "db_id": "cre_Doc_Template_Mgt", "predicted": "SELECT T2.Template_ID, T1.Template_Type_Code FROM Documents AS T1 INNER JOIN Templates AS T2 ON T1.Template_ID = T2.Template_ID GROUP BY T2.Template_ID ORDER BY COUNT(*) DESC LIMIT 1"}
+{"id": 168, "db_id": "car_1", "predicted": "SELECT T1.MakeId, T1.Make FROM cars_data AS T1 INNER JOIN car_names AS T2 ON T1.MakeId = T2.MakeId WHERE T1.Horsepower IS NOT NULL AND T1.Horsepower != 'N/A' AND T1.Horsepower != 'NA' AND T1.Horsepower != 'N/A' AND T1.Horsepower != 'N/A' AND T1.Horsepower != 'N/A' AND T1.Horsepower != 'N/A' AND T1.Horsepower != 'N/A' AND T1.Horsepower != 'N/A' AND T1.Horsepower != 'N/A' AND T1.Horsepower != 'N/A' AND T1.Horsepower != 'N/A' AND T1.Horsepower != 'N/A' AND T1.Horsepower != 'N/A' AND T1.Horsepower != 'N/A' AND T1.Horsepower != 'N/A' AND T1.Horsepower != 'N/A' AND T1.Horsepower != 'N/A' AND T1.Horsepower != 'N/A' AND T1.Horsepower != 'N/A' AND T1.Horsepower !="}
+{"id": 302, "db_id": "cre_Doc_Template_Mgt", "predicted": "SELECT T2.Document_Name, T2.Template_ID FROM Documents AS T1 INNER JOIN Paragraphs AS T2 ON T1.Document_ID = T2.Document_ID WHERE T1.Document_Description LIKE '%w%'"}
+{"id": 301, "db_id": "cre_Doc_Template_Mgt", "predicted": "SELECT T2.Document_Name, T2.Template_ID FROM Documents AS T1 INNER JOIN Templates AS T2 ON T1.Template_ID = T2.Template_ID WHERE T1.Document_Description LIKE '%w%'"}
+{"id": 310, "db_id": "cre_Doc_Template_Mgt", "predicted": "SELECT T1.Template_ID, COUNT(*) AS Usage_Count\nFROM Documents AS T1\nJOIN Paragraphs AS T2 ON T1.Document_ID = T2.Document_ID\nGROUP BY T1.Template_ID"}
+{"id": 154, "db_id": "car_1", "predicted": "SELECT DISTINCT YEAR FROM cars_data WHERE Weight < 4000 INTERSECT SELECT DISTINCT YEAR FROM cars_data WHERE Weight > 3000"}
+{"id": 327, "db_id": "cre_Doc_Template_Mgt", "predicted": "SELECT Version_Number, Template_Type_Code FROM Templates WHERE Version_Number > 5"}
+{"id": 328, "db_id": "cre_Doc_Template_Mgt", "predicted": "SELECT Version_Number, Template_Type_Code FROM Templates WHERE Version_Number > 5"}
+{"id": 368, "db_id": "cre_Doc_Template_Mgt", "predicted": "SELECT document_id ,  count(*) FROM paragraphs GROUP BY document_id ORDER BY document_id"}
+{"id": 430, "db_id": "wta_1", "predicted": "SELECT COUNT(*) FROM players"}
+{"id": 432, "db_id": "wta_1", "predicted": "SELECT count(*) FROM matches"}
+{"id": 462, "db_id": "wta_1", "predicted": "SELECT YEAR FROM matches GROUP BY YEAR ORDER BY COUNT(*) DESC LIMIT 1"}
+{"id": 429, "db_id": "wta_1", "predicted": "SELECT count(*) FROM players"}
+{"id": 431, "db_id": "wta_1", "predicted": "SELECT COUNT(*) FROM matches"}
+{"id": 474, "db_id": "wta_1", "predicted": "SELECT country_code, COUNT(*) FROM players GROUP BY country_code"}
+{"id": 444, "db_id": "wta_1", "predicted": "SELECT COUNT(DISTINCT loser_name) FROM matches"}
+{"id": 482, "db_id": "wta_1", "predicted": "SELECT YEAR(tourney_date) AS year, COUNT(*) AS matches_played FROM matches GROUP BY YEAR(tourney_date)"}
+{"id": 443, "db_id": "wta_1", "predicted": "SELECT COUNT(DISTINCT T1.loser_name) FROM matches AS T1"}
+{"id": 473, "db_id": "wta_1", "predicted": "SELECT COUNT(*) AS player_count, country_code FROM players GROUP BY country_code"}
+{"id": 450, "db_id": "wta_1", "predicted": "SELECT COUNT(*) FROM matches WHERE YEAR IN (2013, 2016)"}
+{"id": 489, "db_id": "wta_1", "predicted": "SELECT hand, COUNT(*) FROM players GROUP BY hand"}
+{"id": 490, "db_id": "wta_1", "predicted": "SELECT hand, COUNT(*) FROM players GROUP BY hand"}
+{"id": 439, "db_id": "wta_1", "predicted": "SELECT MAX(ranking) FROM rankings"}
+{"id": 437, "db_id": "wta_1", "predicted": "SELECT AVG(ranking) FROM rankings"}
+{"id": 442, "db_id": "wta_1", "predicted": "SELECT COUNT(DISTINCT country_code) FROM players"}
+{"id": 481, "db_id": "wta_1", "predicted": "SELECT YEAR(tourney_date) AS year, COUNT(*) AS match_count FROM matches GROUP BY YEAR(tourney_date)"}
+{"id": 461, "db_id": "wta_1", "predicted": "SELECT YEAR FROM matches GROUP BY YEAR ORDER BY COUNT(*) DESC LIMIT 1"}
+{"id": 440, "db_id": "wta_1", "predicted": "SELECT MAX(ranking) FROM rankings"}
+{"id": 438, "db_id": "wta_1", "predicted": "SELECT AVG(ranking) FROM rankings"}
+{"id": 479, "db_id": "wta_1", "predicted": "SELECT COUNT(tours) FROM rankings GROUP BY ranking_date"}
+{"id": 476, "db_id": "wta_1", "predicted": "SELECT country_code FROM players GROUP BY country_code ORDER BY COUNT(*) DESC LIMIT 1"}
+{"id": 480, "db_id": "wta_1", "predicted": "SELECT COUNT(tours) FROM rankings GROUP BY ranking_date"}
+{"id": 445, "db_id": "wta_1", "predicted": "SELECT T1.tourney_name FROM matches AS T1 JOIN tournaments AS T2 ON T1.tourney_id = T2.tourney_id GROUP BY T2.tourney_name HAVING COUNT(*) > 10"}
+{"id": 441, "db_id": "wta_1", "predicted": "SELECT COUNT(DISTINCT country_code) FROM players"}
+{"id": 435, "db_id": "wta_1", "predicted": "SELECT AVG(winner_age) AS avg_winner_age, AVG(loser_age) AS avg_loser_age FROM matches"}
+{"id": 453, "db_id": "wta_1", "predicted": "SELECT first_name, country_code FROM players ORDER BY birth_date ASC LIMIT 1"}
+{"id": 478, "db_id": "wta_1", "predicted": "SELECT country_code FROM players GROUP BY country_code HAVING COUNT(*) > 50"}
+{"id": 477, "db_id": "wta_1", "predicted": "SELECT country_code FROM players GROUP BY country_code HAVING COUNT(*) > 50"}
+{"id": 448, "db_id": "wta_1", "predicted": "SELECT T1.first_name, T1.last_name FROM players AS T1 INNER JOIN matches AS T2 ON T1.player_id = T2.winner_id WHERE T2.tourney_date = '2013-01-01' INTERSECT SELECT T1.first_name, T1.last_name FROM players AS T1 INNER JOIN matches AS T2 ON T1.player_id = T2.winner_id WHERE T2.tourney_date = '2016-01-01'"}
+{"id": 454, "db_id": "wta_1", "predicted": "SELECT first_name, country_code FROM players ORDER BY birth_date ASC LIMIT 1"}
+{"id": 456, "db_id": "wta_1", "predicted": "SELECT first_name, last_name FROM players ORDER BY birth_date"}
+{"id": 469, "db_id": "wta_1", "predicted": "SELECT AVG(ranking) AS average_rank, p.first_name FROM players p JOIN rankings r ON p.player_id = r.player_id GROUP BY p.first_name"}
+{"id": 436, "db_id": "wta_1", "predicted": "SELECT AVG(winner_age) AS avg_winner_age, AVG(loser_age) AS avg_loser_age FROM matches"}
+{"id": 447, "db_id": "wta_1", "predicted": "SELECT DISTINCT T1.winner_name FROM matches AS T1 INNER JOIN matches AS T2 ON T1.winner_id = T2.winner_id WHERE T1.tourney_date = '2013-01-01' INTERSECT SELECT DISTINCT T1.winner_name FROM matches AS T1 INNER JOIN matches AS T2 ON T1.winner_id = T2.winner_id WHERE T1.tourney_date = '2016-01-01'"}
+{"id": 434, "db_id": "wta_1", "predicted": "SELECT first_name, birth_date FROM players WHERE country_code = 'USA'"}
+{"id": 446, "db_id": "wta_1", "predicted": "SELECT DISTINCT T1.tourney_name FROM matches AS T1 JOIN tournaments AS T2 ON T1.tourney_id = T2.tourney_id GROUP BY T2.tourney_name HAVING COUNT(*) > 10"}
+{"id": 449, "db_id": "wta_1", "predicted": "SELECT COUNT(*) FROM matches WHERE YEAR IN (2013, 2016)"}
+{"id": 463, "db_id": "wta_1", "predicted": "SELECT T1.winner_name, T1.ranking_points FROM matches AS T1 JOIN rankings AS T2 ON T1.winner_id = T2.player_id ORDER BY T2.tours DESC LIMIT 1"}
+{"id": 471, "db_id": "wta_1", "predicted": "SELECT p.first_name, SUM(r.ranking_points) AS total_ranking_points FROM players p JOIN rankings r ON p.player_id = r.player_id GROUP BY p.first_name"}
+{"id": 470, "db_id": "wta_1", "predicted": "SELECT T1.first_name, AVG(T2.ranking) FROM players AS T1 JOIN rankings AS T2 ON T1.player_id = T2.player_id GROUP BY T1.first_name"}
+{"id": 483, "db_id": "wta_1", "predicted": "SELECT T1.first_name, T1.last_name, T1.rank FROM players AS T1 INNER JOIN matches AS T2 ON T1.player_id = T2.winner_id ORDER BY T2.winner_age ASC LIMIT 3"}
+{"id": 475, "db_id": "wta_1", "predicted": "SELECT country_code FROM players GROUP BY country_code ORDER BY COUNT(*) DESC LIMIT 1"}
+{"id": 455, "db_id": "wta_1", "predicted": "SELECT first_name, last_name FROM players ORDER BY birth_date"}
+{"id": 472, "db_id": "wta_1", "predicted": "SELECT T1.first_name, SUM(T2.ranking_points) FROM players AS T1 JOIN rankings AS T2 ON T1.player_id = T2.player_id GROUP BY T1.first_name"}
+{"id": 460, "db_id": "wta_1", "predicted": "SELECT T1.first_name, T1.country_code FROM players AS T1 JOIN rankings AS T2 ON T1.player_id = T2.player_id GROUP BY T1.player_id ORDER BY T2.tours DESC LIMIT 1"}
+{"id": 458, "db_id": "wta_1", "predicted": "SELECT T1.first_name, T1.last_name FROM players AS T1 INNER JOIN matches AS T2 ON T1.player_id = T2.loser_id WHERE T2.loser_hand = 'L' ORDER BY T1.birth_date"}
+{"id": 468, "db_id": "wta_1", "predicted": "SELECT T1.winner_name, T1.loser_name FROM matches AS T1 ORDER BY T1.minutes DESC LIMIT 1"}
+{"id": 484, "db_id": "wta_1", "predicted": "SELECT T1.first_name, T1.last_name, T1.rank FROM players AS T1 INNER JOIN matches AS T2 ON T1.player_id = T2.winner_id ORDER BY T2.winner_age ASC LIMIT 3"}
+{"id": 433, "db_id": "wta_1", "predicted": "SELECT first_name, birth_date FROM players WHERE country_code = 'USA'"}
+{"id": 486, "db_id": "wta_1", "predicted": "SELECT COUNT(T1.player_id) FROM matches AS T1 INNER JOIN players AS T2 ON T1.winner_id = T2.player_id WHERE T2.hand = 'L' AND T1.tourney_name LIKE 'WTA%'"}
+{"id": 459, "db_id": "wta_1", "predicted": "SELECT T1.first_name, T1.country_code FROM players AS T1 JOIN rankings AS T2 ON T1.player_id = T2.player_id GROUP BY T1.player_id ORDER BY COUNT(*) DESC LIMIT 1"}
+{"id": 467, "db_id": "wta_1", "predicted": "SELECT T1.winner_name, T1.loser_name FROM matches AS T1 JOIN players AS T2 ON T1.winner_id = T2.player_id JOIN players AS T3 ON T1.loser_id = T3.player_id ORDER BY T1.minutes DESC LIMIT 1"}
+{"id": 485, "db_id": "wta_1", "predicted": "SELECT COUNT(DISTINCT T1.winner_id) FROM matches AS T1 INNER JOIN players AS T2 ON T1.winner_id = T2.player_id WHERE T2.hand = 'left'"}
+{"id": 457, "db_id": "wta_1", "predicted": "SELECT first_name ,  last_name FROM players WHERE hand = 'L' ORDER BY birth_date"}
+{"id": 464, "db_id": "wta_1", "predicted": "SELECT T1.winner_name, T1.ranking_points FROM matches AS T1 JOIN rankings AS T2 ON T1.winner_id = T2.player_id ORDER BY T2.ranking_points DESC LIMIT 1"}
+{"id": 465, "db_id": "wta_1", "predicted": "SELECT T1.winner_name FROM matches AS T1 INNER JOIN rankings AS T2 ON T1.winner_id = T2.player_id WHERE T1.tourney_name = 'Australian Open' ORDER BY T2.ranking_points DESC LIMIT 1"}
+{"id": 466, "db_id": "wta_1", "predicted": "SELECT T1.winner_name FROM matches AS T1 INNER JOIN rankings AS T2 ON T1.winner_id = T2.player_id WHERE T1.tourney_name = 'Australian Open' ORDER BY T2.ranking_points DESC LIMIT 1"}
+{"id": 487, "db_id": "wta_1", "predicted": "SELECT T1.first_name, T1.country_code, T1.birth_date FROM players AS T1 INNER JOIN matches AS T2 ON T1.player_id = T2.winner_id ORDER BY T2.ranking_points DESC LIMIT 1"}
+{"id": 452, "db_id": "wta_1", "predicted": "SELECT T1.first_name, T1.country_code FROM players AS T1 INNER JOIN matches AS T2 ON T1.player_id = T2.winner_id WHERE T2.tourney_name = 'Australian Open' INTERSECT SELECT T1.first_name, T1.country_code FROM players AS T1 INNER JOIN matches AS T2 ON T1.player_id = T2.winner_id WHERE T2.tourney_name = 'WTA Championships'"}
+{"id": 451, "db_id": "wta_1", "predicted": "SELECT T1.country_code, T1.first_name FROM players AS T1 INNER JOIN matches AS T2 ON T1.player_id = T2.winner_id WHERE T2.tourney_name = 'WTA Championships' INTERSECT SELECT T1.country_code, T1.first_name FROM players AS T1 INNER JOIN matches AS T2 ON T1.player_id = T2.winner_id WHERE T2.tourney_name = 'Australian Open'"}
+{"id": 488, "db_id": "wta_1", "predicted": "SELECT T1.first_name, T1.country_code, T1.birth_date FROM players AS T1 INNER JOIN matches AS T2 ON T1.player_id = T2.winner_id GROUP BY T1.player_id ORDER BY SUM(T2.winner_rank_points) DESC LIMIT 1"}
+{"id": 711, "db_id": "world_1", "predicted": "Kabul is located in the Central Asia region."}
+{"id": 708, "db_id": "world_1", "predicted": "Anguilla is in the Caribbean continent."}
+{"id": 806, "db_id": "world_1", "predicted": "SELECT COUNT(*) FROM country WHERE Continent = 'Asia'"}
+{"id": 751, "db_id": "world_1", "predicted": "SELECT COUNT(DISTINCT T1.Continent) FROM country AS T1 INNER JOIN countrylanguage AS T2 ON T1.Code = T2.CountryCode WHERE T2.Language = 'Chinese'"}
+{"id": 753, "db_id": "world_1", "predicted": "SELECT T1.Region FROM country AS T1 INNER JOIN countrylanguage AS T2 ON T1.Code = T2.CountryCode WHERE T2.Language = 'Dutch' OR T2.Language = 'English'"}
+{"id": 807, "db_id": "world_1", "predicted": "SELECT COUNT(*) FROM country WHERE Continent = 'Asia'"}
+{"id": 737, "db_id": "world_1", "predicted": "SELECT COUNT(DISTINCT Language) FROM countrylanguage WHERE CountryCode = 'AW'"}
+{"id": 710, "db_id": "world_1", "predicted": "SELECT T2.Region FROM city AS T1 INNER JOIN country AS T2 ON T1.CountryCode = T2.Code WHERE T1.Name = 'Kabul'"}
+{"id": 743, "db_id": "world_1", "predicted": "SELECT T1.Continent, COUNT(T2.Language) AS LanguageCount\nFROM country AS T1\nJOIN countrylanguage AS T2 ON T1.Code = T2.CountryCode\nGROUP BY T1.Continent\nORDER BY LanguageCount DESC\nLIMIT 1"}
+{"id": 734, "db_id": "world_1", "predicted": "SELECT COUNT(DISTINCT GovernmentForm) FROM country WHERE Region = 'Africa'"}
+{"id": 712, "db_id": "world_1", "predicted": "SELECT T2.Language FROM country AS T1 INNER JOIN countrylanguage AS T2 ON T1.Code = T2.CountryCode WHERE T1.Code = 'AW' ORDER BY T2.Percentage DESC LIMIT 1"}
+{"id": 728, "db_id": "world_1", "predicted": "SELECT Population FROM city WHERE District = 'Gelderland'"}
+{"id": 716, "db_id": "world_1", "predicted": "SELECT Region, Population FROM country WHERE Name = 'Angola'"}
+{"id": 713, "db_id": "world_1", "predicted": "The language predominantly spoken in Aruba is Dutch."}
+{"id": 742, "db_id": "world_1", "predicted": "SELECT T1.Continent FROM country AS T1 JOIN countrylanguage AS T2 ON T1.Code = T2.CountryCode GROUP BY T1.Continent ORDER BY COUNT(DISTINCT T2.Language) DESC LIMIT 1"}
+{"id": 752, "db_id": "world_1", "predicted": "SELECT T1.Region FROM country AS T1 INNER JOIN countrylanguage AS T2 ON T1.Code = T2.CountryCode WHERE T2.Language IN ('English', 'Dutch')"}
+{"id": 744, "db_id": "world_1", "predicted": "SELECT COUNT(T1.CountryCode) FROM country AS T1 INNER JOIN countrylanguage AS T2 ON T1.Code = T2.CountryCode WHERE T2.Language = 'English' INTERSECT SELECT COUNT(T1.CountryCode) FROM country AS T1 INNER JOIN countrylanguage AS T2 ON T1.Code = T2.CountryCode WHERE T2.Language = 'Dutch'"}
+{"id": 715, "db_id": "world_1", "predicted": "SELECT Population, LifeExpectancy FROM country WHERE Name = 'Brazil'"}
+{"id": 732, "db_id": "world_1", "predicted": "SELECT COUNT(DISTINCT Language) FROM countrylanguage"}
+{"id": 738, "db_id": "world_1", "predicted": "SELECT COUNT(DISTINCT Language) FROM countrylanguage WHERE CountryCode = 'AF' AND IsOfficial = 'T'"}
+{"id": 761, "db_id": "world_1", "predicted": "SELECT T1.Name FROM city AS T1 INNER JOIN countrylanguage AS T2 ON T1.CountryCode = T2.CountryCode WHERE T2.Language = 'English' ORDER BY T1.Population DESC LIMIT 1"}
+{"id": 803, "db_id": "world_1", "predicted": "SELECT Name FROM country ORDER BY Population DESC LIMIT 3"}
+{"id": 729, "db_id": "world_1", "predicted": "SELECT SUM(T1.Population) FROM city AS T1 INNER JOIN country AS T2 ON T1.CountryCode = T2.Code WHERE T2.District = 'Gelderland'"}
+{"id": 736, "db_id": "world_1", "predicted": "SELECT COUNT(DISTINCT T1.Language) FROM countrylanguage AS T1 INNER JOIN country AS T2 ON T1.CountryCode = T2.Code WHERE T2.Name = 'Aruba'"}
+{"id": 709, "db_id": "world_1", "predicted": "SELECT T1.Continent FROM country AS T1 INNER JOIN city AS T2 ON T1.Code = T2.CountryCode WHERE T2.Name = 'Anguilla'"}
+{"id": 722, "db_id": "world_1", "predicted": "SELECT SUM(T1.Population) AS TotalPopulation, MAX(T2.GNP) AS MaxGNP FROM country AS T1 INNER JOIN countrylanguage AS T2 ON T1.Code = T2.CountryCode WHERE T1.Continent = 'Asia'"}
+{"id": 739, "db_id": "world_1", "predicted": "SELECT COUNT(DISTINCT T1.Language) FROM country AS T1 INNER JOIN countrylanguage AS T2 ON T1.Code = T2.CountryCode WHERE T1.Name = 'Afghanistan' AND T2.IsOfficial = 'T'"}
+{"id": 705, "db_id": "world_1", "predicted": "SELECT COUNT(*) FROM country WHERE GovernmentForm = 'Republic'"}
+{"id": 815, "db_id": "world_1", "predicted": "SELECT T1.Language FROM countrylanguage AS T1 JOIN country AS T2 ON T1.CountryCode = T2.Code GROUP BY T1.Language ORDER BY COUNT(*) DESC LIMIT 1"}
+{"id": 714, "db_id": "world_1", "predicted": "SELECT Population, LifeExpectancy FROM country WHERE Name = 'Brazil'"}
+{"id": 745, "db_id": "world_1", "predicted": "SELECT COUNT(*) FROM countrylanguage WHERE Language IN ('English', 'Dutch')"}
+{"id": 756, "db_id": "world_1", "predicted": "SELECT T2.Language FROM country AS T1 INNER JOIN countrylanguage AS T2 ON T1.Code = T2.CountryCode WHERE T1.Continent = 'Asia' ORDER BY T2.Percentage DESC LIMIT 1"}
+{"id": 703, "db_id": "world_1", "predicted": "SELECT Name FROM country WHERE IndepYear > 1950"}
+{"id": 805, "db_id": "world_1", "predicted": "SELECT Name FROM country ORDER BY Population LIMIT 3"}
+{"id": 735, "db_id": "world_1", "predicted": "SELECT COUNT(DISTINCT GovernmentForm) FROM country WHERE Region = 'Africa'"}
+{"id": 746, "db_id": "world_1", "predicted": "SELECT Name FROM country WHERE Code2 = 'EN' INTERSECT SELECT Name FROM country WHERE Code2 = 'FR'"}
+{"id": 760, "db_id": "world_1", "predicted": "SELECT T1.Name FROM city AS T1 INNER JOIN countrylanguage AS T2 ON T1.CountryCode = T2.CountryCode WHERE T2.Language = 'English' ORDER BY T1.Population DESC LIMIT 1"}
+{"id": 767, "db_id": "world_1", "predicted": "SELECT COUNT(T1.Name) FROM country AS T1 INNER JOIN countrylanguage AS T2 ON T1.Code = T2.CountryCode WHERE T2.Language != 'English'"}
+{"id": 814, "db_id": "world_1", "predicted": "SELECT T1.Language FROM countrylanguage AS T1 JOIN country AS T2 ON T1.CountryCode = T2.Code GROUP BY T1.Language ORDER BY COUNT(*) DESC LIMIT 1"}
+{"id": 717, "db_id": "world_1", "predicted": "Angola belongs to the continent of Africa and has a population of 25,968,000 people."}
+{"id": 747, "db_id": "world_1", "predicted": "SELECT T1.Name FROM country AS T1 INNER JOIN countrylanguage AS T2 ON T1.Code = T2.CountryCode WHERE T2.Language = 'English' INTERSECT SELECT T1.Name FROM country AS T1 INNER JOIN countrylanguage AS T2 ON T1.Code = T2.CountryCode WHERE T2.Language = 'French'"}
+{"id": 801, "db_id": "world_1", "predicted": "SELECT Name, SurfaceArea FROM country ORDER BY SurfaceArea DESC LIMIT 5"}
+{"id": 802, "db_id": "world_1", "predicted": "SELECT Name FROM country ORDER BY Population DESC LIMIT 3"}
+{"id": 704, "db_id": "world_1", "predicted": "SELECT COUNT(*) FROM country WHERE GovernmentForm = 'Republic'"}
+{"id": 733, "db_id": "world_1", "predicted": "SELECT count(DISTINCT language) FROM countrylanguage"}
+{"id": 804, "db_id": "world_1", "predicted": "SELECT Name FROM country ORDER BY Population LIMIT 3"}
+{"id": 726, "db_id": "world_1", "predicted": "SELECT SUM(SurfaceArea) FROM country WHERE Continent IN ('Asia', 'Europe')"}
+{"id": 779, "db_id": "world_1", "predicted": "SELECT Code FROM country WHERE Code NOT IN (SELECT CountryCode FROM countrylanguage WHERE Language = 'English')"}
+{"id": 750, "db_id": "world_1", "predicted": "SELECT COUNT(DISTINCT T1.Continent) FROM country AS T1 INNER JOIN countrylanguage AS T2 ON T1.Code = T2.CountryCode WHERE T2.Language = 'Chinese'"}
+{"id": 812, "db_id": "world_1", "predicted": "SELECT Name FROM city WHERE Population BETWEEN 160000 AND 900000"}
+{"id": 719, "db_id": "world_1", "predicted": "SELECT AVG(LifeExpectancy) FROM country WHERE Region = 'Central Africa'"}
+{"id": 727, "db_id": "world_1", "predicted": "SELECT SUM(SurfaceArea) FROM country WHERE Continent IN ('Asia', 'Europe')"}
+{"id": 778, "db_id": "world_1", "predicted": "SELECT Code FROM country WHERE Language != 'English'"}
+{"id": 721, "db_id": "world_1", "predicted": "SELECT T1.Name FROM country AS T1 INNER JOIN countrylanguage AS T2 ON T1.Code = T2.CountryCode WHERE T1.Continent = 'Asia' ORDER BY T1.LifeExpectancy ASC LIMIT 1"}
+{"id": 723, "db_id": "world_1", "predicted": "SELECT SUM(T1.Population) AS TotalPopulation, MAX(T2.GNP) AS LargestGNP FROM country AS T1 INNER JOIN country AS T2 ON T1.Code = T2.Code WHERE T1.Continent = 'Asia'"}
+{"id": 755, "db_id": "world_1", "predicted": "SELECT T1.Name FROM country AS T1 INNER JOIN countrylanguage AS T2 ON T1.Code = T2.CountryCode WHERE T2.Language IN ('English', 'Dutch')"}
+{"id": 773, "db_id": "world_1", "predicted": "SELECT T1.Name FROM country AS T1 INNER JOIN country AS T2 ON T1.Code = T2.CountryCode WHERE T1.SurfaceArea > (SELECT MAX(SurfaceArea) FROM country WHERE Continent = 'Europe')"}
+{"id": 800, "db_id": "world_1", "predicted": "SELECT Name, SurfaceArea FROM country ORDER BY SurfaceArea DESC LIMIT 5"}
+{"id": 707, "db_id": "world_1", "predicted": "SELECT SUM(SurfaceArea) FROM country WHERE Region = 'Caribbean'"}
+{"id": 741, "db_id": "world_1", "predicted": "SELECT T1.Name FROM country AS T1 JOIN countrylanguage AS T2 ON T1.Code = T2.CountryCode GROUP BY T1.Name ORDER BY COUNT(*) DESC LIMIT 1"}
+{"id": 758, "db_id": "world_1", "predicted": "SELECT T1.Language FROM country AS T1 JOIN countrylanguage AS T2 ON T1.Code = T2.CountryCode WHERE T1.GovernmentForm = 'Republic' GROUP BY T1.Language HAVING COUNT(*) = 1"}
+{"id": 706, "db_id": "world_1", "predicted": "SELECT SUM(SurfaceArea) FROM country WHERE Region = 'Caribbean'"}
+{"id": 740, "db_id": "world_1", "predicted": "SELECT T1.Name FROM country AS T1 JOIN countrylanguage AS T2 ON T1.Code = T2.CountryCode GROUP BY T1.Name ORDER BY SUM(T2.Percentage) DESC LIMIT 1"}
+{"id": 757, "db_id": "world_1", "predicted": "SELECT T2.Language FROM country AS T1 INNER JOIN countrylanguage AS T2 ON T1.Code = T2.CountryCode WHERE T1.Continent = 'Asia' GROUP BY T2.Language ORDER BY COUNT(*) DESC LIMIT 1"}
+{"id": 720, "db_id": "world_1", "predicted": "SELECT T1.Name FROM country AS T1 INNER JOIN countrylanguage AS T2 ON T1.Code = T2.CountryCode WHERE T1.Continent = 'Asia' ORDER BY T1.LifeExpectancy ASC LIMIT 1"}
+{"id": 749, "db_id": "world_1", "predicted": "SELECT T1.Name FROM country AS T1 INNER JOIN countrylanguage AS T2 ON T1.Code = T2.CountryCode WHERE T2.Language = 'English' OR T2.Language = 'French'"}
+{"id": 702, "db_id": "world_1", "predicted": "SELECT Name FROM country WHERE IndepYear > 1950"}
+{"id": 724, "db_id": "world_1", "predicted": "SELECT AVG(LifeExpectancy) FROM country WHERE Region = 'Africa' AND GovernmentForm = 'Republic'"}
+{"id": 759, "db_id": "world_1", "predicted": "SELECT T1.Language FROM country AS T1 INNER JOIN countrylanguage AS T2 ON T1.Code = T2.CountryCode WHERE T1.GovernmentForm = 'Republic' GROUP BY T2.Language HAVING COUNT(T1.Code) = 1"}
+{"id": 725, "db_id": "world_1", "predicted": "SELECT AVG(T2.LifeExpectancy) FROM country AS T1 INNER JOIN countrylanguage AS T2 ON T1.Code = T2.CountryCode WHERE T1.Continent = 'Africa' AND T1.Region = 'Republic'"}
+{"id": 813, "db_id": "world_1", "predicted": "SELECT Name FROM city WHERE Population BETWEEN 160000 AND 900000"}
+{"id": 790, "db_id": "world_1", "predicted": "SELECT T1.Population, T1.Name, T1.HeadOfState FROM country AS T1 INNER JOIN countrylanguage AS T2 ON T1.Code = T2.CountryCode ORDER BY T1.SurfaceArea DESC LIMIT 1"}
+{"id": 754, "db_id": "world_1", "predicted": "SELECT T1.Name FROM country AS T1 INNER JOIN countrylanguage AS T2 ON T1.Code = T2.CountryCode WHERE T2.Language IN ('English', 'Dutch')"}
+{"id": 816, "db_id": "world_1", "predicted": "SELECT T1.Name, T2.Language FROM country AS T1 INNER JOIN countrylanguage AS T2 ON T1.Code = T2.CountryCode ORDER BY T2.Percentage DESC LIMIT 1"}
+{"id": 766, "db_id": "world_1", "predicted": "SELECT SUM(T1.Population) FROM country AS T1 INNER JOIN countrylanguage AS T2 ON T1.Code = T2.CountryCode WHERE T2.Language != 'English'"}
+{"id": 772, "db_id": "world_1", "predicted": "SELECT T1.Name FROM country AS T1 INNER JOIN country AS T2 ON T1.Code = T2.CountryCode WHERE T1.SurfaceArea > (SELECT MAX(SurfaceArea) FROM country WHERE Region = 'Europe')"}
+{"id": 776, "db_id": "world_1", "predicted": "SELECT T1.Name FROM country AS T1 INNER JOIN country AS T2 ON T1.Code = T2.CountryCode WHERE T1.Continent = 'Asia' AND T1.Population > (SELECT MAX(Population) FROM country WHERE Continent = 'Africa')"}
+{"id": 784, "db_id": "world_1", "predicted": "SELECT T1.Name FROM city AS T1 INNER JOIN country AS T2 ON T1.CountryCode = T2.Code INNER JOIN countrylanguage AS T3 ON T2.Code = T3.CountryCode WHERE T2.Continent = 'Europe' AND T3.Language != 'English'"}
+{"id": 748, "db_id": "world_1", "predicted": "SELECT T1.Name FROM country AS T1 INNER JOIN countrylanguage AS T2 ON T1.Code = T2.CountryCode WHERE T2.Language = 'English' AND T2.IsOfficial = 'T' AND T2.Language = 'French' AND T2.IsOfficial = 'T'"}
+{"id": 768, "db_id": "world_1", "predicted": "SELECT T2.Language FROM country AS T1 INNER JOIN countrylanguage AS T2 ON T1.Code = T2.CountryCode WHERE T1.HeadOfState = 'Beatrix'"}
+{"id": 775, "db_id": "world_1", "predicted": "SELECT T1.Name FROM country AS T1 INNER JOIN city AS T2 ON T1.Code = T2.CountryCode WHERE T2.Population < (SELECT MIN(Population) FROM country)"}
+{"id": 786, "db_id": "world_1", "predicted": "SELECT DISTINCT T1.Name FROM city AS T1 INNER JOIN country AS T2 ON T1.CountryCode = T2.Code INNER JOIN countrylanguage AS T3 ON T2.Code = T3.CountryCode WHERE T2.Continent = 'Asia' AND T3.Language = 'Chinese'"}
+{"id": 731, "db_id": "world_1", "predicted": "SELECT AVG(GNP), SUM(Population) FROM country WHERE Code2 = 'US'"}
+{"id": 809, "db_id": "world_1", "predicted": "SELECT Name FROM country WHERE Continent = 'Europe' AND Population = 80000"}
+{"id": 774, "db_id": "world_1", "predicted": "SELECT T1.Name FROM country AS T1 INNER JOIN city AS T2 ON T1.Code = T2.CountryCode WHERE T1.Continent = 'Africa' AND T2.Population < (SELECT MIN(Population) FROM country WHERE Continent = 'Asia')"}
+{"id": 819, "db_id": "world_1", "predicted": "SELECT COUNT(*) FROM countrylanguage WHERE Language = 'Spanish'"}
+{"id": 821, "db_id": "world_1", "predicted": "SELECT Code FROM countrylanguage WHERE Language = 'Spanish'"}
+{"id": 780, "db_id": "world_1", "predicted": "SELECT CountryCode FROM countrylanguage WHERE Language != 'English'"}
+{"id": 785, "db_id": "world_1", "predicted": "SELECT T1.Name FROM city AS T1 INNER JOIN country AS T2 ON T1.CountryCode = T2.Code WHERE T2.Continent = 'Europe' AND T2.Name NOT IN (SELECT T3.Name FROM country AS T3 INNER JOIN countrylanguage AS T4 ON T3.Code = T4.CountryCode WHERE T4.Language = 'English')"}
+{"id": 791, "db_id": "world_1", "predicted": "SELECT T1.Name, T1.Population, T1.HeadOfState FROM country AS T1 INNER JOIN country AS T2 ON T1.Code = T2.Code ORDER BY T2.SurfaceArea DESC LIMIT 1"}
+{"id": 763, "db_id": "world_1", "predicted": "SELECT T1.Name, T1.Population, T1.LifeExpectancy FROM country AS T1 INNER JOIN country AS T2 ON T1.Code = T2.Code WHERE T2.Continent = 'Asia' ORDER BY T1.SurfaceArea DESC LIMIT 1"}
+{"id": 765, "db_id": "world_1", "predicted": "SELECT AVG(LifeExpectancy) FROM country WHERE GovernmentForm != 'Monarchy' AND GovernmentForm != 'Republic' AND GovernmentForm != 'Federal Republic' AND GovernmentForm != 'Oligarchy' AND GovernmentForm != 'Despotism' AND GovernmentForm != 'Communist' AND GovernmentForm != 'Monarchy' AND GovernmentForm != 'Republic' AND GovernmentForm != 'Federal Republic' AND GovernmentForm != 'Oligarchy' AND GovernmentForm != 'Despotism' AND GovernmentForm != 'Communist' AND GovernmentForm != 'Monarchy' AND GovernmentForm != 'Republic' AND GovernmentForm != 'Federal Republic' AND GovernmentForm != 'Oligarchy' AND GovernmentForm != 'Despotism' AND GovernmentForm != 'Communist' AND GovernmentForm != 'Monarchy' AND GovernmentForm != 'Republic' AND GovernmentForm != 'Federal Republic' AND GovernmentForm != 'Oligarchy' AND GovernmentForm != 'Despotism' AND GovernmentForm != 'Communist' AND GovernmentForm != 'Monarchy' AND GovernmentForm != 'Republic' AND GovernmentForm != 'Federal Republic' AND GovernmentForm != 'Oligarchy' AND GovernmentForm != 'Despotism' AND GovernmentForm != 'Communist' AND Government"}
+{"id": 762, "db_id": "world_1", "predicted": "SELECT T1.Name, T1.Population, T1.LifeExpectancy FROM country AS T1 INNER JOIN country AS T2 ON T1.Code = T2.Code WHERE T2.Continent = 'Asia' ORDER BY T2.SurfaceArea DESC LIMIT 1"}
+{"id": 781, "db_id": "world_1", "predicted": "SELECT CountryCode FROM countrylanguage WHERE Language != 'English'"}
+{"id": 718, "db_id": "world_1", "predicted": "SELECT AVG(LifeExpectancy) FROM country WHERE Region = 'Central Africa'"}
+{"id": 764, "db_id": "world_1", "predicted": "SELECT AVG(LifeExpectancy) FROM country WHERE GovernmentForm != 'Monarchy' AND GovernmentForm != 'Republic' AND GovernmentForm != 'Federal Republic' AND GovernmentForm != 'Oligarchy' AND GovernmentForm != 'Despotism' AND GovernmentForm != 'Communist' AND GovernmentForm != 'Monarchy' AND GovernmentForm != 'Republic' AND GovernmentForm != 'Federal Republic' AND GovernmentForm != 'Oligarchy' AND GovernmentForm != 'Despotism' AND GovernmentForm != 'Communist' AND GovernmentForm != 'Monarchy' AND GovernmentForm != 'Republic' AND GovernmentForm != 'Federal Republic' AND GovernmentForm != 'Oligarchy' AND GovernmentForm != 'Despotism' AND GovernmentForm != 'Communist' AND GovernmentForm != 'Monarchy' AND GovernmentForm != 'Republic' AND GovernmentForm != 'Federal Republic' AND GovernmentForm != 'Oligarchy' AND GovernmentForm != 'Despotism' AND GovernmentForm != 'Communist' AND GovernmentForm != 'Monarchy' AND GovernmentForm != 'Republic' AND GovernmentForm != 'Federal Republic' AND GovernmentForm != 'Oligarchy' AND GovernmentForm != 'Despotism' AND GovernmentForm != 'Communist' AND Government"}
+{"id": 820, "db_id": "world_1", "predicted": "SELECT T1.Code FROM country AS T1 INNER JOIN countrylanguage AS T2 ON T1.Code = T2.CountryCode WHERE T2.Language = 'Spanish' ORDER BY T2.Percentage DESC LIMIT 1"}
+{"id": 730, "db_id": "world_1", "predicted": "SELECT AVG(GNP), SUM(Population) FROM country WHERE GovernmentForm = 'US'"}
+{"id": 769, "db_id": "world_1", "predicted": "SELECT T2.Language FROM country AS T1 INNER JOIN countrylanguage AS T2 ON T1.Code = T2.CountryCode WHERE T1.HeadOfState = 'Beatrix'"}
+{"id": 771, "db_id": "world_1", "predicted": "SELECT COUNT(DISTINCT T1.Language) FROM country AS T1 INNER JOIN countrylanguage AS T2 ON T1.Code = T2.CountryCode WHERE T1.IndepYear < 1930"}
+{"id": 777, "db_id": "world_1", "predicted": "SELECT T1.Name FROM country AS T1 INNER JOIN country AS T2 ON T1.Code = T2.CountryCode WHERE T1.Continent = 'Asia' AND T1.Population > (SELECT MAX(Population) FROM country WHERE Continent = 'Africa')"}
+{"id": 783, "db_id": "world_1", "predicted": "SELECT Code FROM country WHERE GovernmentForm != 'Republic' AND Language != 'English'"}
+{"id": 818, "db_id": "world_1", "predicted": "SELECT COUNT(*) FROM countrylanguage WHERE Language = 'Spanish' ORDER BY Percentage DESC LIMIT 1"}
+{"id": 788, "db_id": "world_1", "predicted": "SELECT Name, IndepYear, SurfaceArea FROM country ORDER BY Population ASC LIMIT 1"}
+{"id": 789, "db_id": "world_1", "predicted": "SELECT Name, IndepYear, SurfaceArea FROM country ORDER BY Population ASC LIMIT 1"}
+{"id": 787, "db_id": "world_1", "predicted": "SELECT DISTINCT T1.Name FROM city AS T1 INNER JOIN countrylanguage AS T2 ON T1.CountryCode = T2.CountryCode WHERE T2.Language = 'Chinese' AND T1.CountryCode IN (SELECT Code FROM country WHERE Continent = 'Asia')"}
+{"id": 808, "db_id": "world_1", "predicted": "SELECT Name FROM country WHERE Continent = 'Europe' AND Population = 80000"}
+{"id": 782, "db_id": "world_1", "predicted": "SELECT Code FROM country WHERE Language != 'English' AND GovernmentForm != 'Republic'"}
+{"id": 795, "db_id": "world_1", "predicted": "SELECT T1.District, COUNT(*) FROM city AS T1 JOIN (SELECT District, AVG(Population) AS AvgPopulation FROM city GROUP BY District) AS T2 ON T1.District = T2.District WHERE T1.Population > T2.AvgPopulation GROUP BY T1.District"}
+{"id": 770, "db_id": "world_1", "predicted": "SELECT COUNT(DISTINCT T1.Language) FROM country AS T1 INNER JOIN countrylanguage AS T2 ON T1.Code = T2.CountryCode WHERE T1.IndepYear < 1930"}
+{"id": 793, "db_id": "world_1", "predicted": "SELECT T1.Name, COUNT(T2.Language) FROM country AS T1 JOIN countrylanguage AS T2 ON T1.Code = T2.CountryCode GROUP BY T1.Name HAVING COUNT(T2.Language) > 2"}
+{"id": 794, "db_id": "world_1", "predicted": "SELECT T1.District, COUNT(*) FROM city AS T1 JOIN (SELECT District, AVG(Population) AS AvgPopulation FROM city GROUP BY District HAVING AVG(Population) > 0) AS T2 ON T1.District = T2.District GROUP BY T1.District"}
+{"id": 792, "db_id": "world_1", "predicted": "SELECT T1.Name, COUNT(T2.Language) AS NumberOfLanguages\nFROM country AS T1\nJOIN countrylanguage AS T2 ON T1.Code = T2.CountryCode\nGROUP BY T1.Name\nHAVING COUNT(T2.Language) >= 3"}
+{"id": 796, "db_id": "world_1", "predicted": "SELECT T1.GovernmentForm, SUM(T2.Population) AS TotalPopulation\nFROM country AS T1\nJOIN countrylanguage AS T2 ON T1.Code = T2.CountryCode\nWHERE T1.IndepYear IS NOT NULL AND T1.IndepYear < 2023 AND T2.Percentage > 72\nGROUP BY T1.GovernmentForm"}
+{"id": 810, "db_id": "world_1", "predicted": "SELECT SUM(T1.Population) AS TotalPopulation, AVG(T1.SurfaceArea) AS AverageArea\nFROM country AS T1\nJOIN country AS T2 ON T1.Code = T2.Code\nWHERE T2.Continent = 'North America' AND T1.SurfaceArea > 3000"}
+{"id": 798, "db_id": "world_1", "predicted": "SELECT T1.Continent, AVG(T1.LifeExpectancy) AS AverageLifeExpectancy, SUM(T1.Population) AS TotalPopulation\nFROM country AS T1\nJOIN countrylanguage AS T2 ON T1.Code = T2.CountryCode\nWHERE T2.IsOfficial = 'T' AND T1.Continent NOT IN ('Antarctica', 'Oceania')\nGROUP BY T1.Continent\nHAVING AVG(T1.LifeExpectancy) < 72"}
+{"id": 817, "db_id": "world_1", "predicted": "SELECT T1.Code, T1.Name, T2.Language FROM country AS T1 JOIN countrylanguage AS T2 ON T1.Code = T2.CountryCode ORDER BY T2.Percentage DESC"}
+{"id": 811, "db_id": "world_1", "predicted": "SELECT SUM(T1.Population) ,  AVG(T1.SurfaceArea) FROM country AS T1 JOIN countrylanguage AS T2 ON T1.Code = T2.CountryCode WHERE T1.Continent = 'North America' AND T1.SurfaceArea > 3000"}
+{"id": 797, "db_id": "world_1", "predicted": "SELECT T1.GovernmentForm, SUM(T1.Population) FROM country AS T1 JOIN countrylanguage AS T2 ON T1.Code = T2.CountryCode WHERE T2.Percentage > 72 GROUP BY T1.GovernmentForm"}
+{"id": 799, "db_id": "world_1", "predicted": "SELECT T1.Continent, SUM(T1.Population) AS TotalPopulation, AVG(T1.LifeExpectancy) AS AverageLifeExpectancy\nFROM country AS T1\nJOIN countrylanguage AS T2 ON T1.Code = T2.CountryCode\nWHERE T2.IsOfficial = 'T' AND T1.LifeExpectancy < 72\nGROUP BY T1.Continent;"}
+{"id": 1030, "db_id": "real_estate_properties", "predicted": "SELECT COUNT(*) FROM Other_Available_Features"}
+{"id": 1031, "db_id": "real_estate_properties", "predicted": "SELECT feature_type_name FROM Ref_Feature_Types WHERE feature_type_code = 'AirCon'"}
+{"id": 1032, "db_id": "real_estate_properties", "predicted": "SELECT T2.property_type_description FROM Properties AS T1 INNER JOIN Ref_Property_Types AS T2 ON T1.property_type_code = T2.property_type_code"}
+{"id": 1033, "db_id": "real_estate_properties", "predicted": "SELECT T1.property_name FROM Properties AS T1 INNER JOIN Other_Available_Features AS T2 ON T1.property_id = T2.property_id WHERE T1.property_type_code IN ('H', 'A') AND T1.room_count > 1"}
+{"id": 988, "db_id": "dog_kennels", "predicted": "SELECT MAX(age) FROM Dogs"}
+{"id": 989, "db_id": "dog_kennels", "predicted": "SELECT MAX(age) FROM Dogs"}
+{"id": 991, "db_id": "dog_kennels", "predicted": "SELECT charge_type, charge_amount FROM Charges"}
+{"id": 986, "db_id": "dog_kennels", "predicted": "SELECT AVG(age) FROM Dogs"}
+{"id": 987, "db_id": "dog_kennels", "predicted": "SELECT AVG(age) FROM Dogs"}
+{"id": 966, "db_id": "dog_kennels", "predicted": "SELECT COUNT(DISTINCT dog_id) FROM Treatments"}
+{"id": 974, "db_id": "dog_kennels", "predicted": "SELECT COUNT(*) FROM Dogs WHERE CAST(AGE AS DECIMAL) < (SELECT AVG(AGE) FROM Dogs);"}
+{"id": 976, "db_id": "dog_kennels", "predicted": "SELECT MAX(cost_of_treatment) FROM Treatments"}
+{"id": 934, "db_id": "dog_kennels", "predicted": "SELECT T1.breed_name FROM Breeds AS T1 JOIN Dogs AS T2 ON T1.breed_code = T2.breed_code GROUP BY T1.breed_name ORDER BY COUNT(*) DESC LIMIT 1"}
+{"id": 980, "db_id": "dog_kennels", "predicted": "SELECT COUNT(owner_id) FROM Dogs WHERE owner_id NOT IN (SELECT owner_id FROM Dogs)"}
+{"id": 978, "db_id": "dog_kennels", "predicted": "SELECT COUNT(DISTINCT dog_id) FROM Dogs WHERE dog_id NOT IN (SELECT dog_id FROM Treatments)"}
+{"id": 992, "db_id": "dog_kennels", "predicted": "SELECT MAX(charge_amount) FROM Charges"}
+{"id": 975, "db_id": "dog_kennels", "predicted": "SELECT COUNT(*) FROM Dogs WHERE CAST(AGE AS DECIMAL) < (SELECT AVG(AGE) FROM Dogs)"}
+{"id": 953, "db_id": "dog_kennels", "predicted": "SELECT T1.first_name, T2.name FROM Owners AS T1 INNER JOIN Dogs AS T2 ON T1.owner_id = T2.owner_id"}
+{"id": 967, "db_id": "dog_kennels", "predicted": "SELECT COUNT(DISTINCT T1.dog_id) FROM Treatments AS T1 INNER JOIN Dogs AS T2 ON T1.dog_id = T2.dog_id"}
+{"id": 960, "db_id": "dog_kennels", "predicted": "SELECT T2.last_name FROM Dogs AS T1 INNER JOIN Owners AS T2 ON T1.owner_id = T2.owner_id ORDER BY T1.age ASC LIMIT 1"}
+{"id": 961, "db_id": "dog_kennels", "predicted": "SELECT T2.last_name FROM Dogs AS T1 INNER JOIN Owners AS T2 ON T1.owner_id = T2.owner_id ORDER BY T1.age ASC LIMIT 1"}
+{"id": 919, "db_id": "dog_kennels", "predicted": "SELECT DISTINCT T1.state FROM Owners AS T1 JOIN Professionals AS T2 ON T1.owner_id = T2.owner_id"}
+{"id": 952, "db_id": "dog_kennels", "predicted": "SELECT T1.first_name, T2.name FROM Owners AS T1 JOIN Dogs AS T2 ON T1.owner_id = T2.owner_id"}
+{"id": 935, "db_id": "dog_kennels", "predicted": "SELECT T1.breed_name FROM Dogs AS T1 JOIN Breeds AS T2 ON T1.breed_code = T2.breed_code GROUP BY T1.breed_code ORDER BY COUNT(*) DESC LIMIT 1"}
+{"id": 977, "db_id": "dog_kennels", "predicted": "SELECT T2.cost_of_treatment FROM Treatments AS T1 INNER JOIN Treatments AS T2 ON T1.treatment_id = T2.treatment_id ORDER BY T2.date_of_treatment DESC LIMIT 1"}
+{"id": 968, "db_id": "dog_kennels", "predicted": "SELECT COUNT(DISTINCT professional_id) FROM Treatments"}
+{"id": 969, "db_id": "dog_kennels", "predicted": "SELECT COUNT(DISTINCT professional_id) FROM Treatments"}
+{"id": 993, "db_id": "dog_kennels", "predicted": "SELECT MAX(charge_amount) FROM Charges"}
+{"id": 918, "db_id": "dog_kennels", "predicted": "SELECT T1.state FROM Owners AS T1 JOIN Professionals AS T2 ON T1.owner_id = T2.owner_id GROUP BY T1.state HAVING COUNT(DISTINCT T1.owner_id) > 0 AND COUNT(DISTINCT T2.owner_id) > 0"}
+{"id": 921, "db_id": "dog_kennels", "predicted": "SELECT AVG(DATE_PART('year', DATE_SUB(CURRENT_DATE, INTERVAL DATE_SUB(TREATMENTS.date_of_treatment, INTERVAL DATE_SUB(TREATMENTS.date_of_treatment, INTERVAL DATE_SUB(TREATMENTS.date_of_treatment, INTERVAL DATE_SUB(TREATMENTS.date_of_treatment, INTERVAL DATE_SUB(TREATMENTS.date_of_treatment, INTERVAL DATE_SUB(TREATMENTS.date_of_treatment, INTERVAL DATE_SUB(TREATMENTS.date_of_treatment, INTERVAL DATE_SUB(TREATMENTS.date_of_treatment, INTERVAL DATE_SUB(TREATMENTS.date_of_treatment, INTERVAL DATE_SUB(TREATMENTS.date_of_treatment, INTERVAL DATE_SUB(TREATMENTS.date_of_treatment, INTERVAL DATE_SUB(TREATMENTS.date_of_treatment, INTERVAL DATE_SUB(TREATMENTS.date_of_treatment, INTERVAL DATE_SUB(TREATMENTS.date_of_treatment, INTERVAL DATE_SUB(TREATMENTS.date_of_treatment, INTERVAL DATE_SUB(TREATMENTS.date_of_treatment, INTERVAL DATE_SUB(TREATMENTS.date_of_treatment, INTERVAL DATE_SUB(TREATMENTS.date_of_treatment, INTERVAL DATE_SUB(TREATMENTS.date_of_treatment, INTERVAL DATE_SUB(TREATMENTS.date_of_treatment, INTERVAL DATE_SUB(TREATMENTS.date_of_treatment, INTERVAL DATE_SUB(TREATMENTS.date_of_treatment,"}
+{"id": 982, "db_id": "dog_kennels", "predicted": "SELECT COUNT(*) FROM Professionals WHERE professional_id NOT IN (SELECT professional_id FROM Treatments)"}
+{"id": 965, "db_id": "dog_kennels", "predicted": "SELECT date_arrived ,  date_departed FROM Dogs"}
+{"id": 983, "db_id": "dog_kennels", "predicted": "SELECT COUNT(*) FROM Professionals WHERE professional_id NOT IN (SELECT professional_id FROM Treatments)"}
+{"id": 996, "db_id": "dog_kennels", "predicted": "SELECT T1.breed_name, T2.size_description FROM Breeds AS T1 JOIN Sizes AS T2 ON T1.breed_code = T2.size_code"}
+{"id": 979, "db_id": "dog_kennels", "predicted": "SELECT COUNT(DISTINCT dog_id) FROM Dogs WHERE dog_id NOT IN (SELECT dog_id FROM Treatments)"}
+{"id": 981, "db_id": "dog_kennels", "predicted": "SELECT COUNT(owner_id) FROM Owners WHERE owner_id NOT IN (SELECT owner_id FROM Dogs)"}
+{"id": 997, "db_id": "dog_kennels", "predicted": "SELECT DISTINCT T1.breed_type, T2.size_type FROM Breeds AS T1 JOIN Sizes AS T2 ON T1.breed_code = T2.size_code"}
+{"id": 964, "db_id": "dog_kennels", "predicted": "SELECT date_arrived ,  date_departed FROM Dogs"}
+{"id": 949, "db_id": "dog_kennels", "predicted": "SELECT T2.cost_of_treatment, T1.treatment_type_description FROM Treatments AS T1 INNER JOIN Charges AS T2 ON T1.treatment_type_code = T2.treatment_type_code"}
+{"id": 994, "db_id": "dog_kennels", "predicted": "SELECT email_address, cell_number, home_phone FROM Professionals"}
+{"id": 995, "db_id": "dog_kennels", "predicted": "SELECT email_address, cell_number, home_phone FROM Professionals"}
+{"id": 951, "db_id": "dog_kennels", "predicted": "SELECT T1.first_name, T1.last_name, T2.size_description FROM Owners AS T1 INNER JOIN Dogs AS T2 ON T1.owner_id = T2.owner_id"}
+{"id": 990, "db_id": "dog_kennels", "predicted": "SELECT charge_type, charge_amount FROM Charges"}
+{"id": 920, "db_id": "dog_kennels", "predicted": "SELECT AVG(DATE_PART('year', DATE_SUB(CURRENT_DATE, INTERVAL DATE(DATE_adopted)) - INTERVAL DATE(DATE_OF_TREATMENT) - INTERVAL 1 DAY)) AS average_age\nFROM Treatments"}
+{"id": 950, "db_id": "dog_kennels", "predicted": "SELECT T1.first_name, T1.last_name, T2.size_description FROM Owners AS T1 INNER JOIN Dogs AS T2 ON T1.owner_id = T2.owner_id"}
+{"id": 955, "db_id": "dog_kennels", "predicted": "SELECT T1.name, T2.date_of_treatment FROM Dogs AS T1 INNER JOIN Treatments AS T2 ON T1.dog_id = T2.dog_id ORDER BY T1.breed_code ASC LIMIT 1"}
+{"id": 930, "db_id": "dog_kennels", "predicted": "SELECT T1.owner_id, T1.first_name, T1.last_name FROM Owners AS T1 JOIN Dogs AS T2 ON T1.owner_id = T2.owner_id GROUP BY T1.owner_id ORDER BY COUNT(*) DESC LIMIT 1"}
+{"id": 939, "db_id": "dog_kennels", "predicted": "SELECT T1.treatment_type_description FROM Treatment_Types AS T1 INNER JOIN Treatments AS T2 ON T1.treatment_type_code = T2.treatment_type_code GROUP BY T1.treatment_type_code ORDER BY SUM(T2.cost_of_treatment) ASC LIMIT 1"}
+{"id": 954, "db_id": "dog_kennels", "predicted": "SELECT T2.name, T1.date_of_treatment FROM Dogs AS T1 INNER JOIN Breeds AS T2 ON T1.breed_code = T2.breed_code ORDER BY T2.breed_name ASC LIMIT 1"}
+{"id": 947, "db_id": "dog_kennels", "predicted": "SELECT T2.date_of_treatment ,  T1.first_name FROM Treatments AS T1 JOIN Professionals AS T2 ON T1.professional_id  =  T2.professional_id"}
+{"id": 931, "db_id": "dog_kennels", "predicted": "SELECT T1.owner_id, T1.first_name, T1.last_name\nFROM Owners AS T1\nJOIN Dogs AS T2 ON T1.owner_id = T2.owner_id\nGROUP BY T1.owner_id\nORDER BY COUNT(*) DESC\nLIMIT 1"}
+{"id": 948, "db_id": "dog_kennels", "predicted": "SELECT T2.treatment_type_description, T1.cost_of_treatment FROM Treatments AS T1 INNER JOIN Treatment_Types AS T2 ON T1.treatment_type_code = T2.treatment_type_code"}
+{"id": 957, "db_id": "dog_kennels", "predicted": "SELECT T1.first_name, T2.name FROM Owners AS T1 INNER JOIN Dogs AS T2 ON T1.owner_id = T2.owner_id WHERE T1.state = 'VA'"}
+{"id": 938, "db_id": "dog_kennels", "predicted": "SELECT T2.treatment_type_description FROM T1 AS T1 INNER JOIN T2 AS T2 ON T1.treatment_type_code = T2.treatment_type_code ORDER BY SUM(T1.cost_of_treatment) ASC LIMIT 1"}
+{"id": 959, "db_id": "dog_kennels", "predicted": "SELECT T1.date_arrived, T1.date_departed FROM Dogs AS T1 INNER JOIN Treatments AS T2 ON T1.dog_id = T2.dog_id"}
+{"id": 926, "db_id": "dog_kennels", "predicted": "SELECT first_name FROM Owners WHERE first_name NOT IN (SELECT name FROM Dogs) UNION SELECT first_name FROM Professionals WHERE first_name NOT IN (SELECT name FROM Dogs)"}
+{"id": 924, "db_id": "dog_kennels", "predicted": "SELECT T1.name FROM Dogs AS T1 JOIN Treatments AS T2 ON T1.dog_id = T2.dog_id WHERE T2.cost_of_treatment > 1000"}
+{"id": 943, "db_id": "dog_kennels", "predicted": "SELECT T2.professional_id ,  T2.cell_number FROM Professionals AS T1 JOIN Treatments AS T2 ON T1.professional_id  =  T2.professional_id GROUP BY T1.professional_id HAVING COUNT(DISTINCT T2.treatment_type_code)  >=  2"}
+{"id": 927, "db_id": "dog_kennels", "predicted": "SELECT first_name FROM Owners WHERE first_name NOT IN (SELECT name FROM Dogs) UNION SELECT first_name FROM Professionals WHERE first_name NOT IN (SELECT name FROM Dogs)"}
+{"id": 999, "db_id": "dog_kennels", "predicted": "SELECT T2.first_name, T1.treatment_type_description FROM T1 JOIN Professionals AS T2 ON T1.professional_id = T2.professional_id"}
+{"id": 929, "db_id": "dog_kennels", "predicted": "SELECT T1.professional_id, T1.role_code, T1.email_address FROM Professionals AS T1 LEFT JOIN Treatments AS T2 ON T1.professional_id = T2.professional_id WHERE T2.treatment_id IS NULL"}
+{"id": 925, "db_id": "dog_kennels", "predicted": "SELECT T1.name FROM Dogs AS T1 JOIN Treatments AS T2 ON T1.dog_id = T2.dog_id WHERE T2.cost_of_treatment <= 1000"}
+{"id": 962, "db_id": "dog_kennels", "predicted": "SELECT email_address FROM Professionals WHERE state = 'Hawaii' OR state = 'Wisconsin'"}
+{"id": 958, "db_id": "dog_kennels", "predicted": "SELECT T2.date_arrived, T2.date_departed FROM Dogs AS T1 INNER JOIN Treatments AS T2 ON T1.dog_id = T2.dog_id"}
+{"id": 936, "db_id": "dog_kennels", "predicted": "SELECT T2.owner_id, T2.last_name FROM Owners AS T1 INNER JOIN Treatments AS T2 ON T1.owner_id = T2.owner_id GROUP BY T1.owner_id ORDER BY SUM(T2.cost_of_treatment) DESC LIMIT 1"}
+{"id": 941, "db_id": "dog_kennels", "predicted": "SELECT T1.owner_id, T1.zip_code\nFROM Owners AS T1\nJOIN Dogs AS T2 ON T1.owner_id = T2.owner_id\nJOIN Treatments AS T3 ON T2.dog_id = T3.dog_id\nJOIN Professionals AS T4 ON T3.professional_id = T4.professional_id\nJOIN Treatment_Types AS T5 ON T3.treatment_type_code = T5.treatment_type_code\nGROUP BY T1.owner_id, T1.zip_code\nORDER BY SUM(T3.cost_of_treatment) DESC\nLIMIT 1"}
+{"id": 946, "db_id": "dog_kennels", "predicted": "SELECT T.date_of_treatment, P.first_name FROM Treatments AS T JOIN Professionals AS P ON T.professional_id = P.professional_id"}
+{"id": 937, "db_id": "dog_kennels", "predicted": "SELECT T1.owner_id, T1.last_name FROM Owners AS T1 INNER JOIN Treatments AS T2 ON T1.owner_id = T2.owner_id GROUP BY T1.owner_id ORDER BY SUM(T2.cost_of_treatment) DESC LIMIT 1"}
+{"id": 928, "db_id": "dog_kennels", "predicted": "SELECT T1.professional_id, T1.role_code, T1.email_address FROM Professionals AS T1 JOIN Treatments AS T2 ON T1.professional_id = T2.professional_id WHERE T2.treatment_id IS NULL"}
+{"id": 933, "db_id": "dog_kennels", "predicted": "SELECT T1.professional_id, T1.role_code, T1.first_name FROM Professionals AS T1 JOIN Treatments AS T2 ON T1.professional_id = T2.professional_id GROUP BY T1.professional_id, T1.role_code, T1.first_name HAVING COUNT(*) >= 2"}
+{"id": 956, "db_id": "dog_kennels", "predicted": "SELECT T1.first_name, T2.name FROM Owners AS T1 INNER JOIN Dogs AS T2 ON T1.owner_id = T2.owner_id WHERE T1.state = 'VA'"}
+{"id": 932, "db_id": "dog_kennels", "predicted": "SELECT T2.professional_id, T2.role_code, T2.first_name FROM Professionals AS T1 INNER JOIN Treatments AS T2 ON T1.professional_id = T2.professional_id GROUP BY T1.professional_id HAVING COUNT(*) >= 2"}
+{"id": 942, "db_id": "dog_kennels", "predicted": "SELECT T2.professional_id, T2.cell_number FROM Professionals AS T1 JOIN Treatments AS T2 ON T1.professional_id = T2.professional_id GROUP BY T1.professional_id HAVING COUNT(DISTINCT T2.treatment_type_code) >= 2"}
+{"id": 963, "db_id": "dog_kennels", "predicted": "SELECT email_address FROM Professionals WHERE state = 'Hawaii' OR state = 'Wisconsin'"}
+{"id": 998, "db_id": "dog_kennels", "predicted": "SELECT T1.first_name, T2.treatment_type_description FROM Professionals AS T1 JOIN Treatments AS T2 ON T1.professional_id = T2.professional_id"}
+{"id": 940, "db_id": "dog_kennels", "predicted": "SELECT T1.owner_id, T1.zip_code\nFROM Owners AS T1\nJOIN Dogs AS T2 ON T1.owner_id = T2.owner_id\nJOIN Treatments AS T3 ON T2.dog_id = T3.dog_id\nGROUP BY T1.owner_id, T1.zip_code\nORDER BY SUM(T3.cost_of_treatment) DESC\nLIMIT 1"}
+{"id": 944, "db_id": "dog_kennels", "predicted": "SELECT T1.first_name, T1.last_name FROM Professionals AS T1 INNER JOIN Treatments AS T2 ON T1.professional_id = T2.professional_id WHERE T2.cost_of_treatment < (SELECT AVG(cost_of_treatment) FROM Treatments)"}
+{"id": 984, "db_id": "dog_kennels", "predicted": "SELECT name, age, weight FROM Dogs WHERE abandoned_yn = '1'"}
+{"id": 971, "db_id": "dog_kennels", "predicted": "SELECT role_code ,  street ,  city ,  state FROM Professionals WHERE city LIKE '%West%'"}
+{"id": 970, "db_id": "dog_kennels", "predicted": "SELECT T1.role_code, T1.street, T1.city, T1.state FROM Professionals AS T1 INNER JOIN Owners AS T2 ON T1.owner_id = T2.owner_id WHERE T2.city LIKE '%West%'"}
+{"id": 972, "db_id": "dog_kennels", "predicted": "SELECT first_name, last_name, email_address FROM Owners WHERE state LIKE '%North%'"}
+{"id": 973, "db_id": "dog_kennels", "predicted": "SELECT first_name, last_name, email_address FROM Owners WHERE state LIKE '%North%'"}
+{"id": 945, "db_id": "dog_kennels", "predicted": "SELECT T1.first_name, T1.last_name FROM Professionals AS T1 INNER JOIN Treatments AS T2 ON T1.professional_id = T2.professional_id WHERE T2.cost_of_treatment < (SELECT AVG(cost_of_treatment) FROM Treatments)"}
+{"id": 985, "db_id": "dog_kennels", "predicted": "SELECT name, age, weight FROM Dogs WHERE abandoned_yn = '1'"}
+{"id": 923, "db_id": "dog_kennels", "predicted": "SELECT T1.professional_id, T1.last_name, T1.cell_number\nFROM Professionals AS T1\nJOIN Treatments AS T2 ON T1.professional_id = T2.professional_id\nWHERE T1.state = 'Indiana' OR COUNT(*) > 2"}
+{"id": 922, "db_id": "dog_kennels", "predicted": "SELECT T1.professional_id, T1.last_name, T1.cell_number \nFROM Professionals AS T1 \nJOIN Treatments AS T2 ON T1.professional_id = T2.professional_id \nWHERE T1.state = 'Indiana' \nGROUP BY T1.professional_id, T1.last_name, T1.cell_number \nHAVING COUNT(*) > 2"}
+{"id": 581, "db_id": "student_transcripts_tracking", "predicted": "The section h is likely a table in a database that contains information about sections of courses. It is a common table in many educational systems, including universities and colleges. The section h table may have columns such as section_id, course_id, section_name, section_description, and other_details. The section_id column is likely the primary key for the section h table, and it is used to uniquely identify each section. The course_id column is likely a foreign key that references the course_id column in the courses table, and it is used to identify the course that the section is associated with. The section_name column is likely a string that contains the name of the section, and the section_description column is likely a string that contains a description of the section. The other_details column is likely a string that contains any additional information about the section."}
+{"id": 510, "db_id": "student_transcripts_tracking", "predicted": "SELECT COUNT(course_id) FROM Courses"}
+{"id": 568, "db_id": "student_transcripts_tracking", "predicted": "SELECT count(*) FROM Transcripts"}
+{"id": 511, "db_id": "student_transcripts_tracking", "predicted": "The math course is described as \"Mathematics\" and has a course description of \"This course covers the fundamental concepts of mathematics, including algebra, geometry, and calculus.\""}
+{"id": 567, "db_id": "student_transcripts_tracking", "predicted": "SELECT COUNT(*) FROM Transcripts"}
+{"id": 564, "db_id": "student_transcripts_tracking", "predicted": "SELECT AVG(transcript_date) FROM Transcripts"}
+{"id": 509, "db_id": "student_transcripts_tracking", "predicted": "SELECT COUNT(course_id) FROM Courses"}
+{"id": 514, "db_id": "student_transcripts_tracking", "predicted": "The zip code for Port Chelsea is 98101."}
+{"id": 517, "db_id": "student_transcripts_tracking", "predicted": "SELECT COUNT(DISTINCT department_id) FROM Degree_Programs"}
+{"id": 570, "db_id": "student_transcripts_tracking", "predicted": "SELECT MAX(transcript_date) FROM Transcripts"}
+{"id": 520, "db_id": "student_transcripts_tracking", "predicted": "SELECT COUNT(DISTINCT degree_summary_name) FROM Degree_Programs"}
+{"id": 569, "db_id": "student_transcripts_tracking", "predicted": "SELECT MAX(transcript_date) FROM Transcripts"}
+{"id": 519, "db_id": "student_transcripts_tracking", "predicted": "SELECT COUNT(DISTINCT degree_summary_name) FROM Degree_Programs"}
+{"id": 518, "db_id": "student_transcripts_tracking", "predicted": "SELECT COUNT(DISTINCT department_id) FROM Degree_Programs"}
+{"id": 563, "db_id": "student_transcripts_tracking", "predicted": "SELECT AVG(transcript_date) FROM Transcripts"}
+{"id": 582, "db_id": "student_transcripts_tracking", "predicted": "SELECT section_description FROM Sections WHERE section_name = 'h'"}
+{"id": 512, "db_id": "student_transcripts_tracking", "predicted": "SELECT course_description FROM Courses WHERE course_name LIKE 'Math%'"}
+{"id": 508, "db_id": "student_transcripts_tracking", "predicted": "SELECT line_1, line_2 FROM addresses"}
+{"id": 522, "db_id": "student_transcripts_tracking", "predicted": "SELECT COUNT(DISTINCT T1.degree_program_id) FROM Degree_Programs AS T1 INNER JOIN Departments AS T2 ON T1.department_id = T2.department_id WHERE T2.department_name = 'Engineering'"}
+{"id": 507, "db_id": "student_transcripts_tracking", "predicted": "SELECT line_1, line_2 FROM addresses"}
+{"id": 521, "db_id": "student_transcripts_tracking", "predicted": "SELECT COUNT(DISTINCT T1.degree_program_id) FROM Degree_Programs AS T1 INNER JOIN Departments AS T2 ON T1.department_id = T2.department_id WHERE T2.department_name = 'Engineering'"}
+{"id": 523, "db_id": "student_transcripts_tracking", "predicted": "SELECT section_name, section_description FROM Sections"}
+{"id": 527, "db_id": "student_transcripts_tracking", "predicted": "SELECT section_name FROM Sections ORDER BY section_name DESC"}
+{"id": 524, "db_id": "student_transcripts_tracking", "predicted": "SELECT section_name, section_description FROM Sections"}
+{"id": 544, "db_id": "student_transcripts_tracking", "predicted": "SELECT T1.semester_name FROM semesters AS T1 INNER JOIN student_enrolment AS T2 ON T1.semester_id = T2.semester_id WHERE T2.student_id IS NULL"}
+{"id": 577, "db_id": "student_transcripts_tracking", "predicted": "SELECT COUNT(DISTINCT current_address_id) FROM Students"}
+{"id": 513, "db_id": "student_transcripts_tracking", "predicted": "SELECT zip_postcode FROM addresses WHERE city = 'Port Chelsea'"}
+{"id": 547, "db_id": "student_transcripts_tracking", "predicted": "SELECT T1.course_name FROM Courses AS T1 JOIN Student_Enrolment AS T2 ON T1.course_id = T2.course_id GROUP BY T1.course_name ORDER BY COUNT(*) DESC LIMIT 1"}
+{"id": 525, "db_id": "student_transcripts_tracking", "predicted": "SELECT T1.course_name, T1.course_id FROM Courses AS T1 JOIN Sections AS T2 ON T1.course_id = T2.course_id GROUP BY T1.course_id HAVING COUNT(T2.section_id) <= 2"}
+{"id": 548, "db_id": "student_transcripts_tracking", "predicted": "SELECT T1.course_name FROM Courses AS T1 INNER JOIN Student_Enrolment AS T2 ON T1.course_id = T2.course_id GROUP BY T1.course_name ORDER BY COUNT(*) DESC LIMIT 1"}
+{"id": 579, "db_id": "student_transcripts_tracking", "predicted": "SELECT * FROM Students ORDER BY last_name DESC, first_name DESC"}
+{"id": 528, "db_id": "student_transcripts_tracking", "predicted": "SELECT section_name FROM sections ORDER BY section_name DESC"}
+{"id": 565, "db_id": "student_transcripts_tracking", "predicted": "SELECT T1.transcript_date, T1.other_details FROM Transcripts AS T1 INNER JOIN Student_Enrolment AS T2 ON T1.transcript_id = T2.transcript_id ORDER BY T2.date_first_registered LIMIT 1"}
+{"id": 578, "db_id": "student_transcripts_tracking", "predicted": "SELECT DISTINCT T1.line_1, T1.line_2, T1.line_3, T1.city, T1.zip_postcode, T1.state_province_county, T1.country, T1.other_address_details FROM Addresses AS T1 INNER JOIN Students AS T2 ON T1.address_id = T2.current_address_id"}
+{"id": 546, "db_id": "student_transcripts_tracking", "predicted": "SELECT T1.course_name FROM Courses AS T1 INNER JOIN Student_Enrolment AS T2 ON T1.course_id = T2.course_id"}
+{"id": 554, "db_id": "student_transcripts_tracking", "predicted": "SELECT cell_mobile_number FROM Students WHERE first_name = 'Timmothy' AND last_name = 'Ward'"}
+{"id": 526, "db_id": "student_transcripts_tracking", "predicted": "SELECT course_name, course_id FROM Courses WHERE course_id NOT IN (SELECT course_id FROM Sections GROUP BY course_id HAVING COUNT(course_id) < 2)"}
+{"id": 551, "db_id": "student_transcripts_tracking", "predicted": "SELECT T1.transcript_date, T1.transcript_id FROM Transcripts AS T1 JOIN Transcript_Contents AS T2 ON T1.transcript_id = T2.transcript_id GROUP BY T1.transcript_id HAVING COUNT(T2.student_course_id) >= 2"}
+{"id": 537, "db_id": "student_transcripts_tracking", "predicted": "SELECT T1.degree_summary_name FROM Degree_Programs AS T1 JOIN Student_Enrolment AS T2 ON T1.degree_program_id = T2.degree_program_id GROUP BY T1.degree_summary_name ORDER BY COUNT(*) DESC LIMIT 1"}
+{"id": 543, "db_id": "student_transcripts_tracking", "predicted": "SELECT T1.semester_name FROM semesters AS T1 LEFT JOIN student_enrolment AS T2 ON T1.semester_id = T2.semester_id WHERE T2.student_id IS NULL"}
+{"id": 552, "db_id": "student_transcripts_tracking", "predicted": "SELECT T1.transcript_date, T1.transcript_id FROM Transcripts AS T1 INNER JOIN Transcript_Contents AS T2 ON T1.transcript_id = T2.transcript_id GROUP BY T1.transcript_id HAVING COUNT(T2.student_course_id) >= 2"}
+{"id": 558, "db_id": "student_transcripts_tracking", "predicted": "SELECT T1.first_name, T1.middle_name, T1.last_name FROM students AS T1 INNER JOIN student_enrolment AS T2 ON T1.student_id = T2.student_id ORDER BY T2.date_first_registered ASC LIMIT 1"}
+{"id": 562, "db_id": "student_transcripts_tracking", "predicted": "SELECT T1.address_id, T1.line_1, T1.line_2 FROM addresses AS T1 JOIN students AS T2 ON T1.address_id = T2.current_address_id GROUP BY T1.address_id ORDER BY COUNT(*) DESC LIMIT 1"}
+{"id": 556, "db_id": "student_transcripts_tracking", "predicted": "SELECT first_name, middle_name, last_name FROM Students WHERE date_first_registered = ( SELECT MIN(date_first_registered) FROM Students )"}
+{"id": 516, "db_id": "student_transcripts_tracking", "predicted": "SELECT T1.department_name, T1.department_id FROM Degree_Programs AS T1 JOIN Departments AS T2 ON T1.department_id = T2.department_id GROUP BY T1.department_id ORDER BY COUNT(*) DESC LIMIT 1"}
+{"id": 574, "db_id": "student_transcripts_tracking", "predicted": "SELECT T1.transcript_date, T1.transcript_id FROM Transcripts AS T1 INNER JOIN Transcript_Contents AS T2 ON T1.transcript_id = T2.transcript_id GROUP BY T1.transcript_id ORDER BY COUNT(*) ASC LIMIT 1"}
+{"id": 538, "db_id": "student_transcripts_tracking", "predicted": "SELECT T1.degree_summary_name FROM Degree_Programs AS T1 JOIN Student_Enrolment AS T2 ON T1.degree_program_id = T2.degree_program_id GROUP BY T1.degree_summary_name ORDER BY COUNT(*) DESC LIMIT 1"}
+{"id": 515, "db_id": "student_transcripts_tracking", "predicted": "SELECT T1.department_name, T1.department_id FROM Degree_Programs AS T1 JOIN Departments AS T2 ON T1.department_id = T2.department_id GROUP BY T1.department_id ORDER BY COUNT(*) DESC LIMIT 1"}
+{"id": 532, "db_id": "student_transcripts_tracking", "predicted": "SELECT department_description FROM departments WHERE department_name LIKE '%computer%'"}
+{"id": 580, "db_id": "student_transcripts_tracking", "predicted": "In reverse alphabetical order, students can be sorted by their last name, first name, and middle name. This can be achieved by using the ORDER BY clause in SQL. For example, the following query will return all students sorted by their last name in reverse alphabetical order:\n\n```sql\nSELECT * FROM Students ORDER BY last_name DESC;\n```\n\nThis query will return a result set with all columns from the Students table, sorted by the last_name column in descending order. The DESC keyword specifies that the sorting should be in descending order, meaning the highest values will appear first."}
+{"id": 545, "db_id": "student_transcripts_tracking", "predicted": "SELECT T1.course_name FROM Courses AS T1 INNER JOIN Student_Enrolment AS T2 ON T1.course_id = T2.course_id"}
+{"id": 575, "db_id": "student_transcripts_tracking", "predicted": "SELECT T1.semester_name FROM Student_Enrolment AS T1 INNER JOIN Student_Enrolment AS T2 ON T1.degree_program_id = T2.degree_program_id WHERE T1.degree_program_id IN (SELECT degree_program_id FROM Degree_Programs WHERE department_id IN (SELECT department_id FROM Departments WHERE department_name = 'Master')) INTERSECT SELECT T1.semester_name FROM Student_Enrolment AS T1 INNER JOIN Student_Enrolment AS T2 ON T1.degree_program_id = T2.degree_program_id WHERE T1.degree_program_id IN (SELECT degree_program_id FROM Degree_Programs WHERE department_id IN (SELECT department_id FROM Departments WHERE department_name = 'Bachelor'))"}
+{"id": 531, "db_id": "student_transcripts_tracking", "predicted": "SELECT department_description FROM Departments WHERE department_name LIKE '%computer%'"}
+{"id": 566, "db_id": "student_transcripts_tracking", "predicted": "The earliest date of a transcript release is 2023-01-01. The details of this release include the release date, the number of students who received the transcript, and the number of students who did not receive the transcript."}
+{"id": 529, "db_id": "student_transcripts_tracking", "predicted": "SELECT T1.semester_name, T1.semester_id FROM semesters AS T1 JOIN student_enrolment AS T2 ON T1.semester_id = T2.semester_id GROUP BY T1.semester_id ORDER BY COUNT(*) DESC LIMIT 1"}
+{"id": 555, "db_id": "student_transcripts_tracking", "predicted": "SELECT first_name, middle_name, last_name FROM Students WHERE date_first_registered = ( SELECT MIN(date_first_registered) FROM Students )"}
+{"id": 576, "db_id": "student_transcripts_tracking", "predicted": "SELECT T1.semester_id FROM Student_Enrolment AS T1 INNER JOIN Student_Enrolment_Courses AS T2 ON T1.student_enrolment_id = T2.student_enrolment_id INNER JOIN Courses AS T3 ON T2.course_id = T3.course_id WHERE T3.course_name IN ('Master of Arts', 'Bachelor of Arts') GROUP BY T1.semester_id HAVING COUNT(DISTINCT T1.student_id) = 2"}
+{"id": 530, "db_id": "student_transcripts_tracking", "predicted": "SELECT T1.semester_name, T1.semester_id FROM Semesters AS T1 JOIN Student_Enrolment AS T2 ON T1.semester_id = T2.semester_id GROUP BY T1.semester_id ORDER BY COUNT(*) DESC LIMIT 1"}
+{"id": 553, "db_id": "student_transcripts_tracking", "predicted": "SELECT cell_mobile_number FROM Students WHERE first_name = 'Timmothy' AND last_name = 'Ward'"}
+{"id": 536, "db_id": "student_transcripts_tracking", "predicted": "SELECT T1.first_name, T1.middle_name, T1.last_name FROM Students AS T1 INNER JOIN Student_Enrolment AS T2 ON T1.student_id = T2.student_id INNER JOIN Degree_Programs AS T3 ON T2.degree_program_id = T3.degree_program_id WHERE T3.degree_summary_name = 'Bachelors'"}
+{"id": 540, "db_id": "student_transcripts_tracking", "predicted": "SELECT T1.degree_program_id, T1.degree_summary_name FROM Degree_Programs AS T1 INNER JOIN Student_Enrolment AS T2 ON T1.degree_program_id = T2.degree_program_id GROUP BY T1.degree_program_id ORDER BY COUNT(*) DESC LIMIT 1"}
+{"id": 535, "db_id": "student_transcripts_tracking", "predicted": "SELECT T1.first_name, T1.middle_name, T1.last_name FROM Students AS T1 INNER JOIN Student_Enrolment AS T2 ON T1.student_id = T2.student_id INNER JOIN Degree_Programs AS T3 ON T2.degree_program_id = T3.degree_program_id WHERE T3.degree_summary_name = 'Bachelor'"}
+{"id": 573, "db_id": "student_transcripts_tracking", "predicted": "To find the date of the transcript with the least number of results and list the corresponding ID, you can use the following SQL query:\n\n```sql\nSELECT T1.transcript_date, T1.transcript_id\nFROM Transcripts AS T1\nJOIN Transcript_Contents AS T2 ON T1.transcript_id = T2.transcript_id\nGROUP BY T1.transcript_date\nORDER BY COUNT(*) ASC\nLIMIT 1;\n```\n\nThis query works as follows:\n\n1. **Join Tables**: It joins the `Transcripts` table (`T1`) with the `Transcript_Contents` table (`T2`) on the `transcript_id` column to link each transcript with its contents.\n\n2. **Group By**: It groups the results by the `transcript_date` column to aggregate the number of contents for each date.\n\n3. **Count(*)**: It counts the number of contents for each group (i.e., each date).\n\n4. **Order By**: It orders the groups by the count of contents in ascending order (`ASC`).\n\n5. **Limit 1**: It limits the result to the first row, which will be the date with the least number of contents.\n\nThis query will give you the date of the transcript with the least"}
+{"id": 557, "db_id": "student_transcripts_tracking", "predicted": "SELECT T1.first_name, T1.middle_name, T1.last_name FROM students AS T1 INNER JOIN student_enrolment AS T2 ON T1.student_id = T2.student_id ORDER BY T2.date_first_registered ASC LIMIT 1"}
+{"id": 561, "db_id": "student_transcripts_tracking", "predicted": "SELECT T1.address_id, T1.line_1, T1.line_2, T1.line_3, T1.city, T1.zip_postcode, T1.state_province_county, T1.country, T1.other_address_details \nFROM Addresses AS T1 \nJOIN Students AS T2 ON T1.address_id = T2.current_address_id \nGROUP BY T1.address_id \nORDER BY COUNT(*) DESC \nLIMIT 1"}
+{"id": 539, "db_id": "student_transcripts_tracking", "predicted": "SELECT T1.degree_program_id, T1.degree_summary_name FROM Degree_Programs AS T1 JOIN Student_Enrolment AS T2 ON T1.degree_program_id = T2.degree_program_id GROUP BY T1.degree_program_id ORDER BY COUNT(*) DESC LIMIT 1"}
+{"id": 559, "db_id": "student_transcripts_tracking", "predicted": "SELECT T1.first_name FROM Students AS T1 INNER JOIN Addresses AS T2 ON T1.current_address_id = T2.address_id WHERE T1.permanent_address_id != T2.address_id"}
+{"id": 560, "db_id": "student_transcripts_tracking", "predicted": "SELECT T1.first_name FROM students AS T1 INNER JOIN addresses AS T2 ON T1.permanent_address_id = T2.address_id WHERE T1.current_address_id != T2.address_id"}
+{"id": 533, "db_id": "student_transcripts_tracking", "predicted": "SELECT T1.first_name, T1.middle_name, T1.last_name, T1.student_id FROM Student_Enrolment AS T1 INNER JOIN Degree_Programs AS T2 ON T1.degree_program_id = T2.degree_program_id WHERE T1.semester_id = 1 GROUP BY T1.student_id"}
+{"id": 550, "db_id": "student_transcripts_tracking", "predicted": "SELECT T1.last_name FROM Students AS T1 INNER JOIN Addresses AS T2 ON T1.current_address_id = T2.address_id WHERE T2.state_province_county = 'North Carolina' AND T1.date_first_registered IS NULL"}
+{"id": 584, "db_id": "student_transcripts_tracking", "predicted": "SELECT T1.first_name FROM Students AS T1 INNER JOIN Addresses AS T2 ON T1.permanent_address_id = T2.address_id WHERE T2.country = 'Haiti' OR T1.cell_mobile_number = '09700166582'"}
+{"id": 571, "db_id": "student_transcripts_tracking", "predicted": "SELECT COUNT(T1.student_course_id) AS max_count, T1.student_course_id AS student_course_id FROM Student_Enrolment_Courses AS T1 INNER JOIN Transcripts AS T2 ON T1.transcript_id = T2.transcript_id GROUP BY T1.student_course_id ORDER BY max_count DESC LIMIT 1"}
+{"id": 583, "db_id": "student_transcripts_tracking", "predicted": "SELECT T1.first_name FROM Students AS T1 INNER JOIN Addresses AS T2 ON T1.permanent_address_id = T2.address_id WHERE T2.country = 'Haiti' OR T2.cell_mobile_number = '09700166582'"}
+{"id": 572, "db_id": "student_transcripts_tracking", "predicted": "SELECT COUNT(T1.student_course_id) AS max_count, T1.course_id AS course_id FROM Student_Enrolment_Courses AS T1 INNER JOIN Student_Enrolment AS T2 ON T1.student_enrolment_id = T2.student_enrolment_id GROUP BY T1.course_id ORDER BY max_count DESC LIMIT 1"}
+{"id": 534, "db_id": "student_transcripts_tracking", "predicted": "SELECT T1.first_name, T1.middle_name, T1.last_name, T1.student_id, T2.degree_program_id, T2.semester_id FROM Students AS T1 INNER JOIN Student_Enrolment AS T2 ON T1.student_id = T2.student_id WHERE T2.semester_id = (SELECT semester_id FROM Semesters WHERE semester_name = 'Spring 2023')"}
+{"id": 549, "db_id": "student_transcripts_tracking", "predicted": "SELECT T1.last_name FROM Students AS T1 INNER JOIN Addresses AS T2 ON T1.current_address_id = T2.address_id WHERE T2.state_province_county = 'North Carolina' AND T1.date_left IS NULL"}
+{"id": 542, "db_id": "student_transcripts_tracking", "predicted": "SELECT T1.first_name, T1.middle_name, T1.last_name, T1.student_id, COUNT(T2.student_enrolment_id) FROM Students AS T1 INNER JOIN Student_Enrolment AS T2 ON T1.student_id = T2.student_id GROUP BY T1.student_id ORDER BY COUNT(T2.student_enrolment_id) DESC LIMIT 1"}
+{"id": 541, "db_id": "student_transcripts_tracking", "predicted": "SELECT T1.student_id, T1.first_name, T1.middle_name, T1.last_name, COUNT(T2.student_enrolment_id) AS number_of_enrollments FROM Student_Enrolment AS T1 JOIN Student_Enrolment_Courses AS T2 ON T1.student_enrolment_id = T2.student_enrolment_id GROUP BY T1.student_id ORDER BY number_of_enrollments DESC LIMIT 1"}
