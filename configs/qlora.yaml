@@ -1,0 +1,31 @@
+# QLoRA fine-tuning on Spider. The settings are common QLoRA defaults and were not tuned.
+
+splits:  # Spider training splits to train on
+  - train_spider
+  - train_others
+
+lora:  # arguments of peft.LoraConfig
+  r: 16  # rank, the width of the adapter matrices
+  lora_alpha: 32  # scale of the adapter output: alpha / r = 2
+  lora_dropout: 0.05  # share of adapter inputs randomly dropped while training
+  bias: none  # biases are not trained
+  task_type: CAUSAL_LM  # next-token prediction
+  target_modules: all-linear  # adapters on every linear layer, attention and MLP
+
+training:  # arguments of trl.SFTConfig
+  num_train_epochs: 2  # passes over the samples
+  per_device_train_batch_size: 4  # samples per step on the GPU
+  gradient_accumulation_steps: 4  # batches added up per update: 4 x 4 = 16 samples
+  learning_rate: 0.0002  # peak learning rate
+  lr_scheduler_type: cosine  # the learning rate falls along a cosine curve
+  warmup_steps: 50  # updates over which the learning rate rises from zero
+  optim: paged_adamw_8bit  # AdamW with 8-bit state, to save memory
+  max_length: 2048  # tokens; longer samples are dropped, as truncating would cut the SQL
+  completion_only_loss: true  # the loss is on the SQL, not on the schema and question
+  fp16: true  # the T4 has no bf16
+  gradient_checkpointing: true  # recompute activations in the backward pass, to save memory
+  logging_steps: 25  # print the loss every 25 updates
+  save_strategy: epoch  # a checkpoint after every epoch, to resume a stopped run
+  save_total_limit: 1  # keep only the last checkpoint
+  report_to: none  # no online tracking
+  seed: 42  # makes shuffling and initialization repeatable

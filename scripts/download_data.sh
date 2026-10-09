@@ -7,7 +7,7 @@ usage() {
     exit 2
 }
 
-# check the targets before downloading anything
+# Check the targets before downloading anything
 [ $# -gt 0 ] || usage
 for target in "$@"; do
     case $target in
@@ -21,27 +21,27 @@ ROOT=$(cd "$(dirname "$0")/.." && pwd)
 source "$ROOT/scripts/config.env"
 cd "$ROOT"
 
-trap 'rm -rf "${tmp:-}"' EXIT  # delete the temporary folder if the script stops early
+trap 'rm -rf "${tmp:-}"' EXIT  # delete the temporary directory if the script stops early
 
-# download <drive id> <name under data/>
+# Download <drive id> <name under data/>
 download() {
     local dest=data/$2
-    # skip what is already downloaded
+    # Skip what is already downloaded
     if [ -d "$dest" ]; then
         echo "$dest already exists"
         return
     fi
-    # download and unzip into a temporary folder
+    # Download and unzip into a temporary directory
     mkdir -p data
     tmp=$(mktemp -d data/.download.XXXXXX)
     uvx gdown "$1" -O "$tmp/archive.zip"
     unzip -q "$tmp/archive.zip" -x '__MACOSX/*' -d "$tmp"
-    # move the folder into place only once it is complete
-    mv "$tmp"/*/ "$dest"  # the archive holds a single folder
+    # Move the directory into place only once it is complete
+    mv "$tmp"/*/ "$dest"  # the archive holds a single directory
     rm -rf "$tmp"
 }
 
-# download the requested targets
+# Download the requested targets
 for target in "$@"; do
     case $target in
         spider) download "$SPIDER_DRIVE_ID" "$SPIDER_DIR" ;;

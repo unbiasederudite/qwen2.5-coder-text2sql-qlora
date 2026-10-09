@@ -20,6 +20,18 @@ GENERATION = {
 }
 
 
+def model_slug(model_name: str) -> str:
+    """Shortens a model name for file and directory names.
+
+    Args:
+        model_name (str): Hugging Face model name.
+
+    Returns:
+        str: Name without the organization, in lower case.
+    """
+    return model_name.split("/")[-1].lower()
+
+
 def load_model(name: str) -> tuple[PreTrainedModel, PreTrainedTokenizerBase]:
     """Loads a model in 4-bit and its tokenizer.
 
@@ -48,15 +60,13 @@ def generate_batch(
 ) -> list[str]:
     """Generates the assistant replies to several conversations at once.
 
-    Decodes with the settings in `GENERATION` and sets the tokenizer to left padding.
-
     Args:
         model (PreTrainedModel): Model from `load_model`.
         tokenizer (PreTrainedTokenizerBase): Tokenizer from `load_model`.
         conversations (list[list[Message]]): Conversations to reply to.
 
     Returns:
-        list[str]: Replies without the prompts, in the order of the conversations.
+        list[str]: Replies, in the order of the conversations.
     """
     prompts = [
         tokenizer.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)

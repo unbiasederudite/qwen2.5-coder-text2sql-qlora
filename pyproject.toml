@@ -15,6 +15,7 @@ dev = [
     "ipykernel>=7.4.0",
     "mypy>=2.3.1",
     "pytest>=9.1.1",
+    "pyyaml>=6.0.3",
     "ruff>=0.16.9",
     {include-group = "eval"},
 ]
@@ -57,11 +58,11 @@ strict = true
 files = ["src"]
 
 [[tool.mypy.overrides]]
-module = ["torch.*", "transformers.*", "huggingface_hub.*"]
+module = ["torch.*", "transformers.*", "huggingface_hub.*", "peft.*", "trl.*", "datasets.*"]
 ignore_missing_imports = true  # installed only in the colab group
 
 [[tool.mypy.overrides]]
-module = ["nltk.*"]
+module = ["nltk.*", "yaml.*", "tqdm.*"]
 ignore_missing_imports = true  # no type information
 
 [[tool.mypy.overrides]]

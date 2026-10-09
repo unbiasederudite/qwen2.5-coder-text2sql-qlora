@@ -6,6 +6,7 @@ from pathlib import Path
 from typing import Literal, TypedDict
 
 Split = Literal["train_spider", "train_others", "dev", "test"]
+SPIDER_DIR = Path("data/spider_data")  # where `scripts/download_data.sh spider` puts Spider
 
 
 class Example(TypedDict):
@@ -17,7 +18,7 @@ class Example(TypedDict):
 
 
 class Schema(TypedDict):
-    """Structure of one Spider database, as stored in `tables.json`."""
+    """One Spider database schema, as stored in `tables.json`."""
 
     db_id: str  # database name
     table_names_original: list[str]  # table names
@@ -25,6 +26,19 @@ class Schema(TypedDict):
     column_types: list[str]  # column types
     primary_keys: list[int | list[int]]  # primary key column indices
     foreign_keys: list[list[int]]  # [column_index, referenced_column_index] pairs
+
+
+def split_file(spider_dir: Path, split: Split) -> Path:
+    """Names the questions file of one split.
+
+    Args:
+        spider_dir (Path): Spider directory.
+        split (Split): Split to name.
+
+    Returns:
+        Path: JSON file of the split.
+    """
+    return spider_dir / f"{split}.json"
 
 
 def load_examples(spider_dir: Path, split: Split) -> list[Example]:
@@ -37,7 +51,7 @@ def load_examples(spider_dir: Path, split: Split) -> list[Example]:
     Returns:
         list[Example]: Examples in file order.
     """
-    rows = json.loads((spider_dir / f"{split}.json").read_text())
+    rows = json.loads(split_file(spider_dir, split).read_text())
     return [Example(db_id=r["db_id"], question=r["question"], query=r["query"]) for r in rows]
 
 
@@ -46,7 +60,7 @@ def load_schemas(spider_dir: Path, test: bool = False) -> dict[str, Schema]:
 
     Args:
         spider_dir (Path): Spider directory.
-        test (bool): Read `test_tables.json` instead.
+        test (bool): Use `test_tables.json` instead.
 
     Returns:
         dict[str, Schema]: Schemas by `db_id`.
@@ -67,12 +81,12 @@ def load_schemas(spider_dir: Path, test: bool = False) -> dict[str, Schema]:
 
 
 def database_path(spider_dir: Path, db_id: str, test: bool = False) -> Path:
-    """Returns the path of one database's SQLite file.
+    """Locates the SQLite file of one database.
 
     Args:
         spider_dir (Path): Spider directory.
         db_id (str): Database name.
-        test (bool): Look in `test_database/` instead.
+        test (bool): Use `test_database/` instead.
 
     Returns:
         Path: Path of the `.sqlite` file.
@@ -80,8 +94,8 @@ def database_path(spider_dir: Path, db_id: str, test: bool = False) -> Path:
     Raises:
         FileNotFoundError: If the database file is missing.
     """
-    folder = "test_database" if test else "database"
-    path = spider_dir / folder / db_id / f"{db_id}.sqlite"
+    directory = "test_database" if test else "database"
+    path = spider_dir / directory / db_id / f"{db_id}.sqlite"
     if not path.exists():
         raise FileNotFoundError(path)
     return path
@@ -93,7 +107,7 @@ def load_schema_ddl(spider_dir: Path, db_id: str, test: bool = False) -> list[st
     Args:
         spider_dir (Path): Spider directory.
         db_id (str): Database name.
-        test (bool): Read from `test_database/` instead.
+        test (bool): Use `test_database/` instead.
 
     Returns:
         list[str]: One `CREATE TABLE` statement per table.
@@ -121,7 +135,7 @@ def query_error(spider_dir: Path, db_id: str, query: str, test: bool = False) ->
         spider_dir (Path): Spider directory.
         db_id (str): Database name.
         query (str): SQL to run.
-        test (bool): Read from `test_database/` instead.
+        test (bool): Use `test_database/` instead.
 
     Returns:
         str | None: SQLite error message, or None if the query runs.

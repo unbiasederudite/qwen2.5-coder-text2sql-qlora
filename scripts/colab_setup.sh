@@ -3,9 +3,9 @@
 set -eu
 
 REF=${REF:-main}  # branch or tag
-REPO_DIR=${REPO##*/}  # folder git clone creates
+REPO_DIR=${REPO##*/}  # directory git clone creates
 
-# clone the repo
+# Clone the repo
 cd /content
 if [ -d "$REPO_DIR" ]; then
     echo "$REPO_DIR already exists"
@@ -14,6 +14,6 @@ else
 fi
 cd "$REPO_DIR"
 
-# install the project and the Colab dependencies
+# Install the project and the Colab dependencies
 pip install uv
 uv pip install --system . --group colab

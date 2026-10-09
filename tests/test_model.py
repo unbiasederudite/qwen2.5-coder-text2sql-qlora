@@ -1,14 +1,11 @@
 """Tests for text2sql.model, with stand-ins for torch and transformers (no GPU or install needed)."""
 
-import importlib
-import sys
 import types
-from collections.abc import Iterator
+from collections.abc import Callable
 from typing import Any
 
 import pytest
 
-import text2sql
 from text2sql.prompt import Message
 
 PROMPT_IDS = [10, 11, 12]
@@ -103,44 +100,47 @@ class FakeTokenizer:
         return ["-".join(map(str, row)) for row in ids]
 
 
-def fake_transformers() -> types.ModuleType:
-    class BitsAndBytesConfig:
-        def __init__(self, **kwargs: object) -> None:
-            self.kwargs = kwargs
+class BitsAndBytesConfig:
+    def __init__(self, **kwargs: object) -> None:
+        self.kwargs = kwargs
 
-    class AutoModelForCausalLM:
-        @staticmethod
-        def from_pretrained(name: str, **kwargs: object) -> FakeModel:
-            return FakeModel(name, kwargs)
 
-    class AutoTokenizer:
-        @staticmethod
-        def from_pretrained(name: str) -> FakeTokenizer:
-            return FakeTokenizer(name)
+class AutoModelForCausalLM:
+    @staticmethod
+    def from_pretrained(name: str, **kwargs: object) -> FakeModel:
+        return FakeModel(name, kwargs)
 
-    module = types.ModuleType("transformers")
-    module.__dict__.update(
+
+class AutoTokenizer:
+    @staticmethod
+    def from_pretrained(name: str) -> FakeTokenizer:
+        return FakeTokenizer(name)
+
+
+@pytest.fixture
+def model_module(
+    stub_module: Callable[..., types.ModuleType],
+    fresh_import: Callable[[str], types.ModuleType],
+) -> types.ModuleType:
+    """`text2sql.model` imported against the stand-ins."""
+    stub_module("torch", float16="FLOAT16")
+    stub_module(
+        "transformers",
         BitsAndBytesConfig=BitsAndBytesConfig,
         AutoModelForCausalLM=AutoModelForCausalLM,
         AutoTokenizer=AutoTokenizer,
         PreTrainedModel=FakeModel,
         PreTrainedTokenizerBase=FakeTokenizer,
     )
-    return module
+    return fresh_import("model")
 
 
-@pytest.fixture
-def model_module(monkeypatch: pytest.MonkeyPatch) -> Iterator[types.ModuleType]:
-    """`text2sql.model` imported against the stand-ins, and removed again afterwards."""
-    torch = types.ModuleType("torch")
-    torch.__dict__["float16"] = "FLOAT16"
-    monkeypatch.setitem(sys.modules, "torch", torch)
-    monkeypatch.setitem(sys.modules, "transformers", fake_transformers())
-    monkeypatch.delitem(sys.modules, "text2sql.model", raising=False)
-    monkeypatch.delattr(text2sql, "model", raising=False)
-    yield importlib.import_module("text2sql.model")
-    sys.modules.pop("text2sql.model", None)  # it was built on the stand-ins, so do not leak it
-    text2sql.__dict__.pop("model", None)
+def test_model_slug_drops_the_organization_and_lowers_the_case(
+    model_module: types.ModuleType,
+) -> None:
+    assert (
+        model_module.model_slug("Qwen/Qwen2.5-Coder-1.5B-Instruct") == "qwen2.5-coder-1.5b-instruct"
+    )
 
 
 def test_generate_batch_returns_the_new_tokens_of_each_conversation(
@@ -164,7 +164,7 @@ def test_generate_batch_is_plain_greedy(model_module: types.ModuleType) -> None:
 
     assert model.generate_kwargs["do_sample"] is False
     assert model.generate_kwargs["repetition_penalty"] == 1.0
-    # the longest gold query is 202 Qwen tokens (train_spider), counting the closing <|im_end|>
+    # The longest gold query is 202 Qwen tokens (train_spider), counting the closing <|im_end|>
     assert model.generate_kwargs["max_new_tokens"] >= 202
     assert "padding_side" not in model.generate_kwargs  # it is a tokenizer setting
     assert model.generate_kwargs["input_ids"] is tokenizer.batch["input_ids"]

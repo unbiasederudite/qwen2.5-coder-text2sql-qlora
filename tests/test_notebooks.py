@@ -55,3 +55,16 @@ def test_colab_notebook_code_cells_have_a_title(path: Path) -> None:
     untitled = [i for i, cell in code_cells(path) if not TITLE.search(source(cell))]
 
     assert not untitled, f"code cells without '# @title': {untitled}"
+
+
+def test_colab_notebooks_share_the_setup_cell() -> None:
+    setup_cells = {
+        path.name: next(
+            source(cell)
+            for _, cell in code_cells(path)
+            if "# @title Install the project" in source(cell)
+        )
+        for path in COLAB_NOTEBOOKS
+    }
+
+    assert len(set(setup_cells.values())) == 1, f"setup cells differ: {sorted(setup_cells)}"

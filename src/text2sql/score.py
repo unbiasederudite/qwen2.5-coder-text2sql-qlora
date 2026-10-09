@@ -12,8 +12,8 @@ from typing import Any, TypedDict
 
 import nltk
 
-from text2sql.meta import read_generation_metadata, write_scoring_metadata
-from text2sql.spider import Example, Split, load_examples
+from text2sql.meta import read_generation_metadata, write_json, write_scoring_metadata
+from text2sql.spider import SPIDER_DIR, Example, Split, load_examples
 from text2sql.spider_evaluation.evaluation import build_foreign_key_map_from_json, evaluate
 
 LEVELS = ("easy", "medium", "hard", "extra", "all")
@@ -29,14 +29,15 @@ COMPONENTS = (
     "IUEN",
     "keywords",
 )
+TEST_SUITE_DIR = Path("data/test_suite_data")  # where `scripts/download_data.sh test-suite` puts it
 EMPTY_PREDICTION = "SELECT"  # a blank line would end a session in the official file format
-# the first markdown code block: an optional language tag (not SELECT or WITH), then the code
+# The first markdown code block: an optional language tag (not SELECT or WITH), then the code
 FENCE = re.compile(
     r"```[ \t]*(?:sql\b[ \t]*|(?!(?:select|with)\b)[\w+-]+[ \t]*\n)?(.*?)(?:```|\Z)",
     re.DOTALL | re.IGNORECASE,
 )
 
-# the vendored functions have no annotations
+# The vendored functions have no annotations
 _evaluate: Callable[..., dict[str, Any]] = evaluate
 _build_kmaps: Callable[[str], dict[str, Any]] = build_foreign_key_map_from_json
 
@@ -50,7 +51,7 @@ class Prediction(TypedDict):
 
 
 class Report(TypedDict):
-    """Scores of one predictions file, by difficulty level and over all questions."""
+    """How a predictions file scored, by difficulty level and over all questions."""
 
     count: dict[str, int]  # questions
     ex: dict[str, float]  # execution accuracy on the original database
@@ -69,7 +70,7 @@ def load_predictions(path: Path) -> list[Prediction]:
         list[Prediction]: Predictions in file order.
 
     Raises:
-        ValueError: If a line is not valid JSON, lacks a field or has a field of the wrong type.
+        ValueError: If a line is not a valid prediction.
     """
     predictions: list[Prediction] = []
     for number, line in enumerate(path.read_text().splitlines(), start=1):
@@ -107,7 +108,7 @@ def align(predictions: list[Prediction], examples: list[Example]) -> list[str]:
         list[str]: Predicted SQL in example order.
 
     Raises:
-        ValueError: If an id is repeated, missing or unknown, or a `db_id` differs.
+        ValueError: If the predictions do not match the examples.
     """
     by_id: dict[int, Prediction] = {}
     for prediction in predictions:
@@ -129,7 +130,7 @@ def align(predictions: list[Prediction], examples: list[Example]) -> list[str]:
 
 
 def one_line(sql: str) -> str:
-    """Puts a query on one line, keeping the spaces inside quotes.
+    """Puts a query on one line.
 
     Args:
         sql (str): Query.
@@ -145,13 +146,13 @@ def one_line(sql: str) -> str:
 
 
 def extract_sql(reply: str) -> str:
-    """Returns the SQL query of a model reply.
+    """Extracts the SQL query from a model reply.
 
     Args:
         reply (str): Reply of the model.
 
     Returns:
-        str: Query without the code fence, the text around it and the end of statement.
+        str: Query without the code fence and the text around it.
     """
     match = FENCE.search(reply)
     text = match.group(1) if match else reply
@@ -177,12 +178,12 @@ def run_official(
     """Runs the official evaluation without its printing.
 
     Args:
-        gold (Path): File of `SQL<TAB>db_id` lines.
-        predicted (Path): File of predicted SQL lines.
-        db_dir (Path): Folder of `<db_id>/*.sqlite` files, each file is a test database.
-        etype (str): `all` for execution and matching, `exec` for execution only.
-        kmaps (dict[str, Any] | None): Foreign key maps, needed for matching.
-        keep_distinct (bool): Keep `DISTINCT` in the execution comparison.
+        gold (Path): File of gold queries.
+        predicted (Path): File of predicted queries.
+        db_dir (Path): Directory of the databases.
+        etype (str): Evaluation type, `all` or `exec`.
+        kmaps (dict[str, Any] | None): Foreign key maps.
+        keep_distinct (bool): Keep `DISTINCT`.
 
     Returns:
         dict[str, Any]: The official scores.
@@ -207,15 +208,15 @@ def score(
         predictions (list[Prediction]): Predictions, one per question.
         spider_dir (Path): Spider directory.
         split (Split): Split the predictions are for.
-        test_suite_dir (Path | None): Test-suite databases, for the test-suite accuracy.
-        keep_distinct (bool): Keep `DISTINCT` in EX and TS (EM and CM ignore it).
-        extract (bool): Take the SQL query out of each reply, or score the replies as written.
+        test_suite_dir (Path | None): Test-suite databases, if any.
+        keep_distinct (bool): Keep `DISTINCT` in EX and TS.
+        extract (bool): Take the SQL out of each reply.
 
     Returns:
         Report: Scores by difficulty level.
 
     Raises:
-        RuntimeError: If the nltk tokenizer data cannot be downloaded.
+        RuntimeError: If the tokenizer data cannot be downloaded.
         ValueError: If the predictions do not match the questions.
     """
     if not nltk.download("punkt_tab", quiet=True):  # no-op when already downloaded
@@ -261,15 +262,27 @@ def score(
     )
 
 
+def report_path(predictions_path: Path) -> Path:
+    """Names the scores file of a predictions file.
+
+    Args:
+        predictions_path (Path): Predictions file.
+
+    Returns:
+        Path: `<name>.report.json` in the `scores/` directory.
+    """
+    return Path("scores") / f"{predictions_path.stem}.report.json"
+
+
 def write_report(report: Report, path: Path) -> None:
     """Writes the scores of a report.
 
     Args:
         report (Report): Report from `score`.
-        path (Path): File for the scores. Its folder is created if needed.
+        path (Path): File for the scores.
     """
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(report, indent=2) + "\n")
+    write_json(path, report)
 
 
 def format_report(report: Report) -> str:
@@ -291,15 +304,15 @@ def format_report(report: Report) -> str:
 
 
 def main() -> None:
-    """Scores a predictions file, prints the table and writes the scores and their metadata."""
+    """Scores a predictions file, prints the table and writes the scores and metadata."""
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("predictions", type=Path, help="predictions file (JSON Lines)")
     parser.add_argument("--split", choices=["dev", "test"], default="dev")
-    parser.add_argument("--spider-dir", type=Path, default=Path("data/spider_data"))
+    parser.add_argument("--spider-dir", type=Path, default=SPIDER_DIR)
     parser.add_argument(
         "--test-suite-dir",
         type=Path,
-        default=Path("data/test_suite_data"),
+        default=TEST_SUITE_DIR,
         help="test-suite databases, used for the dev split only",
     )
     parser.add_argument(
@@ -334,12 +347,17 @@ def main() -> None:
         print("DISTINCT kept in EX and TS")
     if args.raw:
         print("replies scored as written, without extraction")
-    path = Path("scores") / f"{args.predictions.stem}.report.json"
-    write_report(report, path)
-    metadata_path = write_scoring_metadata(
-        path, args.predictions, args.split, args.keep_distinct, not args.raw, generation_metadata
+    report_file = report_path(args.predictions)
+    write_report(report, report_file)
+    written = write_scoring_metadata(
+        report_file,
+        args.predictions,
+        args.split,
+        args.keep_distinct,
+        not args.raw,
+        generation_metadata,
     )
-    print(f"scores written to {path}, metadata to {metadata_path}")
+    print(f"scores in {report_file}, metadata in {written}")
 
 
 if __name__ == "__main__":

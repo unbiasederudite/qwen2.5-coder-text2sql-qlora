@@ -3,7 +3,19 @@ from pathlib import Path
 import pytest
 from conftest import CONCERT_DDL, MUSEUM_DDL, TEST, TRAIN
 
-from text2sql.spider import load_examples, load_schema_ddl, load_schemas, query_error
+from text2sql.spider import (
+    SPIDER_DIR,
+    load_examples,
+    load_schema_ddl,
+    load_schemas,
+    query_error,
+    split_file,
+)
+
+
+def test_split_file_names_the_questions_file_of_a_split() -> None:
+    assert split_file(Path("spider"), "dev") == Path("spider/dev.json")
+    assert split_file(SPIDER_DIR, "train_others") == Path("data/spider_data/train_others.json")
 
 
 def test_load_examples_keeps_three_fields_in_file_order(spider_dir: Path) -> None:
@@ -27,7 +39,7 @@ def test_load_schemas_test_reads_test_tables(spider_dir: Path) -> None:
 
 
 def test_load_schema_ddl_returns_statements_in_creation_order(spider_dir: Path) -> None:
-    # concert uses AUTOINCREMENT, so SQLite also holds an internal sqlite_sequence table
+    # The concert database uses AUTOINCREMENT, so SQLite also holds an internal sqlite_sequence table
     assert load_schema_ddl(spider_dir, "concert") == [f"{s};" for s in CONCERT_DDL]
 
 

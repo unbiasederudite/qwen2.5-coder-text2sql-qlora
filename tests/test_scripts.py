@@ -141,7 +141,7 @@ def test_download_spider(project: Project) -> None:
     assert (data / "spider_data" / "database" / "a" / "a.sqlite").exists()
     assert [p.name for p in data.iterdir()] == [
         "spider_data"
-    ]  # no zip, no temporary folder, no __MACOSX
+    ]  # no zip, no temporary directory, no __MACOSX
     assert project.downloads == ["spider-id"]
 
 
@@ -185,7 +185,7 @@ def test_failed_download_leaves_nothing_behind(project: Project) -> None:
     assert result.returncode != 0
     assert (
         list((project.root / "data").iterdir()) == []
-    )  # no half-finished folder to be mistaken for data
+    )  # no half-finished directory to be mistaken for data
 
 
 @needs_unzip

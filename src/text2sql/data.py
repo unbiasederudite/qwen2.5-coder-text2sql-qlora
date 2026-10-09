@@ -17,7 +17,7 @@ def build_samples(spider_dir: Path, split: Split, clean: bool = False) -> list[S
     Args:
         spider_dir (Path): Spider directory.
         split (Split): Split to build.
-        clean (bool): Drop repeated questions and gold SQL that fails to execute.
+        clean (bool): Drop repeated questions and failing gold SQL.
 
     Returns:
         list[Sample]: Samples in file order.

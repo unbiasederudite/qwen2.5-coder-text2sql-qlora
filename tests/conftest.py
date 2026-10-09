@@ -1,8 +1,14 @@
+import importlib
 import json
 import sqlite3
+import sys
+import types
+from collections.abc import Callable, Iterator
 from pathlib import Path
 
 import pytest
+
+import text2sql
 
 CONCERT_DDL = [
     "CREATE TABLE singer (singer_id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT)",
@@ -69,3 +75,33 @@ def spider_dir(tmp_path: Path) -> Path:
     make_database(tmp_path / "database" / "shop" / "shop.sqlite", SHOP_DDL)
     make_database(tmp_path / "test_database" / "museum" / "museum.sqlite", MUSEUM_DDL)
     return tmp_path
+
+
+@pytest.fixture
+def stub_module(monkeypatch: pytest.MonkeyPatch) -> Callable[..., types.ModuleType]:
+    """Installs a stand-in for a module that needs a GPU or an install, for one test."""
+
+    def install(name: str, **attributes: object) -> types.ModuleType:
+        module = types.ModuleType(name)
+        module.__dict__.update(attributes)
+        monkeypatch.setitem(sys.modules, name, module)
+        return module
+
+    return install
+
+
+@pytest.fixture
+def fresh_import(monkeypatch: pytest.MonkeyPatch) -> Iterator[Callable[[str], types.ModuleType]]:
+    """Imports a `text2sql` module anew, on the stand-ins installed before, and drops it after."""
+    imported: list[str] = []
+
+    def load(name: str) -> types.ModuleType:
+        monkeypatch.delitem(sys.modules, f"text2sql.{name}", raising=False)
+        monkeypatch.delattr(text2sql, name, raising=False)
+        imported.append(name)
+        return importlib.import_module(f"text2sql.{name}")
+
+    yield load
+    for name in imported:  # the module was built on the stand-ins, so do not leak it
+        sys.modules.pop(f"text2sql.{name}", None)
+        text2sql.__dict__.pop(name, None)

@@ -38,8 +38,8 @@ Only the predictions file is required:
 | --- | --- | --- |
 | `predictions` | path to a `.jsonl` file | Predictions to score. |
 | `--split` | `dev` (default), `test` | Spider split the predictions are for. |
-| `--spider-dir` | folder, default `data/spider_data` | Spider release. |
-| `--test-suite-dir` | folder, default `data/test_suite_data` | Test-suite databases for TS, used for `dev` only. |
+| `--spider-dir` | directory, default `data/spider_data` | Spider release. |
+| `--test-suite-dir` | directory, default `data/test_suite_data` | Test-suite databases for TS, used for `dev` only. |
 | `--keep-distinct` | flag | Keep `DISTINCT` in EX and TS, the official script strips it. EM and CM always ignore it. |
 | `--raw` | flag | Score the replies as written, without taking the SQL out of code blocks. |
 
@@ -126,6 +126,25 @@ assistant:
     SELECT count(*) FROM singer
 ```
 
+## Fine-tuning
+
+QLoRA fine-tuning of one model on the Spider training data, `train_spider` and `train_others`, without repeated questions and gold queries that fail to run. That is 8,647 samples, and the 82 that are longer than 2,048 tokens are dropped. The loss is computed on the SQL only. Dev and test are not used for training.
+
+The LoRA and training settings are common QLoRA defaults and were not tuned:
+
+| Setting | Value |
+| --- | --- |
+| LoRA | rank 16, alpha 32, dropout 0.05, on all linear layers |
+| Epochs | 2 |
+| Learning rate | `2e-4`, cosine schedule, 50 warmup steps |
+| Batch | 4 samples per step, 4 steps added up per update (16 samples) |
+| Optimizer | AdamW, 8-bit and paged |
+| Precision | fp16, with gradient checkpointing |
+| Seed | 42 |
+| Checkpoints | after every epoch, only the last one is kept; a rerun resumes from it |
+
+The settings are in `configs/qlora.yaml`.
+
 ## Colab
 
 The GPU work (generation, training) runs on a free Colab T4. Everything else runs locally.
@@ -133,6 +152,7 @@ The GPU work (generation, training) runs on a free Colab T4. Everything else run
 | Notebook | Description | Open |
 | --- | --- | --- |
 | `colab_generate_predictions.ipynb` | Predictions of one model on one split. | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/unbiasederudite/qwen2.5-coder-text2sql-qlora/blob/main/notebooks/colab_generate_predictions.ipynb) |
+| `colab_fine_tune.ipynb` | QLoRA fine-tuning of one model on Spider. | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/unbiasederudite/qwen2.5-coder-text2sql-qlora/blob/main/notebooks/colab_fine_tune.ipynb) |
 
 ### colab_generate_predictions
 
@@ -154,7 +174,25 @@ uv run colab exec -s <session> -f notebooks/colab_generate_predictions.ipynb --t
 
 In the browser or VS Code, uncomment the `%env` lines at the top of the notebook's first cell and set the values. Keep them commented when you use the CLI, as they would override its values.
 
-The notebook writes `<model>_<run>_<split>.jsonl` and `<model>_<run>_<split>.meta.json` to `/content/qwen2.5-coder-text2sql-qlora/predictions/` on the session. See [Reproduce the results](#reproduce-the-results) for the full sequence.
+The notebook writes `<model>_<run>_<split>.jsonl` and `<model>_<run>_<split>.meta.json` to `/content/qwen2.5-coder-text2sql-qlora/predictions_colab/` on the session. Each batch is written as it is done, so running the same command again continues where a stopped run ended, and does nothing if every question is answered. To generate predictions again, restart the session. See [Reproduce the results](#reproduce-the-results) for the full sequence.
+
+### colab_fine_tune
+
+Parameters, all required:
+
+| Parameter | Values | Description |
+| --- | --- | --- |
+| `MODEL` | `Qwen/Qwen2.5-Coder-1.5B-Instruct`, `Qwen/Qwen2.5-Coder-3B-Instruct` | Model to fine-tune. |
+| `CONFIG` | path, for example `configs/qlora.yaml` | Training config: the splits to train on, and the LoRA and training settings. |
+
+```bash
+uv run colab exec -s <session> -f notebooks/colab_fine_tune.ipynb --timeout 28800 \
+  --env MODEL=<model> --env CONFIG=<config>
+```
+
+In the browser or VS Code, uncomment the `%env` lines at the top of the notebook's first cell and set the values. Keep them commented when you use the CLI, as they would override its values.
+
+The notebook writes the adapter, `training.meta.json` and `training.log.json` to `/content/qwen2.5-coder-text2sql-qlora/adapters_colab/<model>/` on the session. A checkpoint is saved after every epoch, so running the same command again continues from the last one, and does nothing if the adapter is finished. To train again, restart the session. See [Reproduce the results](#reproduce-the-results) for the full sequence.
 
 ### VS Code
 
@@ -206,7 +244,7 @@ uv run colab exec -s qlora -f notebooks/colab_generate_predictions.ipynb --timeo
   --env MODEL=Qwen/Qwen2.5-Coder-3B-Instruct --env SPLIT=dev --env RUN=baseline --env BATCH_SIZE=16
 ```
 
-The predictions are in `/content/qwen2.5-coder-text2sql-qlora/predictions/` on the session.
+The predictions are in `/content/qwen2.5-coder-text2sql-qlora/predictions_colab/` on the session.
 
 ### 4. Download the predictions
 
@@ -216,20 +254,14 @@ Each run writes its predictions and their metadata. Files on the session are los
 mkdir -p predictions
 for name in qwen2.5-coder-1.5b-instruct_baseline_dev qwen2.5-coder-3b-instruct_baseline_dev; do
   for ext in jsonl meta.json; do
-    uv run colab download -s qlora /content/qwen2.5-coder-text2sql-qlora/predictions/$name.$ext predictions/$name.$ext
+    uv run colab download -s qlora /content/qwen2.5-coder-text2sql-qlora/predictions_colab/$name.$ext predictions/$name.$ext
   done
 done
 ```
 
 The files are in `predictions/`.
 
-### 5. Close the session
-
-```bash
-uv run colab stop -s qlora
-```
-
-### 6. Score the predictions
+### 5. Score the baseline predictions
 
 ```bash
 uv run python -m text2sql.score predictions/qwen2.5-coder-1.5b-instruct_baseline_dev.jsonl
@@ -237,3 +269,37 @@ uv run python -m text2sql.score predictions/qwen2.5-coder-3b-instruct_baseline_d
 ```
 
 The scores are in `scores/`.
+
+### 6. Fine-tune the models
+
+The same notebook runs for each model:
+
+```bash
+uv run colab exec -s qlora -f notebooks/colab_fine_tune.ipynb --timeout 28800 \
+  --env MODEL=Qwen/Qwen2.5-Coder-1.5B-Instruct --env CONFIG=configs/qlora.yaml
+uv run colab exec -s qlora -f notebooks/colab_fine_tune.ipynb --timeout 28800 \
+  --env MODEL=Qwen/Qwen2.5-Coder-3B-Instruct --env CONFIG=configs/qlora.yaml
+```
+
+The adapters are in `/content/qwen2.5-coder-text2sql-qlora/adapters_colab/` on the session.
+
+### 7. Download the adapters
+
+Each run writes its adapter, a directory of several files, with the metadata and the log of the training. Files on the session are lost when it stops:
+
+```bash
+for name in qwen2.5-coder-1.5b-instruct qwen2.5-coder-3b-instruct; do
+  mkdir -p adapters/$name
+  for file in adapter_model.safetensors adapter_config.json README.md tokenizer.json tokenizer_config.json chat_template.jinja training_args.bin training.meta.json training.log.json; do
+    uv run colab download -s qlora /content/qwen2.5-coder-text2sql-qlora/adapters_colab/$name/$file adapters/$name/$file
+  done
+done
+```
+
+The files are in `adapters/`.
+
+### 8. Close the session
+
+```bash
+uv run colab stop -s qlora
+```

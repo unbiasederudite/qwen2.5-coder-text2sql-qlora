@@ -20,6 +20,7 @@ from text2sql.score import (
     load_predictions,
     main,
     one_line,
+    report_path,
     score,
     write_report,
 )
@@ -37,25 +38,25 @@ TABLES = [
 ]
 
 ALL_AGE = "SELECT name FROM singer WHERE age > (SELECT avg(age) FROM singer)"
-# (gold SQL, predicted SQL, difficulty), in dev.json order
+# Each is (gold SQL, predicted SQL, difficulty), in dev.json order
 QUESTIONS = [
-    # same query: right everywhere
+    # Same query: right everywhere
     ("SELECT count(*) FROM singer", "SELECT count(*) FROM singer", "easy"),
-    # 3 singers in the original database but 4 in the other version: right only by luck
+    # Right only by luck: 3 singers in the original database but 4 in the other version
     ("SELECT count(*) FROM singer", "SELECT 3", "easy"),
     (
         "SELECT name FROM singer WHERE age > 35 ORDER BY age",
         "SELECT name FROM singer WHERE age > 35 ORDER BY age",
         "medium",
     ),
-    # the average age is 41.3 here (only Joe is older) but 36 in the other version
+    # The average age is 41.3 here (only Joe is older) but 36 in the other version
     (ALL_AGE, "SELECT name FROM singer WHERE age > 40", "hard"),
     (
         "SELECT name FROM singer WHERE age > 35 AND name LIKE 'T%' ORDER BY age LIMIT 1",
         "SELEC name",
         "extra",
     ),
-    # the gold returns no rows, and an empty prediction must still be wrong
+    # The gold returns no rows, and an empty prediction must still be wrong
     (ALL_AGE + " AND name LIKE 'T%' ORDER BY age", "", "extra"),
 ]
 LEVELS = ["easy", "medium", "hard", "extra", "all"]
@@ -63,12 +64,12 @@ LEVELS = ["easy", "medium", "hard", "extra", "all"]
 
 @pytest.fixture(autouse=True)
 def in_tmp_path(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
-    """Runs every test in its own folder, where the default `scores/` folder is created."""
+    """Runs every test in its own directory, where the default `scores/` directory is created."""
     monkeypatch.chdir(tmp_path)
 
 
 def read_scores(tmp_path: Path, name: str = "run") -> tuple[dict[str, Any], dict[str, Any]]:
-    """Reads the scores and the metadata of a report written to the default folder."""
+    """Reads the scores and the metadata of a report written to the default directory."""
     scores = json.loads((tmp_path / "scores" / f"{name}.report.json").read_text())
     metadata = json.loads((tmp_path / "scores" / f"{name}.report.meta.json").read_text())
     return scores, metadata
@@ -372,7 +373,7 @@ def test_score_on_the_test_split_reads_the_test_files_and_has_no_test_suite(tmp_
 
 
 def test_score_collapses_whitespace_in_the_gold_and_the_prediction(tmp_path: Path) -> None:
-    # two Spider test gold queries contain a newline or a tab, which the official file format cannot hold
+    # Two Spider test gold queries contain a newline or a tab, which the official file format cannot hold
     spider = make_test_split(tmp_path, ["SELECT count(*)\n\tFROM singer"])
     predictions = [Prediction(id=0, db_id="concert", predicted="SELECT   count(*)\nFROM\tsinger\n")]
 
@@ -402,7 +403,10 @@ def test_main_scores_the_test_split_without_a_test_suite(
 
     main()  # the test split needs no test suite
 
-    assert "scores/run.report.json" in capsys.readouterr().out
+    assert (
+        "scores in scores/run.report.json, metadata in scores/run.report.meta.json"
+        in capsys.readouterr().out
+    )
     scores, metadata = read_scores(tmp_path)
     assert scores["ts"] is None
     assert metadata["split"] == "test"
@@ -454,7 +458,7 @@ def test_a_value_with_repeated_spaces_is_matched_as_it_is(tmp_path: Path) -> Non
     con.commit()
     con.close()
     right = [Prediction(id=0, db_id="concert", predicted=gold)]
-    # empty like the gold would be if its two spaces were collapsed
+    # Empty like the gold would be if its two spaces were collapsed
     wrong = [Prediction(id=0, db_id="concert", predicted="SELECT name FROM singer WHERE age = 99")]
 
     assert score(right, spider, "test")["ex"]["all"] == 1.0
@@ -700,3 +704,26 @@ def test_main_writes_the_metadata_next_to_the_scores_and_keeps_them_apart(
     assert set(scores) == {"count", "ex", "ts", "em", "cm"}
     assert not set(scores) & set(metadata)
     assert metadata["predictions_sha256"] == hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def test_main_reads_spider_from_the_default_folder(
+    spider_dir: Path,
+    suite_dir: Path,
+    predictions: list[Prediction],
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    (tmp_path / "data").mkdir()
+    (tmp_path / "data" / "spider_data").symlink_to(spider_dir)  # where the download script puts it
+    path = predictions_file(tmp_path, predictions, None)
+    monkeypatch.setattr(sys, "argv", ["score", str(path), "--test-suite-dir", str(suite_dir)])
+
+    main()
+
+    assert read_scores(tmp_path)[0]["count"]["all"] == len(predictions)
+
+
+def test_report_path_is_in_the_scores_directory_and_named_after_the_predictions() -> None:
+    assert report_path(Path("predictions/qwen2.5-coder-1.5b-instruct_baseline_dev.jsonl")) == Path(
+        "scores/qwen2.5-coder-1.5b-instruct_baseline_dev.report.json"
+    )

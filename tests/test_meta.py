@@ -2,10 +2,11 @@
 
 import hashlib
 import json
+import platform
 import sqlite3
 import subprocess
-import sys
 import types
+from collections.abc import Callable
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
 from types import SimpleNamespace
@@ -17,14 +18,17 @@ from text2sql import meta
 
 START = datetime(2026, 1, 1, 12, 0, 0, tzinfo=UTC)
 GENERATION = {"max_new_tokens": 256, "do_sample": False}
+CONFIG = {
+    "splits": ["train_spider", "train_others"],
+    "lora": {"r": 16},
+    "training": {"num_train_epochs": 2, "learning_rate": 2e-4, "max_length": 2048},
+}
 
 
 @pytest.fixture(autouse=True)
-def fake_model_module(monkeypatch: pytest.MonkeyPatch) -> None:
-    """Stands in for `text2sql.model`, which needs torch and transformers."""
-    module = types.ModuleType("text2sql.model")
-    module.__dict__["GENERATION"] = GENERATION
-    monkeypatch.setitem(sys.modules, "text2sql.model", module)
+def stand_ins(stub_module: Callable[..., types.ModuleType]) -> None:
+    """Stands in for the module that `meta` imports inside its function."""
+    stub_module("text2sql.model", GENERATION=GENERATION)
 
 
 def fake_model(quantization: object = None) -> SimpleNamespace:
@@ -96,7 +100,7 @@ def test_write_generation_metadata_leaves_unreadable_fields_null(
 
     assert info["split_file_sha256"] is None  # no data/spider_data/dev.json here
     assert info["model_revision"] is None  # nothing is cached for the model
-    assert "split_file_sha256" in capsys.readouterr().out
+    assert "split_file_sha256" in capsys.readouterr().err
 
 
 def test_write_generation_metadata_records_the_repository(
@@ -117,10 +121,12 @@ def test_write_generation_metadata_serializes_the_quantization_config(tmp_path: 
     assert write(tmp_path, model)["quantization"] == {"load_in_4bit": True}
 
 
-def test_cached_revision_is_the_snapshot_folder(monkeypatch: pytest.MonkeyPatch) -> None:
-    hub = types.ModuleType("huggingface_hub")
-    hub.__dict__["try_to_load_from_cache"] = lambda *_: "/c/snapshots/abc123/config.json"
-    monkeypatch.setitem(sys.modules, "huggingface_hub", hub)
+def test_cached_revision_is_the_snapshot_folder(
+    stub_module: Callable[..., types.ModuleType],
+) -> None:
+    stub_module(
+        "huggingface_hub", try_to_load_from_cache=lambda *_: "/c/snapshots/abc123/config.json"
+    )
 
     assert meta.cached_revision("some/model") == "abc123"
 
@@ -133,7 +139,7 @@ def test_package_versions_are_null_for_missing_packages(monkeypatch: pytest.Monk
 
     monkeypatch.setattr(meta.metadata, "version", version)
 
-    versions = meta.package_versions()
+    versions = meta.package_versions(("torch", "transformers"))
 
     assert versions["torch"] == "2.0"
     assert versions["transformers"] is None
@@ -269,11 +275,9 @@ def test_write_scoring_metadata_without_generation_metadata_or_git_has_nulls(
 
 
 def test_write_generation_metadata_records_the_gpu_and_the_split_file_hash(
-    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    tmp_path: Path, stub_module: Callable[..., types.ModuleType]
 ) -> None:
-    torch = types.ModuleType("torch")
-    torch.__dict__["cuda"] = SimpleNamespace(get_device_name=lambda index: f"GPU {index}")
-    monkeypatch.setitem(sys.modules, "torch", torch)
+    stub_module("torch", cuda=SimpleNamespace(get_device_name=lambda index: f"GPU {index}"))
     split_file = tmp_path / "data" / "spider_data" / "dev.json"
     split_file.parent.mkdir(parents=True)
     split_file.write_text("[]")
@@ -293,6 +297,149 @@ def test_git_is_none_when_git_is_not_installed(monkeypatch: pytest.MonkeyPatch) 
     assert meta.git("rev-parse", "HEAD") is None
 
 
+def test_metadata_path_of_a_directory_with_dots_is_inside_it(tmp_path: Path) -> None:
+    adapter = tmp_path / "qwen2.5-coder-1.5b-instruct"  # the dots must not be taken for a suffix
+    adapter.mkdir()
+
+    assert meta.metadata_path(adapter) == adapter / "training.meta.json"
+
+
 def test_metadata_path_replaces_the_suffix(tmp_path: Path) -> None:
     assert meta.metadata_path(tmp_path / "a.jsonl") == tmp_path / "a.meta.json"
     assert meta.metadata_path(tmp_path / "a.report.json") == tmp_path / "a.report.meta.json"
+
+
+def test_package_versions_lists_the_requested_packages_only(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setattr(meta.metadata, "version", lambda name: "1.0")
+
+    assert meta.package_versions(("peft", "trl")) == {"peft": "1.0", "trl": "1.0"}
+
+
+def test_environment_describes_the_code_and_the_machine(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setattr(meta, "git", lambda *args: None)  # no repository
+
+    info = meta.environment(("peft",))
+
+    assert list(info) == ["repo", "commit", "python", "packages", "gpu"]
+    assert info["repo"] is None and info["commit"] is None
+    assert info["python"] == platform.python_version()
+    assert list(info["packages"]) == ["peft"]  # type: ignore[call-overload]
+
+
+def test_timing_gives_the_start_the_end_and_the_duration() -> None:
+    assert meta.timing(START, START + timedelta(seconds=90)) == {
+        "started_at": "2026-01-01T12:00:00+00:00",
+        "finished_at": "2026-01-01T12:01:30+00:00",
+        "duration_seconds": 90,
+    }
+
+
+def test_write_run_metadata_prints_the_fields_it_could_not_read(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    meta.write_run_metadata(tmp_path / "m.json", {"a": 1, "b": None, "c": None})
+
+    assert "warning: fields that could not be read: b, c" in capsys.readouterr().err
+    assert json.loads((tmp_path / "m.json").read_text()) == {"a": 1, "b": None, "c": None}
+
+
+def test_write_json_writes_lists_too(tmp_path: Path) -> None:
+    meta.write_json(tmp_path / "log.json", [{"step": 25}])
+
+    assert json.loads((tmp_path / "log.json").read_text()) == [{"step": 25}]
+
+
+def write_training(
+    tmp_path: Path, model: object | None = None, resumed: bool = False
+) -> dict[str, Any]:
+    path = meta.write_training_metadata(
+        tmp_path,
+        model or fake_model(),
+        config=CONFIG,
+        counts={"samples": 10, "dropped_too_long": 1},
+        resumed=resumed,
+        started_at=START,
+        finished_at=START + timedelta(seconds=90),
+    )
+    assert path == tmp_path / "training.meta.json"
+    result: dict[str, Any] = json.loads(path.read_text())
+    return result
+
+
+def test_write_training_metadata_records_the_run(tmp_path: Path) -> None:
+    info = write_training(tmp_path)
+
+    assert info["model"] == "some/model"
+    assert info["lora"] == CONFIG["lora"]
+    assert info["training"] == CONFIG["training"]
+    assert info["splits"] == CONFIG["splits"]
+    assert list(info["split_files_sha256"]) == CONFIG["splits"]
+    assert (info["samples"], info["dropped_too_long"]) == (10, 1)
+    assert info["duration_seconds"] == 90
+    assert set(info["packages"]) == {"torch", "transformers", "bitsandbytes", "peft", "trl"}
+
+
+@pytest.mark.parametrize("resumed", [False, True])
+def test_write_training_metadata_records_whether_the_run_was_resumed(
+    tmp_path: Path, resumed: bool
+) -> None:
+    assert write_training(tmp_path, resumed=resumed)["resumed"] is resumed
+
+
+def test_write_training_metadata_serializes_the_quantization_config(tmp_path: Path) -> None:
+    class Config:
+        def to_dict(self) -> dict[str, object]:
+            return {"load_in_4bit": True}
+
+    assert write_training(tmp_path, fake_model(Config()))["quantization"] == {"load_in_4bit": True}
+
+
+def test_warn_prints_to_stderr_with_a_prefix(capsys: pytest.CaptureFixture[str]) -> None:
+    meta.warn("something is off")
+
+    captured = capsys.readouterr()
+    assert captured.err == "warning: something is off\n"
+    assert captured.out == ""
+
+
+def test_write_scoring_metadata_warns_about_the_fields_it_could_not_read(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    predictions = predictions_file(tmp_path, None)
+
+    meta.write_scoring_metadata(tmp_path / "x.report.json", predictions, "dev", False, True, None)
+
+    err = capsys.readouterr().err
+    assert "warning: fields that could not be read: run, model, model_revision" in err
+
+
+def put_split_files(tmp_path: Path, **contents: str) -> None:
+    """Writes `data/spider_data/<split>.json` files, which the metadata hashes."""
+    directory = tmp_path / "data" / "spider_data"
+    directory.mkdir(parents=True)
+    for split, text in contents.items():
+        (directory / f"{split}.json").write_text(text)
+
+
+def test_write_generation_metadata_hashes_the_file_of_the_split_answered(tmp_path: Path) -> None:
+    put_split_files(tmp_path, dev="[1]", test="[2]")
+    predictions = tmp_path / "p.jsonl"
+    predictions.write_text("")
+
+    meta.write_generation_metadata(predictions, fake_model(), "run", "test", 16, 5, 0, START, START)
+
+    info = json.loads(meta.metadata_path(predictions).read_text())
+    assert info["split_file_sha256"] == hashlib.sha256(b"[2]").hexdigest()
+
+
+def test_write_training_metadata_hashes_the_file_of_each_training_split(tmp_path: Path) -> None:
+    put_split_files(tmp_path, train_spider="[1]", train_others="[2]")
+
+    info = write_training(tmp_path)
+
+    assert info["split_files_sha256"] == {
+        "train_spider": hashlib.sha256(b"[1]").hexdigest(),
+        "train_others": hashlib.sha256(b"[2]").hexdigest(),
+    }

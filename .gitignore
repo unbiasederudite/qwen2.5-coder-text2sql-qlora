@@ -222,3 +222,10 @@ data/
 
 # Output notebooks written by `colab exec`
 *_output.ipynb
+
+# Fine-tuned adapters, written on Colab to adapters_colab/ and downloaded to adapters/
+adapters/
+adapters_colab/
+
+# Predictions generated on Colab, downloaded to predictions/
+predictions_colab/
