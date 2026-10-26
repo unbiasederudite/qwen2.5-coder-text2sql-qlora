@@ -50,6 +50,10 @@ class FakeModel:
         self.name = name
         self.load_kwargs = load_kwargs
         self.generate_kwargs: dict[str, Any] = {}
+        self.adapters: list[str] = []
+
+    def load_adapter(self, adapter: str) -> None:
+        self.adapters.append(adapter)
 
     def generate(self, **kwargs: object) -> FakeTokens:
         self.generate_kwargs = kwargs
@@ -227,3 +231,17 @@ def test_load_model_returns_the_tokenizer_of_the_same_model(model_module: types.
     _, tokenizer = model_module.load_model("some/model")
 
     assert tokenizer.name == "some/model"
+
+
+def test_load_model_puts_the_adapter_on_the_model(model_module: types.ModuleType) -> None:
+    model, tokenizer = model_module.load_model("some/model", "some/adapter")
+
+    assert model.adapters == ["some/adapter"]
+    assert model.name == "some/model"  # the base model is still the one that is loaded
+    assert tokenizer.name == "some/model"
+
+
+def test_load_model_without_an_adapter_loads_none(model_module: types.ModuleType) -> None:
+    model, _ = model_module.load_model("some/model")
+
+    assert model.adapters == []

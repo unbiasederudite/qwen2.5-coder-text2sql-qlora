@@ -12,12 +12,11 @@ from transformers.trainer_callback import ProgressCallback
 from trl import SFTConfig, SFTTrainer
 
 from text2sql.data import Sample
-from text2sql.meta import write_json
+from text2sql.meta import ADAPTER_FILE, write_json
 from text2sql.prompt import build_completion, build_prompt
 from text2sql.spider import Split
 
 CHECKPOINTS = "checkpoint-*"  # the directories the trainer writes, one per epoch
-ADAPTER_FILE = "adapter_model.safetensors"  # the weights, written when training is done
 
 
 class TrainConfig(TypedDict):

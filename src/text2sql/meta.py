@@ -15,6 +15,9 @@ from typing import TYPE_CHECKING, Any
 
 from text2sql.spider import SPIDER_DIR, Split, split_file
 
+ADAPTER_FILE = "adapter_model.safetensors"  # the weights of a LoRA adapter
+ADAPTER_KEYS = ("adapter", "adapter_sha256", "adapter_revision")  # metadata of an adapter
+
 if TYPE_CHECKING:
     from transformers import PreTrainedModel
 
@@ -49,19 +52,45 @@ def sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
-def cached_revision(model_name: str) -> str:
+def cached_revision(model_name: str, filename: str = "config.json") -> str:
     """Finds the commit of a cached Hugging Face model.
 
     Args:
         model_name (str): Hugging Face model name.
+        filename (str): A file of the model that is in the cache.
 
     Returns:
         str: Commit of the cached model.
+
+    Raises:
+        FileNotFoundError: If the file is not in the cache.
     """
     from huggingface_hub import try_to_load_from_cache
 
+    path = try_to_load_from_cache(model_name, filename)
+    if not isinstance(path, str):
+        raise FileNotFoundError(f"{model_name}/{filename} is not in the cache")
     # A cached file lives in snapshots/<commit>/, so its directory name is the commit
-    return Path(str(try_to_load_from_cache(model_name, "config.json"))).parent.name
+    return Path(path).parent.name
+
+
+def adapter_info(adapter: str) -> dict[str, object]:
+    """Identifies a LoRA adapter.
+
+    Args:
+        adapter (str): Adapter directory, or Hugging Face repository of an adapter.
+
+    Returns:
+        dict[str, object]: The adapter, and the hash of its weights if it is a directory or
+            its commit if it is a repository.
+    """
+    path = Path(adapter)
+    if path.is_dir():
+        return {"adapter": adapter, "adapter_sha256": attempt(sha256, path / ADAPTER_FILE)}
+    return {
+        "adapter": adapter,
+        "adapter_revision": attempt(cached_revision, adapter, "adapter_config.json"),
+    }
 
 
 def git(*args: str) -> str | None:
@@ -249,6 +278,7 @@ def write_generation_metadata(
     already_done: int,
     started_at: datetime,
     finished_at: datetime,
+    adapter: str | None = None,
 ) -> Path:
     """Writes the metadata of a run next to its predictions file.
 
@@ -262,6 +292,7 @@ def write_generation_metadata(
         already_done (int): Predictions already in the file when the run started.
         started_at (datetime): Start of the generation.
         finished_at (datetime): End of the generation.
+        adapter (str | None): Adapter that was loaded on top of the model, if any.
 
     Returns:
         Path: Metadata file.
@@ -274,6 +305,7 @@ def write_generation_metadata(
         "model": model_name,
         "model_revision": attempt(cached_revision, model_name),
         "quantization": getattr(model.config, "quantization_config", None),
+        **(adapter_info(adapter) if adapter else {}),
         "generation": {**GENERATION, "batch_size": batch_size},
         "split": split,
         "split_file_sha256": attempt(sha256, split_file(SPIDER_DIR, split)),
@@ -355,10 +387,12 @@ def write_scoring_metadata(
         Path: Metadata file.
     """
     given = generation_metadata or {}
+    adapter = {key: given[key] for key in ADAPTER_KEYS if key in given}
     info = {
         "run": given.get("run"),
         "model": given.get("model"),
         "model_revision": given.get("model_revision"),
+        **adapter,
         "split": split,
         "predictions_sha256": sha256(predictions_path),
         "keep_distinct": keep_distinct,

@@ -156,20 +156,22 @@ The GPU work (generation, training) runs on a free Colab T4. Everything else run
 
 ### colab_generate_predictions
 
-Parameters, all required:
+Parameters:
 
 | Parameter | Values | Description |
 | --- | --- | --- |
-| `MODEL` | `Qwen/Qwen2.5-Coder-1.5B-Instruct`, `Qwen/Qwen2.5-Coder-3B-Instruct` | Model that answers the questions. |
-| `SPLIT` | `dev`, `test` | Spider split to answer. |
-| `RUN` | any name | Name of the run, part of the output file name. |
-| `BATCH_SIZE` | integer, for example `16` | Questions generated at once. |
+| `MODEL` | `Qwen/Qwen2.5-Coder-1.5B-Instruct`, `Qwen/Qwen2.5-Coder-3B-Instruct` | Model that answers the questions. Required. |
+| `SPLIT` | `dev`, `test` | Spider split to answer. Required. |
+| `RUN` | any name | Name of the run, part of the output file name. Required. |
+| `BATCH_SIZE` | integer, for example `16` | Questions generated at once. Required. |
+| `ADAPTER` | Hugging Face repository, for example `<user>/<adapter>` | LoRA adapter put on the model. Optional, without it the model is the baseline. |
 
 Pass them with the [Colab CLI](https://github.com/googlecolab/google-colab-cli) as `--env` options:
 
 ```bash
 uv run colab exec -s <session> -f notebooks/colab_generate_predictions.ipynb --timeout 3600 \
-  --env MODEL=<model> --env SPLIT=<split> --env RUN=<run> --env BATCH_SIZE=<batch size>
+  --env MODEL=<model> --env SPLIT=<split> --env RUN=<run> --env BATCH_SIZE=<batch size> \
+  [--env ADAPTER=<adapter>]
 ```
 
 In the browser or VS Code, uncomment the `%env` lines at the top of the notebook's first cell and set the values. Keep them commented when you use the CLI, as they would override its values.
@@ -227,15 +229,17 @@ The data is in `data/spider_data/` and `data/test_suite_data/`.
 
 ### 2. Start the Colab session
 
-The first call opens a browser to sign in:
+Start a session with a T4 GPU. The first call opens a browser to sign in:
 
 ```bash
 uv run colab new -s qlora --gpu T4
 ```
 
+The session is called `qlora`, as in every command below.
+
 ### 3. Evaluate the baseline models
 
-The same notebook runs for each model:
+Generate the predictions of each baseline model on the dev split. The same notebook runs for each model:
 
 ```bash
 uv run colab exec -s qlora -f notebooks/colab_generate_predictions.ipynb --timeout 3600 \
@@ -244,11 +248,11 @@ uv run colab exec -s qlora -f notebooks/colab_generate_predictions.ipynb --timeo
   --env MODEL=Qwen/Qwen2.5-Coder-3B-Instruct --env SPLIT=dev --env RUN=baseline --env BATCH_SIZE=16
 ```
 
-The predictions are in `/content/qwen2.5-coder-text2sql-qlora/predictions_colab/` on the session.
+The predictions and their metadata are in `/content/qwen2.5-coder-text2sql-qlora/predictions_colab/` on the session.
 
 ### 4. Download the predictions
 
-Each run writes its predictions and their metadata. Files on the session are lost when it stops:
+Download the predictions and their metadata from the session. Files on the session are lost when it stops:
 
 ```bash
 mkdir -p predictions
@@ -263,6 +267,8 @@ The files are in `predictions/`.
 
 ### 5. Score the baseline predictions
 
+Score the baseline predictions:
+
 ```bash
 uv run python -m text2sql.score predictions/qwen2.5-coder-1.5b-instruct_baseline_dev.jsonl
 uv run python -m text2sql.score predictions/qwen2.5-coder-3b-instruct_baseline_dev.jsonl
@@ -272,7 +278,7 @@ The scores are in `scores/`.
 
 ### 6. Fine-tune the models
 
-The same notebook runs for each model:
+Fine-tune each model on the Spider training data. The same notebook runs for each model:
 
 ```bash
 uv run colab exec -s qlora -f notebooks/colab_fine_tune.ipynb --timeout 28800 \
@@ -281,11 +287,11 @@ uv run colab exec -s qlora -f notebooks/colab_fine_tune.ipynb --timeout 28800 \
   --env MODEL=Qwen/Qwen2.5-Coder-3B-Instruct --env CONFIG=configs/qlora.yaml
 ```
 
-The adapters are in `/content/qwen2.5-coder-text2sql-qlora/adapters_colab/` on the session.
+The adapters, their metadata and their training logs are in `/content/qwen2.5-coder-text2sql-qlora/adapters_colab/` on the session.
 
 ### 7. Download the adapters
 
-Each run writes its adapter, a directory of several files, with the metadata and the log of the training. Files on the session are lost when it stops:
+Download the adapters from the session, each with its metadata and training log. Files on the session are lost when it stops:
 
 ```bash
 for name in qwen2.5-coder-1.5b-instruct qwen2.5-coder-3b-instruct; do
@@ -298,7 +304,63 @@ done
 
 The files are in `adapters/`.
 
-### 8. Close the session
+### 8. Upload the adapters to Hugging Face
+
+Upload each adapter to its own Hugging Face repository, private to start with, so that the Colab session can read it. Log in once first, and replace `<user>` with your Hugging Face username:
+
+```bash
+uv run hf auth login
+uv run hf upload <user>/qwen2.5-coder-1.5b-text2sql-qlora adapters/qwen2.5-coder-1.5b-instruct . \
+  --private --exclude "training_args.bin"
+uv run hf upload <user>/qwen2.5-coder-3b-text2sql-qlora adapters/qwen2.5-coder-3b-instruct . \
+  --private --exclude "training_args.bin"
+```
+
+The adapters are at `huggingface.co/<user>/qwen2.5-coder-1.5b-text2sql-qlora` and `huggingface.co/<user>/qwen2.5-coder-3b-text2sql-qlora`.
+
+### 9. Evaluate the fine-tuned models
+
+Generate the predictions of each fine-tuned model on the dev split. The same notebook as for the baseline runs for each model, with the adapter on top of the model and another run name:
+
+```bash
+uv run colab exec -s qlora -f notebooks/colab_generate_predictions.ipynb --timeout 3600 \
+  --env MODEL=Qwen/Qwen2.5-Coder-1.5B-Instruct --env SPLIT=dev --env RUN=finetuned --env BATCH_SIZE=16 \
+  --env ADAPTER=<user>/qwen2.5-coder-1.5b-text2sql-qlora
+uv run colab exec -s qlora -f notebooks/colab_generate_predictions.ipynb --timeout 3600 \
+  --env MODEL=Qwen/Qwen2.5-Coder-3B-Instruct --env SPLIT=dev --env RUN=finetuned --env BATCH_SIZE=16 \
+  --env ADAPTER=<user>/qwen2.5-coder-3b-text2sql-qlora
+```
+
+The predictions and their metadata are in `/content/qwen2.5-coder-text2sql-qlora/predictions_colab/` on the session.
+
+### 10. Download the predictions of the fine-tuned models
+
+Download the predictions and their metadata from the session. Files on the session are lost when it stops:
+
+```bash
+for name in qwen2.5-coder-1.5b-instruct_finetuned_dev qwen2.5-coder-3b-instruct_finetuned_dev; do
+  for ext in jsonl meta.json; do
+    uv run colab download -s qlora /content/qwen2.5-coder-text2sql-qlora/predictions_colab/$name.$ext predictions/$name.$ext
+  done
+done
+```
+
+The files are in `predictions/`, next to the baseline's.
+
+### 11. Score the fine-tuned predictions
+
+Score the fine-tuned predictions:
+
+```bash
+uv run python -m text2sql.score predictions/qwen2.5-coder-1.5b-instruct_finetuned_dev.jsonl
+uv run python -m text2sql.score predictions/qwen2.5-coder-3b-instruct_finetuned_dev.jsonl
+```
+
+The scores are in `scores/`, next to the baseline's.
+
+### 12. Close the session
+
+Stop the session:
 
 ```bash
 uv run colab stop -s qlora

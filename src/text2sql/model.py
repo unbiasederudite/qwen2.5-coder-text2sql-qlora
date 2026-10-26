@@ -32,11 +32,14 @@ def model_slug(model_name: str) -> str:
     return model_name.split("/")[-1].lower()
 
 
-def load_model(name: str) -> tuple[PreTrainedModel, PreTrainedTokenizerBase]:
-    """Loads a model in 4-bit and its tokenizer.
+def load_model(
+    name: str, adapter: str | None = None
+) -> tuple[PreTrainedModel, PreTrainedTokenizerBase]:
+    """Loads a model in 4-bit and its tokenizer, with a LoRA adapter on top if given.
 
     Args:
         name (str): Hugging Face model name.
+        adapter (str | None): Adapter directory, or Hugging Face repository of an adapter.
 
     Returns:
         tuple[PreTrainedModel, PreTrainedTokenizerBase]: Model and tokenizer.
@@ -50,6 +53,8 @@ def load_model(name: str) -> tuple[PreTrainedModel, PreTrainedTokenizerBase]:
     model = AutoModelForCausalLM.from_pretrained(
         name, quantization_config=quantization, dtype=torch.float16
     )
+    if adapter is not None:
+        model.load_adapter(adapter)
     return model, AutoTokenizer.from_pretrained(name)
 
 

@@ -41,6 +41,7 @@ def write(
     tmp_path: Path,
     model: object | None = None,
     finished_at: datetime = START + timedelta(seconds=90),
+    adapter: str | None = None,
 ) -> dict[str, Any]:
     predictions = tmp_path / "predictions" / "m_run_dev.jsonl"
     predictions.parent.mkdir()
@@ -56,6 +57,7 @@ def write(
         2,
         START,
         finished_at,
+        adapter,
     )
     assert path == predictions.with_suffix(".meta.json")
     result: dict[str, Any] = json.loads(path.read_text())
@@ -121,6 +123,41 @@ def test_write_generation_metadata_serializes_the_quantization_config(tmp_path: 
     assert write(tmp_path, model)["quantization"] == {"load_in_4bit": True}
 
 
+def test_write_generation_metadata_has_no_adapter_fields_without_an_adapter(tmp_path: Path) -> None:
+    info = write(tmp_path)
+
+    assert not set(meta.ADAPTER_KEYS) & set(info)
+
+
+def test_write_generation_metadata_hashes_the_weights_of_an_adapter_directory(
+    tmp_path: Path,
+) -> None:
+    adapter = tmp_path / "adapter"
+    adapter.mkdir()
+    (adapter / meta.ADAPTER_FILE).write_bytes(b"weights")
+
+    info = write(tmp_path, adapter=str(adapter))
+
+    assert info["adapter"] == str(adapter)
+    assert info["adapter_sha256"] == hashlib.sha256(b"weights").hexdigest()
+    assert "adapter_revision" not in info
+
+
+def test_write_generation_metadata_records_the_commit_of_an_adapter_repository(
+    tmp_path: Path, stub_module: Callable[..., types.ModuleType]
+) -> None:
+    stub_module(
+        "huggingface_hub",
+        try_to_load_from_cache=lambda repo, filename: f"/c/snapshots/def456/{filename}",
+    )
+
+    info = write(tmp_path, adapter="user/adapter")
+
+    assert info["adapter"] == "user/adapter"
+    assert info["adapter_revision"] == "def456"
+    assert "adapter_sha256" not in info
+
+
 def test_cached_revision_is_the_snapshot_folder(
     stub_module: Callable[..., types.ModuleType],
 ) -> None:
@@ -129,6 +166,15 @@ def test_cached_revision_is_the_snapshot_folder(
     )
 
     assert meta.cached_revision("some/model") == "abc123"
+
+
+def test_cached_revision_raises_when_the_file_is_not_cached(
+    stub_module: Callable[..., types.ModuleType],
+) -> None:
+    stub_module("huggingface_hub", try_to_load_from_cache=lambda *_: None)
+
+    with pytest.raises(FileNotFoundError):
+        meta.cached_revision("some/model")
 
 
 def test_package_versions_are_null_for_missing_packages(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -258,6 +304,19 @@ def test_write_scoring_metadata_records_the_scoring(
         "repo": "owner/name",
         "commit": "abc123",
     }
+
+
+def test_write_scoring_metadata_carries_the_adapter_over(tmp_path: Path) -> None:
+    given = {"model": "m", "run": "finetuned", "adapter": "a/b", "adapter_revision": "r2"}
+    predictions = predictions_file(tmp_path, None)
+
+    path = meta.write_scoring_metadata(
+        tmp_path / "x.report.json", predictions, "dev", True, False, given
+    )
+
+    info = json.loads(path.read_text())
+    assert (info["adapter"], info["adapter_revision"]) == ("a/b", "r2")
+    assert "adapter_sha256" not in info  # only what the predictions metadata has
 
 
 def test_write_scoring_metadata_without_generation_metadata_or_git_has_nulls(
