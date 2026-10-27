@@ -1,6 +1,5 @@
-"""Qwen model loading and batch generation."""
+"""The models: names for files, and loading."""
 
-import torch
 from transformers import (
     AutoModelForCausalLM,
     AutoTokenizer,
@@ -9,15 +8,7 @@ from transformers import (
     PreTrainedTokenizerBase,
 )
 
-from text2sql.prompt import Message
-
-MODELS = ["Qwen/Qwen2.5-Coder-1.5B-Instruct", "Qwen/Qwen2.5-Coder-3B-Instruct"]
-GENERATION = {
-    "max_new_tokens": 256,  # the longest gold query is 202 Qwen tokens
-    "do_sample": False,  # greedy
-    "repetition_penalty": 1.0,
-    "padding_side": "left",  # the replies must follow the prompts, not the padding
-}
+from text2sql.config import ModelConfig
 
 
 def model_slug(model_name: str) -> str:
@@ -33,56 +24,23 @@ def model_slug(model_name: str) -> str:
 
 
 def load_model(
-    name: str, adapter: str | None = None
+    name: str, config: ModelConfig, adapter: str | None = None
 ) -> tuple[PreTrainedModel, PreTrainedTokenizerBase]:
-    """Loads a model in 4-bit and its tokenizer, with a LoRA adapter on top if given.
+    """Loads a quantized model and its tokenizer, with a LoRA adapter on top if given.
 
     Args:
         name (str): Hugging Face model name.
+        config (ModelConfig): Config from `load_model_config`.
         adapter (str | None): Adapter directory, or Hugging Face repository of an adapter.
 
     Returns:
         tuple[PreTrainedModel, PreTrainedTokenizerBase]: Model and tokenizer.
     """
-    quantization = BitsAndBytesConfig(
-        load_in_4bit=True,
-        bnb_4bit_use_double_quant=True,
-        bnb_4bit_quant_type="nf4",
-        bnb_4bit_compute_dtype=torch.float16,
-    )
     model = AutoModelForCausalLM.from_pretrained(
-        name, quantization_config=quantization, dtype=torch.float16
+        name,
+        quantization_config=BitsAndBytesConfig(**config["quantization"]),
+        dtype=config["dtype"],
     )
     if adapter is not None:
         model.load_adapter(adapter)
     return model, AutoTokenizer.from_pretrained(name)
-
-
-def generate_batch(
-    model: PreTrainedModel,
-    tokenizer: PreTrainedTokenizerBase,
-    conversations: list[list[Message]],
-) -> list[str]:
-    """Generates the assistant replies to several conversations at once.
-
-    Args:
-        model (PreTrainedModel): Model from `load_model`.
-        tokenizer (PreTrainedTokenizerBase): Tokenizer from `load_model`.
-        conversations (list[list[Message]]): Conversations to reply to.
-
-    Returns:
-        list[str]: Replies, in the order of the conversations.
-    """
-    prompts = [
-        tokenizer.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
-        for messages in conversations
-    ]
-    settings = dict(GENERATION)
-    tokenizer.padding_side = settings.pop("padding_side")
-    inputs = tokenizer(prompts, add_special_tokens=False, padding=True, return_tensors="pt").to(
-        model.device
-    )
-    output = model.generate(**inputs, **settings)
-    return list(
-        tokenizer.batch_decode(output[:, inputs["input_ids"].shape[1] :], skip_special_tokens=True)
-    )

@@ -1,10 +1,8 @@
-"""Tests for text2sql.meta."""
+"""Tests for text2sql.meta.runs."""
 
 import hashlib
 import json
-import platform
 import sqlite3
-import subprocess
 import types
 from collections.abc import Callable
 from datetime import UTC, datetime, timedelta
@@ -14,21 +12,20 @@ from typing import Any
 
 import pytest
 
-from text2sql import meta
+from text2sql.meta import provenance, runs
+from text2sql.training import checkpoints
 
-START = datetime(2026, 1, 1, 12, 0, 0, tzinfo=UTC)
-GENERATION = {"max_new_tokens": 256, "do_sample": False}
-CONFIG = {
-    "splits": ["train_spider", "train_others"],
-    "lora": {"r": 16},
-    "training": {"num_train_epochs": 2, "learning_rate": 2e-4, "max_length": 2048},
+MODEL_CONFIG = {
+    "tokenizer": {"padding_side": "left"},
+    "generation": {"max_new_tokens": 256, "do_sample": False},
 }
-
-
-@pytest.fixture(autouse=True)
-def stand_ins(stub_module: Callable[..., types.ModuleType]) -> None:
-    """Stands in for the module that `meta` imports inside its function."""
-    stub_module("text2sql.model", GENERATION=GENERATION)
+COUNTS = {"questions": 5, "generated": 5, "already_done": 0}
+START = datetime(2026, 1, 1, 12, 0, 0, tzinfo=UTC)
+CONFIG = {
+    "data": {"splits": ["train_spider", "train_others"], "clean": True, "max_length": 2048},
+    "lora": {"r": 16},
+    "training": {"num_train_epochs": 2, "learning_rate": 2e-4},
+}
 
 
 def fake_model(quantization: object = None) -> SimpleNamespace:
@@ -47,14 +44,14 @@ def write(
     predictions.parent.mkdir()
     predictions.write_text('{"id": 0}\n')
     model = model or fake_model()
-    path = meta.write_generation_metadata(
+    path = runs.write_generation_metadata(
         predictions,
         model,
+        MODEL_CONFIG,
         "run",
         "dev",
         16,
-        5,
-        2,
+        {"questions": 5, "generated": 3, "already_done": 2},
         START,
         finished_at,
         adapter,
@@ -69,26 +66,14 @@ def in_tmp_path(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.chdir(tmp_path)
 
 
-def test_attempt_returns_the_result_or_none() -> None:
-    assert meta.attempt(int, "5") == 5
-
-    assert meta.attempt(int, "x") is None
-
-
-def test_sha256_hashes_the_file_content(tmp_path: Path) -> None:
-    file = tmp_path / "f"
-    file.write_bytes(b"abc")
-
-    assert meta.sha256(file) == hashlib.sha256(b"abc").hexdigest()
-
-
 def test_write_generation_metadata_records_the_run(tmp_path: Path) -> None:
     info = write(tmp_path)
 
     assert info["model"] == "some/model"
     assert (info["run"], info["split"]) == ("run", "dev")
     assert (info["questions"], info["already_done"]) == (5, 2)
-    assert info["generation"] == {**GENERATION, "batch_size": 16}
+    assert info["generation"] == {**MODEL_CONFIG["generation"], "batch_size": 16}
+    assert info["tokenizer"] == MODEL_CONFIG["tokenizer"]
     assert info["started_at"] == "2026-01-01T12:00:00+00:00"
     assert info["finished_at"] == "2026-01-01T12:01:30+00:00"
     assert info["duration_seconds"] == 90
@@ -108,7 +93,7 @@ def test_write_generation_metadata_leaves_unreadable_fields_null(
 def test_write_generation_metadata_records_the_repository(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
-    monkeypatch.setattr(meta, "git", lambda *args: "https://github.com/owner/name.git")
+    monkeypatch.setattr(provenance, "_git", lambda *args: "https://github.com/owner/name.git")
 
     assert write(tmp_path)["repo"] == "owner/name"
 
@@ -126,7 +111,7 @@ def test_write_generation_metadata_serializes_the_quantization_config(tmp_path: 
 def test_write_generation_metadata_has_no_adapter_fields_without_an_adapter(tmp_path: Path) -> None:
     info = write(tmp_path)
 
-    assert not set(meta.ADAPTER_KEYS) & set(info)
+    assert not set(provenance.ADAPTER_KEYS) & set(info)
 
 
 def test_write_generation_metadata_hashes_the_weights_of_an_adapter_directory(
@@ -134,7 +119,7 @@ def test_write_generation_metadata_hashes_the_weights_of_an_adapter_directory(
 ) -> None:
     adapter = tmp_path / "adapter"
     adapter.mkdir()
-    (adapter / meta.ADAPTER_FILE).write_bytes(b"weights")
+    (adapter / checkpoints.ADAPTER_FILE).write_bytes(b"weights")
 
     info = write(tmp_path, adapter=str(adapter))
 
@@ -158,115 +143,48 @@ def test_write_generation_metadata_records_the_commit_of_an_adapter_repository(
     assert "adapter_sha256" not in info
 
 
-def test_cached_revision_is_the_snapshot_folder(
-    stub_module: Callable[..., types.ModuleType],
-) -> None:
-    stub_module(
-        "huggingface_hub", try_to_load_from_cache=lambda *_: "/c/snapshots/abc123/config.json"
-    )
-
-    assert meta.cached_revision("some/model") == "abc123"
-
-
-def test_cached_revision_raises_when_the_file_is_not_cached(
-    stub_module: Callable[..., types.ModuleType],
-) -> None:
-    stub_module("huggingface_hub", try_to_load_from_cache=lambda *_: None)
-
-    with pytest.raises(FileNotFoundError):
-        meta.cached_revision("some/model")
-
-
-def test_package_versions_are_null_for_missing_packages(monkeypatch: pytest.MonkeyPatch) -> None:
-    def version(name: str) -> str:
-        if name == "torch":
-            return "2.0"
-        raise meta.metadata.PackageNotFoundError(name)
-
-    monkeypatch.setattr(meta.metadata, "version", version)
-
-    versions = meta.package_versions(("torch", "transformers"))
-
-    assert versions["torch"] == "2.0"
-    assert versions["transformers"] is None
-
-
-def test_git_commit_is_the_head_of_the_repository(tmp_path: Path) -> None:
-    git = ["git", "-c", "user.name=t", "-c", "user.email=t@t"]
-    subprocess.run([*git, "init", "-q"], check=True)
-    subprocess.run([*git, "commit", "-q", "--allow-empty", "-m", "x"], check=True)
-    head = subprocess.check_output([*git, "rev-parse", "HEAD"], text=True).strip()
-
-    assert meta.git_commit() == head
-
-
-@pytest.mark.parametrize(
-    ("url", "repo"),
-    [
-        (
-            "https://github.com/unbiasederudite/qwen2.5-coder-text2sql-qlora.git",
-            "unbiasederudite/qwen2.5-coder-text2sql-qlora",
-        ),
-        ("git@github.com:owner/name.git", "owner/name"),
-        ("https://github.com/owner/name", "owner/name"),
-        (None, None),
-        ("https://example.com/owner/name.git", None),
-    ],
-)
-def test_repository_is_read_from_the_origin_remote(
-    url: str | None, repo: str | None, monkeypatch: pytest.MonkeyPatch
-) -> None:
-    monkeypatch.setattr(meta, "git", lambda *args: url)
-
-    assert meta.repository() == repo
-
-
-def test_git_commit_is_none_outside_a_repository(tmp_path: Path) -> None:
-    assert meta.git_commit() is None  # tmp_path is no repository
-
-
 def predictions_file(tmp_path: Path, info: dict[str, object] | None) -> Path:
     """Writes `run.jsonl` and, if given, `run.meta.json` with the hash of the predictions."""
     path = tmp_path / "run.jsonl"
     path.write_text('{"id": 0}\n')
     if info is not None:
         (tmp_path / "run.meta.json").write_text(
-            json.dumps({"predictions_sha256": meta.sha256(path), **info})
+            json.dumps({"predictions_sha256": provenance.sha256(path), **info})
         )
     return path
 
 
-def test_read_generation_metadata_reads_the_file_next_to_the_predictions(tmp_path: Path) -> None:
-    assert meta.read_generation_metadata(predictions_file(tmp_path, None), "dev") is None
+def test_load_generation_metadata_reads_the_file_next_to_the_predictions(tmp_path: Path) -> None:
+    assert runs.load_generation_metadata(predictions_file(tmp_path, None), "dev") is None
 
-    info = meta.read_generation_metadata(predictions_file(tmp_path, {"run": "r"}), "dev")
+    info = runs.load_generation_metadata(predictions_file(tmp_path, {"run": "r"}), "dev")
 
     assert info is not None and info["run"] == "r"
 
 
-def test_read_generation_metadata_stops_when_it_describes_another_predictions_file(
+def test_load_generation_metadata_stops_when_it_describes_another_predictions_file(
     tmp_path: Path,
 ) -> None:
     path = predictions_file(tmp_path, {})
     (tmp_path / "run.meta.json").write_text(json.dumps({"predictions_sha256": "0" * 64}))
 
     with pytest.raises(ValueError, match="describes another predictions file"):
-        meta.read_generation_metadata(path, "dev")
+        runs.load_generation_metadata(path, "dev")
 
 
-def test_read_generation_metadata_accepts_metadata_without_a_hash(tmp_path: Path) -> None:
+def test_load_generation_metadata_accepts_metadata_without_a_hash(tmp_path: Path) -> None:
     path = predictions_file(tmp_path, {})
     (tmp_path / "run.meta.json").write_text(json.dumps({"run": "r"}))
 
-    assert meta.read_generation_metadata(path, "dev") == {"run": "r"}
+    assert runs.load_generation_metadata(path, "dev") == {"run": "r"}
 
 
-def test_read_generation_metadata_warns_about_another_split(
+def test_load_generation_metadata_warns_about_another_split(
     tmp_path: Path, capsys: pytest.CaptureFixture[str]
 ) -> None:
     path = predictions_file(tmp_path, {"split": "test"})
 
-    meta.read_generation_metadata(path, "dev")
+    runs.load_generation_metadata(path, "dev")
 
     assert "metadata is for the test split, scoring dev" in capsys.readouterr().err
 
@@ -278,7 +196,7 @@ def test_write_scoring_metadata_records_the_scoring(
         ("remote", "get-url", "origin"): "git@github.com:owner/name.git",
         ("rev-parse", "HEAD"): "abc123",
     }
-    monkeypatch.setattr(meta, "git", lambda *args: answers.get(args))
+    monkeypatch.setattr(provenance, "_git", lambda *args: answers.get(args))
     given = {
         "model": "m",
         "model_revision": "r1",
@@ -287,14 +205,14 @@ def test_write_scoring_metadata_records_the_scoring(
     }
     predictions = predictions_file(tmp_path, None)
 
-    path = meta.write_scoring_metadata(
+    path = runs.write_scoring_metadata(
         tmp_path / "x.report.json", predictions, "dev", True, False, given
     )
 
     assert path == tmp_path / "x.report.meta.json"
     assert json.loads(path.read_text()) == {
         "split": "dev",
-        "predictions_sha256": meta.sha256(predictions),
+        "predictions_sha256": provenance.sha256(predictions),
         "model": "m",
         "model_revision": "r1",
         "run": "baseline",  # the generation settings stay in the metadata of the predictions
@@ -310,7 +228,7 @@ def test_write_scoring_metadata_carries_the_adapter_over(tmp_path: Path) -> None
     given = {"model": "m", "run": "finetuned", "adapter": "a/b", "adapter_revision": "r2"}
     predictions = predictions_file(tmp_path, None)
 
-    path = meta.write_scoring_metadata(
+    path = runs.write_scoring_metadata(
         tmp_path / "x.report.json", predictions, "dev", True, False, given
     )
 
@@ -324,7 +242,7 @@ def test_write_scoring_metadata_without_generation_metadata_or_git_has_nulls(
 ) -> None:
     predictions = predictions_file(tmp_path, None)
 
-    path = meta.write_scoring_metadata(
+    path = runs.write_scoring_metadata(
         tmp_path / "x.report.json", predictions, "dev", False, True, None
     )
 
@@ -347,73 +265,19 @@ def test_write_generation_metadata_records_the_gpu_and_the_split_file_hash(
     assert info["split_file_sha256"] == hashlib.sha256(b"[]").hexdigest()
 
 
-def test_git_is_none_when_git_is_not_installed(monkeypatch: pytest.MonkeyPatch) -> None:
-    def missing(*args: object, **kwargs: object) -> str:
-        raise FileNotFoundError("git")
-
-    monkeypatch.setattr(meta.subprocess, "check_output", missing)
-
-    assert meta.git("rev-parse", "HEAD") is None
-
-
-def test_metadata_path_of_a_directory_with_dots_is_inside_it(tmp_path: Path) -> None:
-    adapter = tmp_path / "qwen2.5-coder-1.5b-instruct"  # the dots must not be taken for a suffix
-    adapter.mkdir()
-
-    assert meta.metadata_path(adapter) == adapter / "training.meta.json"
-
-
-def test_metadata_path_replaces_the_suffix(tmp_path: Path) -> None:
-    assert meta.metadata_path(tmp_path / "a.jsonl") == tmp_path / "a.meta.json"
-    assert meta.metadata_path(tmp_path / "a.report.json") == tmp_path / "a.report.meta.json"
-
-
-def test_package_versions_lists_the_requested_packages_only(
-    monkeypatch: pytest.MonkeyPatch,
-) -> None:
-    monkeypatch.setattr(meta.metadata, "version", lambda name: "1.0")
-
-    assert meta.package_versions(("peft", "trl")) == {"peft": "1.0", "trl": "1.0"}
-
-
-def test_environment_describes_the_code_and_the_machine(monkeypatch: pytest.MonkeyPatch) -> None:
-    monkeypatch.setattr(meta, "git", lambda *args: None)  # no repository
-
-    info = meta.environment(("peft",))
-
-    assert list(info) == ["repo", "commit", "python", "packages", "gpu"]
-    assert info["repo"] is None and info["commit"] is None
-    assert info["python"] == platform.python_version()
-    assert list(info["packages"]) == ["peft"]  # type: ignore[call-overload]
-
-
-def test_timing_gives_the_start_the_end_and_the_duration() -> None:
-    assert meta.timing(START, START + timedelta(seconds=90)) == {
-        "started_at": "2026-01-01T12:00:00+00:00",
-        "finished_at": "2026-01-01T12:01:30+00:00",
-        "duration_seconds": 90,
-    }
-
-
 def test_write_run_metadata_prints_the_fields_it_could_not_read(
     tmp_path: Path, capsys: pytest.CaptureFixture[str]
 ) -> None:
-    meta.write_run_metadata(tmp_path / "m.json", {"a": 1, "b": None, "c": None})
+    runs._write_run_metadata(tmp_path / "m.json", {"a": 1, "b": None, "c": None})
 
     assert "warning: fields that could not be read: b, c" in capsys.readouterr().err
     assert json.loads((tmp_path / "m.json").read_text()) == {"a": 1, "b": None, "c": None}
 
 
-def test_write_json_writes_lists_too(tmp_path: Path) -> None:
-    meta.write_json(tmp_path / "log.json", [{"step": 25}])
-
-    assert json.loads((tmp_path / "log.json").read_text()) == [{"step": 25}]
-
-
 def write_training(
     tmp_path: Path, model: object | None = None, resumed: bool = False
 ) -> dict[str, Any]:
-    path = meta.write_training_metadata(
+    path = runs.write_training_metadata(
         tmp_path,
         model or fake_model(),
         config=CONFIG,
@@ -431,10 +295,10 @@ def test_write_training_metadata_records_the_run(tmp_path: Path) -> None:
     info = write_training(tmp_path)
 
     assert info["model"] == "some/model"
+    assert info["data"] == CONFIG["data"]
     assert info["lora"] == CONFIG["lora"]
     assert info["training"] == CONFIG["training"]
-    assert info["splits"] == CONFIG["splits"]
-    assert list(info["split_files_sha256"]) == CONFIG["splits"]
+    assert list(info["split_files_sha256"]) == CONFIG["data"]["splits"]
     assert (info["samples"], info["dropped_too_long"]) == (10, 1)
     assert info["duration_seconds"] == 90
     assert set(info["packages"]) == {"torch", "transformers", "bitsandbytes", "peft", "trl"}
@@ -456,7 +320,7 @@ def test_write_training_metadata_serializes_the_quantization_config(tmp_path: Pa
 
 
 def test_warn_prints_to_stderr_with_a_prefix(capsys: pytest.CaptureFixture[str]) -> None:
-    meta.warn("something is off")
+    runs._warn("something is off")
 
     captured = capsys.readouterr()
     assert captured.err == "warning: something is off\n"
@@ -468,7 +332,7 @@ def test_write_scoring_metadata_warns_about_the_fields_it_could_not_read(
 ) -> None:
     predictions = predictions_file(tmp_path, None)
 
-    meta.write_scoring_metadata(tmp_path / "x.report.json", predictions, "dev", False, True, None)
+    runs.write_scoring_metadata(tmp_path / "x.report.json", predictions, "dev", False, True, None)
 
     err = capsys.readouterr().err
     assert "warning: fields that could not be read: run, model, model_revision" in err
@@ -487,9 +351,11 @@ def test_write_generation_metadata_hashes_the_file_of_the_split_answered(tmp_pat
     predictions = tmp_path / "p.jsonl"
     predictions.write_text("")
 
-    meta.write_generation_metadata(predictions, fake_model(), "run", "test", 16, 5, 0, START, START)
+    runs.write_generation_metadata(
+        predictions, fake_model(), MODEL_CONFIG, "run", "test", 16, COUNTS, START, START
+    )
 
-    info = json.loads(meta.metadata_path(predictions).read_text())
+    info = json.loads(runs.metadata_path(predictions).read_text())
     assert info["split_file_sha256"] == hashlib.sha256(b"[2]").hexdigest()
 
 
@@ -502,3 +368,15 @@ def test_write_training_metadata_hashes_the_file_of_each_training_split(tmp_path
         "train_spider": hashlib.sha256(b"[1]").hexdigest(),
         "train_others": hashlib.sha256(b"[2]").hexdigest(),
     }
+
+
+def test_metadata_path_of_a_directory_with_dots_is_inside_it(tmp_path: Path) -> None:
+    adapter = tmp_path / "qwen2.5-coder-1.5b-instruct"  # the dots must not be taken for a suffix
+    adapter.mkdir()
+
+    assert runs.metadata_path(adapter) == adapter / "training.meta.json"
+
+
+def test_metadata_path_replaces_the_suffix(tmp_path: Path) -> None:
+    assert runs.metadata_path(tmp_path / "a.jsonl") == tmp_path / "a.meta.json"
+    assert runs.metadata_path(tmp_path / "a.report.json") == tmp_path / "a.report.meta.json"

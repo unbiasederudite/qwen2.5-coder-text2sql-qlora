@@ -1,5 +1,7 @@
-from text2sql.data import Sample
+"""Tests for text2sql.prompt."""
+
 from text2sql.prompt import build_completion, build_prompt
+from text2sql.spider.samples import Sample
 
 SAMPLE = Sample(
     db_id="concert",

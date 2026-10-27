@@ -1,8 +1,11 @@
 # QLoRA fine-tuning on Spider. The settings are common QLoRA defaults and were not tuned.
 
-splits:  # Spider training splits to train on
-  - train_spider
-  - train_others
+data:  # the training samples
+  splits:  # Spider training splits to train on
+    - train_spider
+    - train_others
+  clean: true  # drop repeated questions and gold SQL that fails to run
+  max_length: 2048  # tokens; longer samples are dropped, as truncating would cut the SQL
 
 lora:  # arguments of peft.LoraConfig
   r: 16  # rank, the width of the adapter matrices
@@ -20,7 +23,6 @@ training:  # arguments of trl.SFTConfig
   lr_scheduler_type: cosine  # the learning rate falls along a cosine curve
   warmup_steps: 50  # updates over which the learning rate rises from zero
   optim: paged_adamw_8bit  # AdamW with 8-bit state, to save memory
-  max_length: 2048  # tokens; longer samples are dropped, as truncating would cut the SQL
   completion_only_loss: true  # the loss is on the SQL, not on the schema and question
   fp16: true  # the T4 has no bf16
   gradient_checkpointing: true  # recompute activations in the backward pass, to save memory

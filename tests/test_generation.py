@@ -1,4 +1,4 @@
-"""Tests for text2sql.generate, with a stand-in for the model (no GPU or install needed)."""
+"""Tests for text2sql.generation, with a stand-in for the model (no GPU or install needed)."""
 
 import json
 import types
@@ -7,9 +7,10 @@ from pathlib import Path
 
 import pytest
 
-from text2sql.data import Sample
 from text2sql.prompt import Message
+from text2sql.spider.samples import Sample
 
+CONFIG: dict[str, object] = {}
 QUESTIONS = [
     "a long question about many singers",  # 0, the longest prompt
     "short",  # 1
@@ -25,7 +26,7 @@ SAMPLES = [
 
 
 class Recorder:
-    """Stands in for `generate_batch`: records the questions of each call and answers them."""
+    """Stands in for `_generate_batch`: records the questions of each call and answers them."""
 
     def __init__(self) -> None:
         self.batches: list[list[str]] = []
@@ -34,7 +35,11 @@ class Recorder:
         self.lines_seen: list[int] = []
 
     def __call__(
-        self, model: object, tokenizer: object, conversations: list[list[Message]]
+        self,
+        model: object,
+        tokenizer: object,
+        conversations: list[list[Message]],
+        config: dict[str, object],
     ) -> list[str]:
         if self.watched is not None:
             self.lines_seen.append(len(self.watched.read_text().splitlines()))
@@ -48,22 +53,25 @@ class Recorder:
 @pytest.fixture
 def recorder(stub_module: Callable[..., types.ModuleType]) -> Recorder:
     recorder = Recorder()
-    stub_module("text2sql.model", generate_batch=recorder)
     stub_module("transformers", PreTrainedModel=object, PreTrainedTokenizerBase=object)
     return recorder
 
 
 @pytest.fixture
 def generate_module(
-    recorder: Recorder, fresh_import: Callable[[str], types.ModuleType]
+    recorder: Recorder,
+    fresh_import: Callable[[str], types.ModuleType],
+    monkeypatch: pytest.MonkeyPatch,
 ) -> types.ModuleType:
-    """`text2sql.generate` imported against the stand-ins."""
-    return fresh_import("generate")
+    """`text2sql.generation` imported against the stand-ins, with the recorder as its model."""
+    module = fresh_import("generation")
+    monkeypatch.setattr(module, "_generate_batch", recorder)
+    return module
 
 
 def run(module: types.ModuleType, path: Path, batch_size: int = 2) -> dict[str, int]:
     counts: dict[str, int] = module.generate_predictions(
-        object(), object(), SAMPLES, path, batch_size
+        object(), object(), SAMPLES, path, batch_size, CONFIG
     )
     return counts
 
@@ -103,7 +111,11 @@ def test_questions_are_answered_in_batches_shortest_prompt_first(
 def test_the_counts_say_how_many_were_generated_and_how_many_were_there(
     generate_module: types.ModuleType, tmp_path: Path
 ) -> None:
-    assert run(generate_module, tmp_path / "p.jsonl") == {"generated": 5, "already_done": 0}
+    assert run(generate_module, tmp_path / "p.jsonl") == {
+        "questions": 5,
+        "generated": 5,
+        "already_done": 0,
+    }
 
 
 def test_questions_already_in_the_file_are_skipped_and_the_file_is_appended_to(
@@ -114,7 +126,7 @@ def test_questions_already_in_the_file_are_skipped_and_the_file_is_appended_to(
 
     counts = run(generate_module, path)
 
-    assert counts == {"generated": 3, "already_done": 2}
+    assert counts == {"questions": 5, "generated": 3, "already_done": 2}
     asked = {question for batch in recorder.batches for question in batch}
     assert asked == {QUESTIONS[0], QUESTIONS[2], QUESTIONS[4]}
     rows = {row["id"]: row["predicted"] for row in read(path)}
@@ -130,7 +142,7 @@ def test_nothing_is_generated_when_every_question_is_in_the_file(
 
     counts = run(generate_module, path)
 
-    assert counts == {"generated": 0, "already_done": 5}
+    assert counts == {"questions": 5, "generated": 0, "already_done": 5}
     assert recorder.batches == []
     assert path.read_text() == "".join(line(i, "old") for i in range(5))
 
@@ -161,7 +173,7 @@ def test_a_failed_batch_keeps_the_finished_ones_and_a_rerun_resumes_from_them(
 
     counts = run(generate_module, path, batch_size=2)
 
-    assert counts == {"generated": 3, "already_done": 2}
+    assert counts == {"questions": 5, "generated": 3, "already_done": 2}
     assert sorted(row["id"] for row in read(path)) == [0, 1, 2, 3, 4]
 
 

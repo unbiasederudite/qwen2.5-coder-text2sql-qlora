@@ -1,13 +1,13 @@
 """Checks against the real Spider release; skipped when it is not downloaded."""
 
-from pathlib import Path
-
 import pytest
+from conftest import PROJECT_ROOT
 
-from text2sql.data import build_samples
-from text2sql.spider import Split, load_examples, query_error
+from text2sql.spider.database import execution_error
+from text2sql.spider.dataset import Split, load_examples
+from text2sql.spider.samples import build_samples
 
-SPIDER_DIR = Path(__file__).parent.parent / "data" / "spider_data"
+SPIDER_DIR = PROJECT_ROOT / "data" / "spider_data"
 
 pytestmark = pytest.mark.skipif(not SPIDER_DIR.exists(), reason="Spider is not downloaded")
 
@@ -26,11 +26,10 @@ def test_clean_train_spider_size() -> None:
 
 @pytest.mark.parametrize("split", ["dev", "test"])
 def test_every_evaluation_query_runs(split: Split) -> None:
-    test = split == "test"
     failing = [
         ex
         for ex in load_examples(SPIDER_DIR, split)
-        if query_error(SPIDER_DIR, ex["db_id"], ex["query"], test=test)
+        if execution_error(SPIDER_DIR, ex["db_id"], ex["query"], split)
     ]
 
     assert failing == []

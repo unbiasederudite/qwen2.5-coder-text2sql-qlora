@@ -1,8 +1,10 @@
+"""Tests for text2sql.spider.samples."""
+
 from pathlib import Path
 
 from conftest import CONCERT_DDL, SHOP_DDL, TRAIN
 
-from text2sql.data import build_samples
+from text2sql.spider.samples import build_samples
 
 
 def test_samples_get_the_schema_of_their_own_database(spider_dir: Path) -> None:

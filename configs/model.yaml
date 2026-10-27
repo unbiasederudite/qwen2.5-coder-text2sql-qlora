@@ -1,0 +1,21 @@
+# The models, how they are loaded and how they generate. Training and generation share it.
+
+supported_models:  # Hugging Face models the notebooks accept
+  - Qwen/Qwen2.5-Coder-1.5B-Instruct
+  - Qwen/Qwen2.5-Coder-3B-Instruct
+
+dtype: float16  # type of the weights that are not quantized, the T4 has no bf16
+
+quantization:  # arguments of transformers.BitsAndBytesConfig
+  load_in_4bit: true  # weights are stored in 4 bits
+  bnb_4bit_quant_type: nf4  # 4-bit format fitted to normally distributed weights
+  bnb_4bit_use_double_quant: true  # the quantization constants are quantized too
+  bnb_4bit_compute_dtype: float16  # type of the arithmetic, the T4 has no bf16
+
+tokenizer:  # settings of the tokenizer
+  padding_side: left  # the replies must follow the prompts, not the padding
+
+generation:  # arguments of model.generate
+  max_new_tokens: 256  # the longest gold query is 202 Qwen tokens
+  do_sample: false  # greedy: the most likely token every time
+  repetition_penalty: 1.0  # no penalty for repeating tokens

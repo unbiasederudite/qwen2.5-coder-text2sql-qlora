@@ -1,3 +1,5 @@
+"""Tests for the helper scripts in `scripts/`."""
+
 import os
 import re
 import shutil
@@ -6,8 +8,9 @@ import zipfile
 from pathlib import Path
 
 import pytest
+from conftest import PROJECT_ROOT
 
-SCRIPTS = Path(__file__).parent.parent / "scripts"
+SCRIPTS = PROJECT_ROOT / "scripts"
 
 pytestmark = pytest.mark.skipif(shutil.which("bash") is None, reason="bash is not available")
 needs_unzip = pytest.mark.skipif(shutil.which("unzip") is None, reason="unzip is not available")

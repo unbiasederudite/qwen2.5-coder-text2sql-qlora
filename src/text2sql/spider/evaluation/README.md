@@ -1,4 +1,4 @@
-# spider_evaluation
+# spider/evaluation
 
 Official Spider evaluation code, vendored with small changes.
 

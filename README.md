@@ -4,7 +4,7 @@
 
 ## Models
 
-QLoRA with 4-bit models.
+QLoRA with 4-bit models. The supported models, the 4-bit and the generation settings are in `configs/model.yaml`.
 
 | Model | GPU memory (4-bit) |
 | --- | --- |
@@ -143,7 +143,7 @@ The LoRA and training settings are common QLoRA defaults and were not tuned:
 | Seed | 42 |
 | Checkpoints | after every epoch, only the last one is kept; a rerun resumes from it |
 
-The settings are in `configs/qlora.yaml`.
+The settings are in `configs/train.yaml`.
 
 ## Colab
 
@@ -185,7 +185,7 @@ Parameters, all required:
 | Parameter | Values | Description |
 | --- | --- | --- |
 | `MODEL` | `Qwen/Qwen2.5-Coder-1.5B-Instruct`, `Qwen/Qwen2.5-Coder-3B-Instruct` | Model to fine-tune. |
-| `CONFIG` | path, for example `configs/qlora.yaml` | Training config: the splits to train on, and the LoRA and training settings. |
+| `CONFIG` | path, for example `configs/train.yaml` | Training config: the training samples, and the LoRA and training settings. |
 
 ```bash
 uv run colab exec -s <session> -f notebooks/colab_fine_tune.ipynb --timeout 28800 \
@@ -206,7 +206,7 @@ code --install-extension google.colab
 
 ## Checks
 
-Lint, formatting, types and tests, the same steps CI runs on every push:
+Lint, formatting, types, import layers and tests, the same steps CI runs on every push:
 
 ```bash
 uv run ruff check . && uv run ruff format --check . && uv run mypy && uv run pytest
@@ -282,9 +282,9 @@ Fine-tune each model on the Spider training data. The same notebook runs for eac
 
 ```bash
 uv run colab exec -s qlora -f notebooks/colab_fine_tune.ipynb --timeout 28800 \
-  --env MODEL=Qwen/Qwen2.5-Coder-1.5B-Instruct --env CONFIG=configs/qlora.yaml
+  --env MODEL=Qwen/Qwen2.5-Coder-1.5B-Instruct --env CONFIG=configs/train.yaml
 uv run colab exec -s qlora -f notebooks/colab_fine_tune.ipynb --timeout 28800 \
-  --env MODEL=Qwen/Qwen2.5-Coder-3B-Instruct --env CONFIG=configs/qlora.yaml
+  --env MODEL=Qwen/Qwen2.5-Coder-3B-Instruct --env CONFIG=configs/train.yaml
 ```
 
 The adapters, their metadata and their training logs are in `/content/qwen2.5-coder-text2sql-qlora/adapters_colab/` on the session.

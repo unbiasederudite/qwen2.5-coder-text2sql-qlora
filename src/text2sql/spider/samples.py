@@ -2,7 +2,8 @@
 
 from pathlib import Path
 
-from text2sql.spider import Example, Split, load_examples, load_schema_ddl, query_error
+from text2sql.spider.database import execution_error, load_schema_ddl
+from text2sql.spider.dataset import Example, Split, load_examples
 
 
 class Sample(Example):
@@ -22,7 +23,6 @@ def build_samples(spider_dir: Path, split: Split, clean: bool = False) -> list[S
     Returns:
         list[Sample]: Samples in file order.
     """
-    test = split == "test"
     ddl_by_db: dict[str, list[str]] = {}
     seen: set[tuple[str, str]] = set()
     samples: list[Sample] = []
@@ -30,10 +30,10 @@ def build_samples(spider_dir: Path, split: Split, clean: bool = False) -> list[S
         db_id = ex["db_id"]
         if clean:
             key = (db_id, ex["question"])
-            if key in seen or query_error(spider_dir, db_id, ex["query"], test=test):
+            if key in seen or execution_error(spider_dir, db_id, ex["query"], split):
                 continue
             seen.add(key)
         if db_id not in ddl_by_db:
-            ddl_by_db[db_id] = load_schema_ddl(spider_dir, db_id, test=test)
+            ddl_by_db[db_id] = load_schema_ddl(spider_dir, db_id, split)
         samples.append(Sample(**ex, schema=ddl_by_db[db_id]))
     return samples

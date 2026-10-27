@@ -1,15 +1,15 @@
 # text2sql
 
-Text-to-SQL pipeline on Spider: data, prompts, fine-tuning, generation, scoring and metadata.
+The project package.
 
-| File | Description |
+| Path | Description |
 | --- | --- |
-| `spider.py` | Spider loaders. |
-| `data.py` | Question and schema samples. |
-| `prompt.py` | Chat messages. |
-| `model.py` | Model loading and batch generation. |
-| `generate.py` | Prediction generation. |
-| `train.py` | QLoRA fine-tuning. |
-| `meta.py` | Metadata of runs and reports. |
-| `score.py` | Scoring of predictions. |
-| `spider_evaluation/` | Vendored official Spider evaluation. |
+| `spider/` | The Spider dataset: files, databases, samples, predictions and scoring. |
+| `training/` | Fine-tuning: the training dataset, the trainer and its checkpoints. |
+| `meta/` | Metadata that describes generation, training and scoring runs. |
+| `generation.py` | Generation of replies, and of the predictions of a model on a Spider split. |
+| `score.py` | The score command, run as `python -m text2sql.score`. |
+| `config.py` | The model and training config files, and their checks. |
+| `model.py` | The models: names for files, and loading. |
+| `prompt.py` | Chat messages for training and inference. |
+| `jsonio.py` | Writing JSON files. |

@@ -43,7 +43,7 @@ build-backend = "uv_build"
 [tool.ruff]
 line-length = 100
 src = ["src"]
-extend-exclude = ["src/text2sql/spider_evaluation"]  # vendored, see its README
+extend-exclude = ["src/text2sql/spider/evaluation"]  # vendored, see its README
 
 [tool.ruff.lint]
 extend-select = [
@@ -71,5 +71,5 @@ module = ["nltk.*", "yaml.*", "tqdm.*"]
 ignore_missing_imports = true  # no type information
 
 [[tool.mypy.overrides]]
-module = ["text2sql.spider_evaluation.*"]
+module = ["text2sql.spider.evaluation.*"]
 ignore_errors = true  # vendored, see its README

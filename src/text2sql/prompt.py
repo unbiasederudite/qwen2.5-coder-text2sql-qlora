@@ -2,7 +2,7 @@
 
 from typing import TypedDict
 
-from text2sql.data import Sample
+from text2sql.spider.samples import Sample
 
 
 class Message(TypedDict):

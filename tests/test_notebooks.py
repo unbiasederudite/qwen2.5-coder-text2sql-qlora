@@ -6,10 +6,11 @@ from pathlib import Path
 from typing import Any
 
 import pytest
+from conftest import PROJECT_ROOT
 
 NOTEBOOKS = sorted(
     path
-    for path in (Path(__file__).parent.parent / "notebooks").glob("*.ipynb")
+    for path in (PROJECT_ROOT / "notebooks").glob("*.ipynb")
     if not path.name.endswith("_output.ipynb")  # written by `colab exec` and ignored by git
 )
 COLAB_NOTEBOOKS = [path for path in NOTEBOOKS if path.name.startswith("colab_")]

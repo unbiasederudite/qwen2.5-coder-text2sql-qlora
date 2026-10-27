@@ -1,4 +1,4 @@
-"""Smoke tests for the vendored Spider evaluation code (see src/text2sql/spider_evaluation/README.md)."""
+"""Smoke tests for the vendored Spider evaluation code (see src/text2sql/spider/evaluation/README.md)."""
 
 import asyncio
 import sqlite3
@@ -10,14 +10,14 @@ nltk = pytest.importorskip("nltk")
 if not nltk.download("punkt_tab", quiet=True):  # no-op when already downloaded
     pytest.skip("could not download the nltk tokenizer data", allow_module_level=True)
 
-from text2sql.spider_evaluation.evaluation import (
+from text2sql.spider.evaluation.evaluation import (
     Evaluator,
     build_valid_col_units,
     rebuild_sql_col,
     rebuild_sql_val,
 )
-from text2sql.spider_evaluation.exec_eval import eval_exec_match, exec_on_db
-from text2sql.spider_evaluation.process_sql import Schema, get_schema, get_sql
+from text2sql.spider.evaluation.exec_eval import eval_exec_match, exec_on_db
+from text2sql.spider.evaluation.process_sql import Schema, get_schema, get_sql
 
 
 @pytest.fixture
