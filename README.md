@@ -56,14 +56,29 @@ Scoring is built around the vendored official [test-suite evaluation](https://gi
 
 Only text-to-SQL is evaluated. The fine-tuned models are intended for this task only, and any loss of general capabilities is possible and not measured.
 
-## Baseline results
+## Results
 
-Scores of the models on the Spider dev split before fine-tuning:
+Scores of the models on the Spider dev split (1,034 questions) and test split (2,147 questions), before fine-tuning (baseline) and after it (fine-tuned, with the [adapters](#adapters)).
 
-| Model | EX | TS | EM |
+### Dev
+
+| Model | Variant | EX | TS | EM |
+| --- | --- | --- | --- | --- |
+| `Qwen/Qwen2.5-Coder-1.5B-Instruct` | baseline | 0.652 | 0.555 | 0.428 |
+| `Qwen/Qwen2.5-Coder-1.5B-Instruct` | fine-tuned | 0.734 | 0.677 | 0.668 |
+| `Qwen/Qwen2.5-Coder-3B-Instruct` | baseline | 0.712 | 0.627 | 0.457 |
+| `Qwen/Qwen2.5-Coder-3B-Instruct` | fine-tuned | 0.778 | 0.722 | 0.735 |
+
+### Test
+
+The test split has no test-suite databases, so there is no TS:
+
+| Model | Variant | EX | EM |
 | --- | --- | --- | --- |
-| `Qwen/Qwen2.5-Coder-1.5B-Instruct` | 0.652 | 0.555 | 0.428 |
-| `Qwen/Qwen2.5-Coder-3B-Instruct` | 0.712 | 0.627 | 0.457 |
+| `Qwen/Qwen2.5-Coder-1.5B-Instruct` | baseline | 0.645 | 0.413 |
+| `Qwen/Qwen2.5-Coder-1.5B-Instruct` | fine-tuned | 0.732 | 0.662 |
+| `Qwen/Qwen2.5-Coder-3B-Instruct` | baseline | 0.715 | 0.425 |
+| `Qwen/Qwen2.5-Coder-3B-Instruct` | fine-tuned | 0.795 | 0.709 |
 
 The scores and their metadata are in `scores/`, the predictions in `predictions/`. See [Reproduce the results](#reproduce-the-results) to run them again.
 
@@ -144,6 +159,92 @@ The LoRA and training settings are common QLoRA defaults and were not tuned:
 | Checkpoints | after every epoch, only the last one is kept; a rerun resumes from it |
 
 The settings are in `configs/train.yaml`.
+
+## Adapters
+
+The fine-tuned LoRA adapters are on Hugging Face and not in git, `adapters/` is ignored:
+
+| Model | Adapter |
+| --- | --- |
+| `Qwen/Qwen2.5-Coder-1.5B-Instruct` | [unbiasederudite/qwen2.5-coder-1.5b-text2sql-qlora](https://huggingface.co/unbiasederudite/qwen2.5-coder-1.5b-text2sql-qlora) |
+| `Qwen/Qwen2.5-Coder-3B-Instruct` | [unbiasederudite/qwen2.5-coder-3b-text2sql-qlora](https://huggingface.co/unbiasederudite/qwen2.5-coder-3b-text2sql-qlora) |
+
+Each repository holds the adapter weights and config, the tokenizer files, `training.meta.json` and `training.log.json`. An adapter goes on top of its own base model only, and expects the chat format of the [training sample](#training-sample).
+
+### Download
+
+```bash
+uv run hf download unbiasederudite/qwen2.5-coder-1.5b-text2sql-qlora --local-dir adapters/qwen2.5-coder-1.5b-instruct
+uv run hf download unbiasederudite/qwen2.5-coder-3b-text2sql-qlora --local-dir adapters/qwen2.5-coder-3b-instruct
+```
+
+### Use
+
+With this project, pass the repository as `ADAPTER` to [`colab_generate_predictions`](#colab_generate_predictions), or as the third argument of `load_model`. It needs a CUDA GPU and `uv sync --group colab`:
+
+```python
+from text2sql.config import load_model_config
+from text2sql.model import load_model
+
+model, tokenizer = load_model(
+    "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+    load_model_config(),
+    "unbiasederudite/qwen2.5-coder-1.5b-text2sql-qlora",
+)
+```
+
+Without this project, with [PEFT](https://github.com/huggingface/peft):
+
+```python
+from peft import PeftModel
+from transformers import AutoModelForCausalLM, AutoTokenizer
+
+base = "Qwen/Qwen2.5-Coder-1.5B-Instruct"
+model = PeftModel.from_pretrained(
+    AutoModelForCausalLM.from_pretrained(base),
+    "unbiasederudite/qwen2.5-coder-1.5b-text2sql-qlora",
+)
+tokenizer = AutoTokenizer.from_pretrained(base)
+```
+
+## Metadata
+
+Every run writes a `.meta.json` file that says what produced its output, so a result can be traced back to its code, data, model and settings:
+
+| File | Written by | Describes |
+| --- | --- | --- |
+| `predictions/<name>.meta.json` | `colab_generate_predictions` | One generation run. |
+| `scores/<name>.report.meta.json` | the scoring command | One scoring run. |
+| `adapters/<model>/training.meta.json` | `colab_fine_tune` | One training run. |
+
+**Generation**
+
+- `run`, `model`, `model_revision`, `quantization`: the run name, the base model with its Hugging Face commit, and its quantization settings.
+- `adapter` and `adapter_revision`: only for fine-tuned runs, the adapter repository and the commit that was loaded. With a local adapter directory, `adapter_sha256` holds the hash of its weights instead.
+- `tokenizer`, `generation`: the padding side, and the generation settings with the `batch_size`.
+- `split`, `split_file_sha256`, `questions`, `already_done`: the Spider split and the hash of its file, how many questions it has, and how many predictions were already in the file when the run started.
+- `predictions_sha256`: the hash of the predictions file.
+- `started_at`, `finished_at`, `duration_seconds`: when the run ran.
+- `repo`, `commit`, `python`, `packages`, `gpu`: the code, the Python and package versions, and the GPU.
+
+**Scoring**
+
+- `run`, `model`, `model_revision`, `adapter`, `adapter_revision`: copied from the generation metadata next to the predictions file.
+- `split`, `predictions_sha256`: the split that was scored, and the hash of the predictions file.
+- `keep_distinct`, `extraction`: the scoring options, `--keep-distinct` and whether the SQL was taken out of the replies (off with `--raw`).
+- `repo`, `commit`, `sqlite_version`: the code, and the SQLite that ran the queries.
+
+The scorer stops if the generation metadata describes another predictions file, and warns if it is for another split. Without it, `run`, `model` and `model_revision` stay empty.
+
+**Training**
+
+- `model`, `model_revision`, `quantization`: as for generation.
+- `data`, `lora`, `training`: the training samples (`splits`, `clean`, `max_length`), the LoRA settings and the trainer settings.
+- `split_files_sha256`, `samples`, `dropped_too_long`: the hashes of the training split files, how many samples were trained on, and how many were dropped for being too long.
+- `resumed`: whether the run continued from a checkpoint.
+- `started_at`, `finished_at`, `duration_seconds`, `repo`, `commit`, `python`, `packages`, `gpu`: as for generation.
+
+A field that could not be read, such as `gpu` without a GPU, is written as `null`, and the run prints a warning.
 
 ## Colab
 
@@ -239,13 +340,17 @@ The session is called `qlora`, as in every command below.
 
 ### 3. Evaluate the baseline models
 
-Generate the predictions of each baseline model on the dev split. The same notebook runs for each model:
+Generate the predictions of each baseline model on the dev and test splits. The same notebook runs for each model and split:
 
 ```bash
 uv run colab exec -s qlora -f notebooks/colab_generate_predictions.ipynb --timeout 3600 \
   --env MODEL=Qwen/Qwen2.5-Coder-1.5B-Instruct --env SPLIT=dev --env RUN=baseline --env BATCH_SIZE=16
 uv run colab exec -s qlora -f notebooks/colab_generate_predictions.ipynb --timeout 3600 \
+  --env MODEL=Qwen/Qwen2.5-Coder-1.5B-Instruct --env SPLIT=test --env RUN=baseline --env BATCH_SIZE=16
+uv run colab exec -s qlora -f notebooks/colab_generate_predictions.ipynb --timeout 3600 \
   --env MODEL=Qwen/Qwen2.5-Coder-3B-Instruct --env SPLIT=dev --env RUN=baseline --env BATCH_SIZE=16
+uv run colab exec -s qlora -f notebooks/colab_generate_predictions.ipynb --timeout 3600 \
+  --env MODEL=Qwen/Qwen2.5-Coder-3B-Instruct --env SPLIT=test --env RUN=baseline --env BATCH_SIZE=16
 ```
 
 The predictions and their metadata are in `/content/qwen2.5-coder-text2sql-qlora/predictions_colab/` on the session.
@@ -256,7 +361,8 @@ Download the predictions and their metadata from the session. Files on the sessi
 
 ```bash
 mkdir -p predictions
-for name in qwen2.5-coder-1.5b-instruct_baseline_dev qwen2.5-coder-3b-instruct_baseline_dev; do
+for name in qwen2.5-coder-1.5b-instruct_baseline_dev qwen2.5-coder-1.5b-instruct_baseline_test \
+            qwen2.5-coder-3b-instruct_baseline_dev qwen2.5-coder-3b-instruct_baseline_test; do
   for ext in jsonl meta.json; do
     uv run colab download -s qlora /content/qwen2.5-coder-text2sql-qlora/predictions_colab/$name.$ext predictions/$name.$ext
   done
@@ -267,11 +373,13 @@ The files are in `predictions/`.
 
 ### 5. Score the baseline predictions
 
-Score the baseline predictions:
+Score the baseline predictions. The test predictions need `--split test`, and their scores have no TS, as the test split has no test-suite databases:
 
 ```bash
 uv run python -m text2sql.score predictions/qwen2.5-coder-1.5b-instruct_baseline_dev.jsonl
+uv run python -m text2sql.score predictions/qwen2.5-coder-1.5b-instruct_baseline_test.jsonl --split test
 uv run python -m text2sql.score predictions/qwen2.5-coder-3b-instruct_baseline_dev.jsonl
+uv run python -m text2sql.score predictions/qwen2.5-coder-3b-instruct_baseline_test.jsonl --split test
 ```
 
 The scores are in `scores/`.
@@ -316,18 +424,24 @@ uv run hf upload <user>/qwen2.5-coder-3b-text2sql-qlora adapters/qwen2.5-coder-3
   --private --exclude "training_args.bin"
 ```
 
-The adapters are at `huggingface.co/<user>/qwen2.5-coder-1.5b-text2sql-qlora` and `huggingface.co/<user>/qwen2.5-coder-3b-text2sql-qlora`.
+The adapters are at `huggingface.co/<user>/qwen2.5-coder-1.5b-text2sql-qlora` and `huggingface.co/<user>/qwen2.5-coder-3b-text2sql-qlora`. The published ones of this project are listed under [Adapters](#adapters).
 
 ### 9. Evaluate the fine-tuned models
 
-Generate the predictions of each fine-tuned model on the dev split. The same notebook as for the baseline runs for each model, with the adapter on top of the model and another run name:
+Generate the predictions of each fine-tuned model on the dev and test splits. The same notebook as for the baseline runs for each model and split, with the adapter on top of the model and another run name:
 
 ```bash
 uv run colab exec -s qlora -f notebooks/colab_generate_predictions.ipynb --timeout 3600 \
   --env MODEL=Qwen/Qwen2.5-Coder-1.5B-Instruct --env SPLIT=dev --env RUN=finetuned --env BATCH_SIZE=16 \
   --env ADAPTER=<user>/qwen2.5-coder-1.5b-text2sql-qlora
 uv run colab exec -s qlora -f notebooks/colab_generate_predictions.ipynb --timeout 3600 \
+  --env MODEL=Qwen/Qwen2.5-Coder-1.5B-Instruct --env SPLIT=test --env RUN=finetuned --env BATCH_SIZE=16 \
+  --env ADAPTER=<user>/qwen2.5-coder-1.5b-text2sql-qlora
+uv run colab exec -s qlora -f notebooks/colab_generate_predictions.ipynb --timeout 3600 \
   --env MODEL=Qwen/Qwen2.5-Coder-3B-Instruct --env SPLIT=dev --env RUN=finetuned --env BATCH_SIZE=16 \
+  --env ADAPTER=<user>/qwen2.5-coder-3b-text2sql-qlora
+uv run colab exec -s qlora -f notebooks/colab_generate_predictions.ipynb --timeout 3600 \
+  --env MODEL=Qwen/Qwen2.5-Coder-3B-Instruct --env SPLIT=test --env RUN=finetuned --env BATCH_SIZE=16 \
   --env ADAPTER=<user>/qwen2.5-coder-3b-text2sql-qlora
 ```
 
@@ -338,7 +452,8 @@ The predictions and their metadata are in `/content/qwen2.5-coder-text2sql-qlora
 Download the predictions and their metadata from the session. Files on the session are lost when it stops:
 
 ```bash
-for name in qwen2.5-coder-1.5b-instruct_finetuned_dev qwen2.5-coder-3b-instruct_finetuned_dev; do
+for name in qwen2.5-coder-1.5b-instruct_finetuned_dev qwen2.5-coder-1.5b-instruct_finetuned_test \
+            qwen2.5-coder-3b-instruct_finetuned_dev qwen2.5-coder-3b-instruct_finetuned_test; do
   for ext in jsonl meta.json; do
     uv run colab download -s qlora /content/qwen2.5-coder-text2sql-qlora/predictions_colab/$name.$ext predictions/$name.$ext
   done
@@ -349,11 +464,13 @@ The files are in `predictions/`, next to the baseline's.
 
 ### 11. Score the fine-tuned predictions
 
-Score the fine-tuned predictions:
+Score the fine-tuned predictions, with `--split test` for the test predictions:
 
 ```bash
 uv run python -m text2sql.score predictions/qwen2.5-coder-1.5b-instruct_finetuned_dev.jsonl
+uv run python -m text2sql.score predictions/qwen2.5-coder-1.5b-instruct_finetuned_test.jsonl --split test
 uv run python -m text2sql.score predictions/qwen2.5-coder-3b-instruct_finetuned_dev.jsonl
+uv run python -m text2sql.score predictions/qwen2.5-coder-3b-instruct_finetuned_test.jsonl --split test
 ```
 
 The scores are in `scores/`, next to the baseline's.
